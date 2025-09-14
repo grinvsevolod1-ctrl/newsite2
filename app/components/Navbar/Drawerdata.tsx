@@ -10,10 +10,10 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
     { name: 'О нас', href: '#aboutus-section', current: true },
-    { name: 'Services', href: '#services-section', current: false },
-    { name: 'FAQ', href: '#faq-section', current: false },
-    { name: 'Blog', href: '#blog-section', current: false },
-    { name: 'Testimonial', href: '#testimonial-section', current: false },
+    { name: 'Сервисы', href: '#services-section', current: false },
+    { name: 'Услуги', href: '#faq-section', current: false },
+    { name: 'Блог', href: '#blog-section', current: false },
+    { name: 'Технологии', href: '#testimonial-section', current: false },
 ]
 
 function classNames(...classes: string[]) {
