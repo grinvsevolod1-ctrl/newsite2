@@ -407,7 +407,7 @@ html {
 .chat-button {
   position: fixed;
   bottom: 24px;
-  right: 24px;
+  left: 24px;
   background-color: #1E40AF; /* Tailwind blue-800 */
   color: white;
   padding: 12px 16px;
@@ -424,7 +424,7 @@ html {
 .chat-window {
   position: fixed;
   bottom: 24px;
-  right: 24px;
+  left: 24px;
   width: 100%;
   max-width: 360px;
   background-color: white;

@@ -10,7 +10,6 @@ const ChatBot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Detect mobile
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -18,13 +17,11 @@ const ChatBot = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Load history
   useEffect(() => {
     const saved = localStorage.getItem("netnext-chat");
     if (saved) setMessages(JSON.parse(saved));
   }, []);
 
-  // Save history
   useEffect(() => {
     localStorage.setItem("netnext-chat", JSON.stringify(messages));
   }, [messages]);
@@ -52,17 +49,15 @@ const ChatBot = () => {
 
   return (
     <>
-      {/* Floating Button */}
       {!isOpen && (
-        <button onClick={() => setIsOpen(true)} className="chat-button">
+        <button onClick={() => setIsOpen(true)} className="chat-button left-6">
           💬
         </button>
       )}
 
-      {/* Modal Chat */}
       {isOpen && (
         <div className="chat-overlay" onClick={() => setIsOpen(false)}>
-          <div className="chat-window animate-fade-in" onClick={(e) => e.stopPropagation()}>
+          <div className="chat-window left-6 animate-fade-in" onClick={(e) => e.stopPropagation()}>
             <div className="chat-header">
               <span>NetNext Чат</span>
               <button onClick={() => setIsOpen(false)} className="text-sm hover:opacity-70">✕</button>
