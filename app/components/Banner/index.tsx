@@ -199,5 +199,32 @@ const Banner = () => {
                         <Image src="/images/site/2.png" alt="Project 1" width={400} height={240} />
                         <p className="mt-2 text-sm font-medium">Сайт для студии</p>
                       </div>
-                      <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
-                        <Image src="/images/site/3
+                                           <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
+                        <Image src="/images/site/3.png" alt="Project 2" width={400} height={240} />
+                        <p className="mt-2 text-sm font-medium">Платформа для обучения</p>
+                      </div>
+                    </div>
+
+                    {/* ⚠️ Предупреждение */}
+                    <p className="mt-6 text-xs text-gray-500 text-center">
+                      ⚠️ Примеры проектов являются демонстрационными и не нарушают авторские права. Все изображения используются исключительно в целях презентации.
+                    </p>
+                  </div>
+
+                  {/* CTA: Telegram */}
+                  <div className="mt-6 text-center">
+                    <Link href="https://t.me/skufig1" target="_blank" className="text-blue underline hover:text-hoblue">
+                      Хочу обсудить лично в Telegram
+                    </Link>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </>
+  );
+};
+
+export default Banner;
