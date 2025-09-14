@@ -64,12 +64,13 @@ const Contactusform = () => {
       <div className="flex gap-4 items-center">
         <Link href="https://instagram.com/netnext.site" target="_blank">
           <img
-            src="/images/footer/instagram.svg"
-            alt="Instagram"
-            title="Instagram"
-            className="w-8 h-8 hover:scale-110 transition-transform"
-            onError={(e) => (e.currentTarget.src = fallbackIcon)}
-          />
+  src="/images/footer/instagram.svg"
+  alt="Instagram"
+  title="Instagram"
+  className="w-8 h-8 text-black fill-black hover:scale-110 transition-transform"
+  onError={(e) => (e.currentTarget.src = fallbackIcon)}
+/>
+
         </Link>
         <Link href="https://t.me/skufig1" target="_blank">
           <img
