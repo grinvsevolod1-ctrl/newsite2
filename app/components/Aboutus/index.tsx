@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
@@ -103,13 +104,48 @@ const Aboutus = () => {
           <h5 className="text-xl font-semibold text-darkpurple mb-4">
             Хотите обсудить проект или получить консультацию?
           </h5>
-          <Link
-            href="https://t.me/skufig1"
-            target="_blank"
-            className="inline-block bg-blue text-white px-6 py-3 rounded-full hover:bg-hoblue transition"
-          >
-            Связаться в Telegram
-          </Link>
+          <div className="flex justify-center items-center gap-6 flex-wrap">
+            {/* Telegram */}
+            <Link
+              href="https://t.me/skufig1"
+              target="_blank"
+              className="inline-flex items-center gap-2 bg-blue text-white px-5 py-3 rounded-full hover:bg-hoblue transition"
+            >
+              <Image src="/images/footer/telegram.svg" alt="Telegram" width={20} height={20} />
+              Telegram
+            </Link>
+
+            {/* Email */}
+            <Link
+              href="mailto:info@netnext.site"
+              className="inline-flex items-center gap-2 bg-blue text-white px-5 py-3 rounded-full hover:bg-hoblue transition"
+            >
+              <Image src="/images/footer/mail.svg" alt="Email" width={20} height={20} />
+              Email
+            </Link>
+
+            {/* WhatsApp */}
+            <Link
+              href="https://wa.me/375291234567"
+              target="_blank"
+              className="inline-flex items-center gap-2 bg-blue text-white px-5 py-3 rounded-full hover:bg-hoblue transition"
+            >
+              <Image src="/images/footer/whatsapp.svg" alt="WhatsApp" width={20} height={20} />
+              WhatsApp
+            </Link>
+
+            {/* Phone — адаптивный */}
+            <div className="inline-flex items-center gap-2 bg-blue text-white px-5 py-3 rounded-full hover:bg-hoblue transition">
+              <Image
+                src="/images/footer/phone.svg"
+                alt="Phone"
+                width={20}
+                height={20}
+                className="block md:hidden"
+              />
+              <span className="hidden md:block">+375 (29) 123-45-67</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
