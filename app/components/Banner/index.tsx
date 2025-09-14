@@ -1,9 +1,17 @@
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const Banner = () => {
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setIsVisible(true), 100);
+        return () => clearTimeout(timer);
+    }, []);
+
     return (
-        <div className='mx-auto max-w-7xl mt-4 mb-6 sm:py-6 px-6 lg:px-8'>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+        <div className='mx-auto max-w-7xl mt-2 mb-6 sm:py-4 px-6 lg:px-8'>
+            <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
 
                 {/* COLUMN-1 */}
                 <div className="mx-auto sm:mx-0 flex flex-col justify-center">
