@@ -1,6 +1,6 @@
 "use client";
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import Link from 'next/link';
 
 const Contactusform = () => {
@@ -8,18 +8,29 @@ const Contactusform = () => {
   const [inputValues, setInputValues] = useState({ name: '', message: '' });
   const [contactMethod, setContactMethod] = useState('');
   const [contactValue, setContactValue] = useState('');
+  const [regionCode, setRegionCode] = useState('+375'); // Default for Belarus
 
   const contactOptions = [
     'Email', 'Telegram', 'WhatsApp', 'VK', 'Facebook',
     'Телефон', 'Viber', 'Instagram', 'TikTok'
   ];
 
+  // 🧠 Автоматическое определение региона
+  useEffect(() => {
+    // Пример: можно расширить под другие страны
+    const userRegion = 'BY'; // Беларусь
+    if (userRegion === 'BY') setRegionCode('+375');
+    else if (userRegion === 'RU') setRegionCode('+7');
+    else if (userRegion === 'UA') setRegionCode('+380');
+    else setRegionCode('+1'); // fallback
+  }, []);
+
   const getPlaceholder = (method: string) => {
     switch (method.toLowerCase()) {
       case 'email': return 'your_email@example.com';
-      case 'телефон': return '+375 (__) ___-__-__';
+      case 'телефон': return `${regionCode} (__) ___-__-__`;
+      case 'whatsapp': return `${regionCode} (__) ___-__-__`;
       case 'telegram': return '@your_username';
-      case 'whatsapp': return '+375 (__) ___-__-__';
       case 'instagram': return '@your_handle';
       default: return 'Введите данные...';
     }
