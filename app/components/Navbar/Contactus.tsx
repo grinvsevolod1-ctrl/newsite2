@@ -1,158 +1,195 @@
-"use client"
+"use client";
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import Link from 'next/link';
 
-
 const Contactusform = () => {
-    let [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const [inputValues, setInputValues] = useState({ name: '', message: '' });
+  const [contactMethod, setContactMethod] = useState('');
+  const [contactValue, setContactValue] = useState('');
 
-    const [inputValues, setInputValues] = useState({
-        input1: '',
-        input2: '',
-        input3: ''
+  const contactOptions = [
+    'email', 'telegram', 'whatsapp', 'vk', 'facebook',
+    'телефон', 'viber', 'instagram', 'tiktok'
+  ];
+
+  const getPlaceholder = (method: string) => {
+    switch (method) {
+      case 'email': return 'your_email@example.com';
+      case 'телефон': return '+375 (__) ___-__-__';
+      case 'telegram': return '@your_username';
+      case 'whatsapp': return '+375 (__) ___-__-__';
+      case 'instagram': return '@your_handle';
+      default: return 'Введите данные...';
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setInputValues(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const message = `
+🆕 Новый контакт:
+👤 Имя: ${inputValues.name}
+📡 Способ связи: ${contactMethod}
+📱 Данные: ${contactValue}
+💬 Сообщение: ${inputValues.message}
+    `;
+
+    await fetch(`https://api.telegram.org/bot7971685388:AAFshMdeIWWiwLPZdp2os2vgwVDp9PTP4eU/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: 940316027,
+        text: message
+      })
     });
 
-    const handleChange = (e: { target: { name: string; value: string; }; }) => {
-        const { name, value } = e.target;
-        setInputValues(prevState => ({ ...prevState, [name]: value }));
-    }
+    setIsOpen(false);
+    setInputValues({ name: '', message: '' });
+    setContactMethod('');
+    setContactValue('');
+  };
 
-    const handleClick = () => {
-        alert(`Name: ${inputValues.input1}, Email-address: ${inputValues.input2}, Message: ${inputValues.input3}`);
-        setIsOpen(false)
-    }
+  const fallbackIcon = "/images/footer/vec.svg";
 
-    // FORM SUBMIT
-    const handleSubmit = (event: { preventDefault: () => void; }) => {
-        event.preventDefault();
-        // handle form submission
-    };
+  return (
+    <>
+      {/* 🔗 Соц-ссылки вместо "О нас" */}
+      <div className="flex gap-4 items-center">
+        <Link href="https://instagram.com/netnext.site" target="_blank">
+          <img
+            src="/images/footer/instagram.svg"
+            alt="Instagram"
+            title="Instagram"
+            className="w-8 h-8 hover:scale-110 transition-transform"
+            onError={(e) => (e.currentTarget.src = fallbackIcon)}
+          />
+        </Link>
+        <Link href="https://t.me/skufig1" target="_blank">
+          <img
+            src="/images/footer/telegram.svg"
+            alt="Telegram"
+            title="Telegram"
+            className="w-8 h-8 hover:scale-110 transition-transform"
+            onError={(e) => (e.currentTarget.src = fallbackIcon)}
+          />
+        </Link>
+        <a href="tel:+375291414555">
+          <img
+            src="/images/footer/phone.svg"
+            alt="Phone"
+            title="Позвонить"
+            className="w-8 h-8 hover:scale-110 transition-transform"
+            onError={(e) => (e.currentTarget.src = fallbackIcon)}
+          />
+        </a>
+      </div>
 
-    const isDisabled = Object.values(inputValues).some((value) => value === '');
+      {/* 📍 Мини-кнопка в левом нижнем углу */}
+      <div className="fixed bottom-4 left-4 z-40">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="bg-navyblue text-white rounded-full px-4 py-2 text-sm shadow-md hover:scale-105 transition-transform duration-300"
+        >
+          Связаться
+        </button>
+      </div>
 
+      {/* 💬 Модальное окно */}
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-50" onClose={() => setIsOpen(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
 
-    const closeModal = () => {
-        setIsOpen(false)
-    }
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <div className="py-4 px-2">
+                    <h2 className="text-2xl font-semibold text-center mb-4">NetNext</h2>
+                    <p className="text-sm text-gray-500 text-center mb-6">Выберите способ связи и оставьте сообщение</p>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <input
+                        type="text"
+                        name="name"
+                        value={inputValues.name}
+                        onChange={handleChange}
+                        required
+                        placeholder="Ваше имя"
+                        className="w-full border border-linegrey rounded-md px-3 py-2"
+                      />
 
-    const openModal = () => {
-        setIsOpen(true)
-    }
+                      <select
+                        value={contactMethod}
+                        onChange={(e) => setContactMethod(e.target.value)}
+                        required
+                        className="w-full border border-linegrey rounded-md px-3 py-2"
+                      >
+                        <option value="">Выберите способ связи</option>
+                        {contactOptions.map((method) => (
+                          <option key={method} value={method}>{method}</option>
+                        ))}
+                      </select>
 
-    return (
-        <>
-            <div className=" inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto md:ml-6 sm:pr-0">
-                {/* <div className='lg:hidden'>
-                    <button type="button" className='bg-navyblue w-full hover:text-white text-white border border-purple font-medium py-2 px-4 rounded' onClick={openModal}>
-                        Contact Us
-                    </button>
-                </div> */}
-                <div className='hidden lg:block'>
-                    <button type="button" className='justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white' onClick={openModal}>
-                        О нас
-                    </button>
-                </div>
+                      {contactMethod && (
+                        <input
+                          type="text"
+                          value={contactValue}
+                          onChange={(e) => setContactValue(e.target.value)}
+                          placeholder={getPlaceholder(contactMethod)}
+                          required
+                          className="w-full border border-linegrey rounded-md px-3 py-2"
+                        />
+                      )}
+
+                      <textarea
+                        name="message"
+                        value={inputValues.message}
+                        onChange={handleChange}
+                        required
+                        placeholder="Ваше сообщение..."
+                        className="w-full border border-linegrey rounded-md px-3 py-2"
+                      />
+
+                      <button
+                        type="submit"
+                        className="w-full bg-blue text-white py-2 rounded-md hover:bg-navyblue transition"
+                      >
+                        Отправить
+                      </button>
+                    </form>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
             </div>
-
-            <Transition appear show={isOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-50" onClose={closeModal}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0 bg-black bg-opacity-25" />
-                    </Transition.Child>
-
-                    <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full items-center justify-center p-4 text-center">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-
-                                    <div className="py-8 lg:py-8 px-4 mx-auto max-w-screen-md">
-                                        <div className="flex flex-shrink-0 items-center justify-center">
-                                            <Link href="/" className='text-2xl sm:text-4xl font-semibold text-black'>
-                                                NetNext
-                                            </Link>
-                                        </div>
-                                        <p className="mb-8 lg:mb-16 mt-8 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">Свяжитесь с нами сейчас? Хотите оставить отзыв?</p>
-                                        <form action="#" className="space-y-8" onSubmit={handleSubmit}>
-                                            <div>
-                                                <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ваше имя</label>
-                                                <input
-                                                    id="text"
-
-                                                    name="input1"
-                                                    value={inputValues.input1}
-                                                    onChange={handleChange}
-
-                                                    type="text"
-                                                    autoComplete="current-password"
-                                                    required
-                                                    className="relative block w-full appearance-none  rounded-md border border-linegrey px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                                    placeholder="Имя..."
-                                                />
-                                            </div>
-                                            <div>
-                                                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ваш email</label>
-                                                <input
-                                                    id="email"
-                                                    name="input2"
-                                                    value={inputValues.input2}
-                                                    onChange={handleChange}
-
-                                                    type="email"
-                                                    autoComplete="current-password"
-                                                    required
-                                                    className="relative block w-full appearance-none  rounded-md border border-linegrey px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                                    placeholder="your_email@gmail.com"
-                                                />
-                                            </div>
-                                            <div className="sm:col-span-2">
-                                                <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">Ваше сообщение</label>
-                                                <textarea
-                                                    id="message"
-                                                    name="input3"
-                                                    value={inputValues.input3}
-                                                    onChange={handleChange}
-                                                    className="relative block w-full appearance-none  rounded-md border border-linegrey px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" placeholder="Напишите, что вас заинтересовало и мы с вами свяжемся в ближайшее время..."></textarea>
-                                            </div>
-                                            <button type="submit"
-                                                onClick={handleClick}
-                                                disabled={isDisabled}
-                                                className="py-3 px-5 text-sm disabled:opacity-50 font-medium w-full text-center text-white rounded-lg bg-blue focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Отправить</button>
-
-                                        </form>
-
-                                    </div>
-
-                                    {/* <div className='flex justify-end'>
-                                        <button type="button"
-                                            onClick={closeModal}
-                                            className="py-3 px-5 mt-2 text-sm font-medium w-50 text-center text-white rounded-lg bg-red hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Close</button>
-                                    </div> */}
-
-                                </Dialog.Panel>
-                            </Transition.Child>
-                        </div>
-                    </div>
-                </Dialog>
-            </Transition>
-        </>
-    )
-}
+          </div>
+        </Dialog>
+      </Transition>
+    </>
+  );
+};
 
 export default Contactusform;
