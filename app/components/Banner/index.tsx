@@ -29,12 +29,16 @@ const Banner = () => {
       case "landing": setEstimatedPriceUSD(300); break;
       case "corporate": setEstimatedPriceUSD(600); break;
       case "ecommerce": setEstimatedPriceUSD(1200); break;
+      case "telegrambot": setEstimatedPriceUSD(500); break;
+      case "mobileapp": setEstimatedPriceUSD(1500); break;
+      case "smm": setEstimatedPriceUSD(250); break;
+      case "support": setEstimatedPriceUSD(200); break;
       default: setEstimatedPriceUSD(0);
     }
   }, [projectType]);
 
   const getConvertedPrice = () => {
-    const rate = 3.2; // Примерный курс BYN/USD
+    const rate = 3.2;
     return currency === "BYN"
       ? Math.round(estimatedPriceUSD * rate)
       : estimatedPriceUSD;
@@ -46,7 +50,7 @@ const Banner = () => {
     const text = `
 🚀 Новый проект:
 👤 Имя: ${name}
-📦 Тип: ${projectType}
+📦 Услуга: ${projectType}
 💰 Оценка: ${price} ${currency}
 💬 Сообщение: ${message}
     `;
@@ -66,7 +70,6 @@ const Banner = () => {
     <>
       <div className="mx-auto max-w-7xl mt-4 mb-6 sm:py-6 px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* COLUMN-1 */}
           <div className="mx-auto sm:mx-0 flex flex-col justify-center">
             <div className="py-2 text-center lg:text-start">
               <button className="text-blue bg-lightblue hover:shadow-xl text-sm md:text-lg font-bold px-6 py-1 rounded-3xl tracking-wider hover:text-white hover:bg-black">
@@ -80,6 +83,13 @@ const Banner = () => {
               <p className="mt-4 text-lg text-gray-600">
                 От идеи до запуска — мы превращаем ваши цели в работающие продукты
               </p>
+              <ul className="mt-4 text-sm text-gray-500 list-disc list-inside">
+                <li>Telegram-боты и автоматизация</li>
+                <li>Мобильные приложения</li>
+                <li>SMM и контент-стратегии</li>
+                <li>Ведение и поддержка сайтов</li>
+                <li>Интеграция с CRM и мессенджерами</li>
+              </ul>
             </div>
             <div className="mt-6 text-center lg:text-start">
               <button
@@ -91,14 +101,12 @@ const Banner = () => {
             </div>
           </div>
 
-          {/* COLUMN-2 */}
           <div className="hidden lg:flex items-center justify-center">
             <Image src="/images/site/1.png" alt="hero-image" width={800} height={642} priority />
           </div>
         </div>
       </div>
 
-      {/* MODAL */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={closeModal}>
           <Transition.Child
@@ -127,7 +135,6 @@ const Banner = () => {
                 <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all">
                   <h2 className="text-3xl font-bold text-center mb-6">Запуск проекта с NetNext</h2>
 
-                  {/* Currency Switch */}
                   <div className="flex justify-center gap-4 mb-4">
                     <button
                       onClick={() => setCurrency("USD")}
@@ -163,10 +170,14 @@ const Banner = () => {
                       required
                       className="w-full border border-linegrey rounded-md px-4 py-2 capitalize"
                     >
-                      <option value="">Выберите тип проекта</option>
+                      <option value="">Выберите услугу</option>
                       <option value="landing">Лендинг</option>
                       <option value="corporate">Корпоративный сайт</option>
                       <option value="ecommerce">Интернет-магазин</option>
+                      <option value="telegrambot">Telegram-бот</option>
+                      <option value="mobileapp">Мобильное приложение</option>
+                      <option value="smm">SMM и продвижение</option>
+                      <option value="support">Поддержка сайта</option>
                     </select>
 
                     {estimatedPriceUSD > 0 && (
@@ -175,7 +186,7 @@ const Banner = () => {
                       </p>
                     )}
 
-                    <textarea
+                                       <textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       required
@@ -196,18 +207,25 @@ const Banner = () => {
                     <h3 className="text-xl font-semibold mb-4">Примеры наших проектов</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
-                        <Image src="/images/site/2.png" alt="Project 1" width={400} height={240} />
-                        <p className="mt-2 text-sm font-medium">Сайт для студии</p>
+                        <Image src="/images/site/1.png" alt="Project 1" width={400} height={240} />
+                        <p className="mt-2 text-sm font-medium">Сервис доставки пиццы</p>
+                        <p className="text-xs text-gray-500 mt-1">Адаптивный лендинг с выбором вкуса, геолокацией и Telegram-ботом</p>
                       </div>
-                                           <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
-                        <Image src="/images/site/3.png" alt="Project 2" width={400} height={240} />
-                        <p className="mt-2 text-sm font-medium">Платформа для обучения</p>
+                      <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
+                        <Image src="/images/site/2.png" alt="Project 2" width={400} height={240} />
+                        <p className="mt-2 text-sm font-medium">Интернет-магазин колонии</p>
+                        <p className="text-xs text-gray-500 mt-1">Закрытая система с авторизацией, каталогом и внутренними платежами</p>
+                      </div>
+                      <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
+                        <Image src="/images/site/3.png" alt="Project 3" width={400} height={240} />
+                        <p className="mt-2 text-sm font-medium">Цифровая витрина для торгового центра</p>
+                        <p className="text-xs text-gray-500 mt-1">Многоуровневая навигация, интеграция с арендаторами и событийным календарём</p>
                       </div>
                     </div>
 
                     {/* ⚠️ Предупреждение */}
                     <p className="mt-6 text-xs text-gray-500 text-center">
-                      ⚠️ Примеры проектов являются демонстрационными и не нарушают авторские права. Все изображения используются исключительно в целях презентации.
+                      ⚠️ Все проекты представлены исключительно в демонстрационных целях. Изображения не нарушают авторские права и не содержат персональных данных.
                     </p>
                   </div>
 
