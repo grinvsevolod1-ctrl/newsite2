@@ -14,11 +14,11 @@ interface NavigationItem {
 }
 
 const navigation: NavigationItem[] = [
-    { name: 'About Us', href: '#aboutus-section', current: false },
-    { name: 'Services', href: '#services-section', current: false },
-    { name: 'FAQ', href: '#faq-section', current: false },
-    { name: 'Blog', href: '#blog-section', current: false },
-    { name: 'Testimonial', href: '#testimonial-section', current: false },
+    { name: 'О нас', href: '#aboutus-section', current: false },
+    { name: 'Сервисы', href: '#services-section', current: false },
+    { name: 'Услуги', href: '#faq-section', current: false },
+    { name: 'Блог', href: '#blog-section', current: false },
+    { name: 'Технологии', href: '#testimonial-section', current: false },
 ]
 
 function classNames(...classes: string[]) {
@@ -64,7 +64,7 @@ const Navbar = () => {
                                 </div>
 
                             </div>
-                            {/* <button className='hidden lg:flex justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white'>Contact us</button> */}
+                            {/* <button className='hidden lg:flex justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white'>О нас</button> */}
                             <Contactusform />
                         </div>
 
