@@ -10,12 +10,12 @@ const Contactusform = () => {
   const [contactValue, setContactValue] = useState('');
 
   const contactOptions = [
-    'email', 'telegram', 'whatsapp', 'vk', 'facebook',
-    'телефон', 'viber', 'instagram', 'tiktok'
+    'Email', 'Telegram', 'WhatsApp', 'VK', 'Facebook',
+    'Телефон', 'Viber', 'Instagram', 'TikTok'
   ];
 
   const getPlaceholder = (method: string) => {
-    switch (method) {
+    switch (method.toLowerCase()) {
       case 'email': return 'your_email@example.com';
       case 'телефон': return '+375 (__) ___-__-__';
       case 'telegram': return '@your_username';
@@ -60,17 +60,16 @@ const Contactusform = () => {
 
   return (
     <>
-      {/* 🔗 Соц-ссылки вместо "О нас" */}
+      {/* 🔗 Соц-ссылки */}
       <div className="flex gap-4 items-center">
         <Link href="https://instagram.com/netnext.site" target="_blank">
           <img
-  src="/images/footer/instagram.svg"
-  alt="Instagram"
-  title="Instagram"
-  className="w-8 h-8 text-black fill-black hover:scale-110 transition-transform"
-  onError={(e) => (e.currentTarget.src = fallbackIcon)}
-/>
-
+            src="/images/footer/instagram.svg"
+            alt="Instagram"
+            title="Instagram"
+            className="w-8 h-8 hover:scale-110 transition-transform"
+            onError={(e) => (e.currentTarget.src = fallbackIcon)}
+          />
         </Link>
         <Link href="https://t.me/skufig1" target="_blank">
           <img
@@ -92,8 +91,8 @@ const Contactusform = () => {
         </a>
       </div>
 
-      {/* 📍 Мини-кнопка в левом нижнем углу */}
-      <div className="fixed bottom-4 left-4 z-40">
+      {/* 📍 Кнопка в правом нижнем углу */}
+      <div className="fixed bottom-4 right-4 z-40">
         <button
           onClick={() => setIsOpen(true)}
           className="bg-navyblue text-white rounded-full px-4 py-2 text-sm shadow-md hover:scale-105 transition-transform duration-300"
@@ -147,7 +146,7 @@ const Contactusform = () => {
                         value={contactMethod}
                         onChange={(e) => setContactMethod(e.target.value)}
                         required
-                        className="w-full border border-linegrey rounded-md px-3 py-2"
+                        className="w-full border border-linegrey rounded-md px-3 py-2 capitalize"
                       >
                         <option value="">Выберите способ связи</option>
                         {contactOptions.map((method) => (
