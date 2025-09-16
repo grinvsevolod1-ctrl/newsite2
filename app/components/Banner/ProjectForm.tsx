@@ -111,19 +111,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agreeTerms) {
-      alert("⚠️ " + t.agree);
-      return;
-    }
-    if (name.trim().length < 2) {
-      alert("⚠️ " + t.name);
-      return;
-    }
-    const digits = phone.replace(/\D/g, "");
-    if (digits.length < 10 || digits.length > 15) {
-      alert("⚠️ " + t.phone);
-      return;
-    }
+    if (!agreeTerms) return;
 
     setIsSubmitting(true);
     const price = getConvertedPrice();
@@ -172,31 +160,11 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
       <div className="flex justify-end gap-2 mb-2">
-        <button
-          type="button"
-          onClick={() => setLang("ru")}
-          className={lang === "ru" ? "font-bold" : ""}
-        >
-          🇷🇺
-        </button>
-        <button
-          type="button"
-          onClick={() => setLang("en")}
-          className={lang === "en" ? "font-bold" : ""}
-        >
-          🇬🇧
-        </button>
+        <button type="button" onClick={() => setLang("ru")} className={lang === "ru" ? "font-bold" : ""}>🇷🇺</button>
+        <button type="button" onClick={() => setLang("en")} className={lang === "en" ? "font-bold" : ""}>🇬🇧</button>
       </div>
 
-      <input
-        type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        autoFocus
-        placeholder={t.name}
-        className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
-      />
+      <input type="text" value={name} onChange={(e) => setName(e.target.value)} required autoFocus placeholder={t.name} className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue" />
 
       <div className="relative w-full">
         <InputMask
@@ -205,43 +173,19 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           required
-        >
-          {(inputProps) => (
-            <input
-              {...inputProps}
-              type="tel"
-              placeholder={`${t.phone} (${t.placeholderPhone})`}
-              className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
-            />
-          )}
-        </InputMask>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z"
-          />
+          as="input"
+          placeholder={`${t.phone} (${t.placeholderPhone})`}
+          className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
+        />
+        <svg xmlns="http://www.w3.org/2000/svg" className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z" />
         </svg>
       </div>
 
-        <select
-        value={projectType}
-        onChange={(e) => setProjectType(e.target.value)}
-        required
-        className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
-      >
+      <select value={projectType} onChange={(e) => setProjectType(e.target.value)} required className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue">
         <option value="">{t.service}</option>
         {services.map((s) => (
-          <option key={s.value} value={s.value}>
-            {s.label}
-          </option>
+          <option key={s.value} value={s.value}>{s.label}</option>
         ))}
       </select>
 
@@ -251,26 +195,11 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         </p>
       )}
 
-      <textarea
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        required
-        placeholder={t.message}
-        className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue resize-none min-h-[80px]"
-      />
+      <textarea value={message} onChange={(e) => setMessage(e.target.value)} required placeholder={t.message} className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue resize-none min-h-[80px]" />
 
       <div className="flex items-start mt-2">
-        <input
-          type="checkbox"
-          checked={agreeTerms}
-          onChange={(e) => setAgreeTerms(e.target.checked)}
-          id="terms"
-          className="mt-1 mr-2"
-          required
-        />
-        <label htmlFor="terms" className="text-sm text-gray-600">
-          {t.agree}
-        </label>
+        <input type="checkbox" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} id="terms" className="mt-1 mr-2" required />
+        <label htmlFor="terms" className="text-sm text-gray-600">{t.agree}</label>
       </div>
 
       <div className="flex justify-center gap-4 mb-2">
