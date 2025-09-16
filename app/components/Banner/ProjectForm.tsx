@@ -12,7 +12,7 @@ const translations = {
   ru: {
     name: "Ваше имя",
     phone: "Ваш номер телефона",
-    placeholderPhone: "например, +375 (29) 14-14-555",
+    placeholderPhone: "например, +375 (29) 123-45-67",
     service: "Выберите услугу",
     message: "Опишите задачу или идею...",
     agree: "Я согласен с условиями обработки данных",
@@ -148,14 +148,12 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
     setIsSubmitting(false);
     localStorage.removeItem("projectFormDraft");
 
-    // Очистка формы
     setName("");
     setPhone("");
     setMessage("");
     setProjectType("");
     setAgreeTerms(false);
 
-    // Закрытие модального окна
     setTimeout(() => {
       setFormSuccess(false);
       closeModal();
@@ -187,14 +185,14 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
           onChange={(e) => setPhone(e.target.value)}
           required
         >
-          {(inputProps) => (
+          {((inputProps: any) => (
             <input
               {...inputProps}
               type="tel"
               placeholder={`${t.phone} (${t.placeholderPhone})`}
               className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
             />
-          )}
+          )) as unknown as React.ReactNode}
         </InputMask>
         <svg xmlns="http://www.w3.org/2000/svg" className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z" />
@@ -227,7 +225,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue resize-none min-h-[80px]"
       />
 
-            <div className="flex items-start mt-2">
+      <div className="flex items-start mt-2">
         <input
           type="checkbox"
           checked={agreeTerms}
@@ -236,7 +234,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
           className="mt-1 mr-2"
           required
         />
-        <label htmlFor="terms" className="text-sm text-gray-600">
+                <label htmlFor="terms" className="text-sm text-gray-600">
           {t.agree}
         </label>
       </div>
