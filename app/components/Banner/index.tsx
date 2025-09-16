@@ -5,6 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useEffect } from "react";
 import Link from "next/link";
 import InputMask from "react-input-mask"; // маска номера телефона
+import { AiFillAlert } from 'react-icons/ai'; // добавляем импорт иконки
 
 const sliderImages = [
   "/images/site/1.png",
@@ -186,7 +187,10 @@ const Banner = () => {
                 <Dialog.Panel className="w-full max-w-3xl bg-white rounded-2xl p-6 md:p-8 shadow-xl transform transition-all relative">
                   {/* Заголовок и закрытие */}
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-3xl font-bold text-center flex-1">Запуск проекта с NetNext</h2>
+                    <h2 className="text-3xl font-bold text-center flex-1 flex items-center justify-center space-x-2">
+                      <AiFillAlert className="w-6 h-6 text-red-500" />
+                      Запуск проекта с NetNext
+                    </h2>
                     <button onClick={closeModal} className="text-gray-500 hover:text-gray-700" aria-label="Закрыть">
                       ✕
                     </button>
