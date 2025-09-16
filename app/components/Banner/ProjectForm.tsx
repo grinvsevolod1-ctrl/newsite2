@@ -173,10 +173,16 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           required
-          as="input"
-          placeholder={`${t.phone} (${t.placeholderPhone})`}
-          className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
-        />
+        >
+          {(inputProps: React.InputHTMLAttributes<HTMLInputElement>) => (
+            <input
+              {...inputProps}
+              type="tel"
+              placeholder={`${t.phone} (${t.placeholderPhone})`}
+              className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
+            />
+          )}
+        </InputMask>
         <svg xmlns="http://www.w3.org/2000/svg" className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z" />
         </svg>
@@ -202,7 +208,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         <label htmlFor="terms" className="text-sm text-gray-600">{t.agree}</label>
       </div>
 
-      <div className="flex justify-center gap-4 mb-2">
+           <div className="flex justify-center gap-4 mb-2">
         <button
           type="button"
           onClick={() => setCurrency("USD")}
