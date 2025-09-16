@@ -19,6 +19,7 @@ const Banner = () => {
   const [currency, setCurrency] = useState("USD");
   const [regionCode, setRegionCode] = useState("+375");
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [agreeTerms, setAgreeTerms] = useState(false); // чекбокс согласия
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => setIsOpen(false);
@@ -60,6 +61,10 @@ const Banner = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!agreeTerms) {
+      alert("Пожалуйста, подтвердите согласие с условиями");
+      return;
+    }
     const price = getConvertedPrice();
     const text = `
 🚀 Новый проект:
@@ -78,24 +83,25 @@ const Banner = () => {
     setMessage("");
     setProjectType("");
     setEstimatedPriceUSD(0);
+    setAgreeTerms(false);
   };
 
   return (
     <>
-      <div className="w-full bg-white">
+      <div className="w-full bg-white relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center min-h-[80vh] max-w-7xl mx-auto px-6 lg:px-8">
           {/* TEXT BLOCK */}
-          <div className="flex flex-col justify-center py-12">
-            <button className="text-blue bg-lightblue hover:shadow-xl text-sm md:text-lg font-bold px-6 py-1 rounded-3xl tracking-wider hover:text-white hover:bg-black w-fit mb-4">
+          <div className="flex flex-col justify-center py-12 px-4 md:px-8 text-center lg:text-left">
+            <button className="text-blue bg-lightblue hover:shadow-xl text-sm md:text-lg font-bold px-6 py-1 rounded-3xl tracking-wider hover:text-white hover:bg-black mx-auto lg:mx-0 mb-4">
               NetNext
             </button>
-            <h1 className="text-4xl md:text-6xl font-bold text-darkpurple leading-tight">
+            <h1 className="text-4xl md:text-6xl font-bold text-darkpurple leading-tight mb-4">
               Мы создаём<br /> современные сайты<br /> и цифровые решения
             </h1>
-            <p className="mt-4 text-lg text-gray-600">
+            <p className="mt-4 text-lg text-gray-600 mb-4">
               От идеи до запуска — мы превращаем ваши цели в работающие продукты
             </p>
-            <ul className="mt-4 text-sm text-gray-500 list-disc list-inside">
+            <ul className="mt-4 text-sm text-gray-500 list-disc list-inside mb-6">
               <li>Telegram-боты и автоматизация</li>
               <li>Мобильные приложения</li>
               <li>SMM и контент-стратегии</li>
@@ -119,7 +125,7 @@ const Banner = () => {
               className="object-cover rounded-3xl"
               priority
             />
-            <div className="absolute bottom-4 right-4 bg-white bg-opacity-80 rounded-xl p-2 shadow">
+            <div className="absolute bottom-4 right-4 bg-white bg-opacity-80 rounded-xl p-2 shadow max-w-[200px]">
               <Image
                 src={sliderImages[currentSlide]}
                 alt={`slide-${currentSlide}`}
@@ -132,7 +138,7 @@ const Banner = () => {
         </div>
       </div>
 
-      {/* MODAL */}
+      {/* МОДАЛЬНОЕ ОКНО */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={closeModal}>
           <Transition.Child
@@ -147,20 +153,31 @@ const Banner = () => {
             <div className="fixed inset-0 bg-black bg-opacity-40" />
           </Transition.Child>
 
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className="fixed inset-0 overflow-y-auto px-4 md:px-8">
+            <div className="flex min-h-full items-center justify-center p-4">
               <Transition.Child
                 as={Fragment}
                 enter="ease-out duration-300"
                 enterFrom="opacity-0 scale-95"
                 enterTo="opacity-100 scale-100"
                 leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
               >
-                <Dialog.Panel className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all">
-                  <h2 className="text-3xl font-bold text-center mb-6">Запуск проекта с NetNext</h2>
+                <Dialog.Panel className="w-full max-w-3xl bg-white rounded-2xl p-6 md:p-8 shadow-xl transform transition-all relative">
+                  {/* Заголовок и кнопка закрытия */}
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-3xl font-bold text-center flex-1">Запуск проекта с NetNext</h2>
+                    <button
+                      onClick={closeModal}
+                      className="text-gray-500 hover:text-gray-700"
+                      aria-label="Закрыть"
+                    >
+                      ✕
+                    </button>
+                  </div>
 
+                  {/* Выбор валюты */}
                   <div className="flex justify-center gap-4 mb-4">
                     <button
                       onClick={() => setCurrency("USD")}
@@ -180,21 +197,24 @@ const Banner = () => {
                     </button>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Форма */}
+                  <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+                    {/* Имя */}
                     <input
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
                       placeholder="Ваше имя"
-                      className="w-full border border-linegrey rounded-md px-4 py-2"
+                      className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue"
                     />
 
+                    {/* Услуга */}
                     <select
                       value={projectType}
                       onChange={(e) => setProjectType(e.target.value)}
                       required
-                      className="w-full border border-linegrey rounded-md px-4 py-2 capitalize"
+                      className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue"
                     >
                       <option value="">Выберите услугу</option>
                       <option value="landing">Лендинг</option>
@@ -206,29 +226,47 @@ const Banner = () => {
                       <option value="support">Поддержка сайта</option>
                     </select>
 
+                    {/* Оценка стоимости */}
                     {estimatedPriceUSD > 0 && (
                       <p className="text-sm text-gray-600">
                         💰 Оценочная стоимость: <strong>{getConvertedPrice()} {currency}</strong>
                       </p>
                     )}
 
+                    {/* Сообщение */}
                     <textarea
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       required
                       placeholder="Опишите задачу или идею..."
-                      className="w-full border border-linegrey rounded-md px-4 py-2"
+                      className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue resize-none min-h-[80px]"
                     />
 
+                    {/* Чекбокс согласия */}
+                    <div className="flex items-start mt-2">
+                      <input
+                        type="checkbox"
+                        checked={agreeTerms}
+                        onChange={(e) => setAgreeTerms(e.target.checked)}
+                        id="terms"
+                        className="mt-1 mr-2"
+                        required
+                      />
+                      <label htmlFor="terms" className="text-sm text-gray-600">
+                        Я согласен с условиями обработки данных
+                      </label>
+                    </div>
+
+                    {/* Кнопка отправки */}
                     <button
                       type="submit"
-                      className="w-full bg-blue text-white py-3 rounded-md hover:bg-hoblue transition"
+                      className="w-full bg-blue text-white py-3 px-4 rounded-md hover:bg-hoblue transition font-semibold"
                     >
                       Отправить запрос
                     </button>
                   </form>
 
-                  {/* CASES */}
+                  {/* Примеры проектов */}
                   <div className="mt-8">
                     <h3 className="text-xl font-semibold mb-4">Примеры наших проектов</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -254,14 +292,13 @@ const Banner = () => {
                         </p>
                       </div>
                     </div>
-
-                    {/* ⚠️ Предупреждение */}
+                    {/* Предупреждение */}
                     <p className="mt-6 text-xs text-gray-500 text-center">
                       ⚠️ Все проекты представлены исключительно в демонстрационных целях. Изображения не нарушают авторские права и не содержат персональных данных.
                     </p>
                   </div>
 
-                  {/* CTA: Telegram */}
+                  {/* CTA в Телеграм */}
                   <div className="mt-6 text-center">
                     <Link
                       href="https://t.me/skufig1"
