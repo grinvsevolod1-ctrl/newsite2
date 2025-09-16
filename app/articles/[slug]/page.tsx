@@ -41,6 +41,12 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
   const prev = articlesData[idx - 1];
   const next = articlesData[idx + 1];
 
+  const handleCopyLink = () => {
+    if (typeof window !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+    }
+  };
+
   return (
     <article
       className="max-w-4xl mx-auto px-6 py-20"
@@ -149,7 +155,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
             Email
           </Link>
           <button
-            onClick={() => navigator.clipboard.writeText(window.location.href)}
+            onClick={handleCopyLink}
             className="bg-gray-500 text-white px-4 py-2 rounded-full hover:bg-gray-600 transition text-sm"
           >
             Скопировать ссылку
