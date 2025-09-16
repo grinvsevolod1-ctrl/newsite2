@@ -4,15 +4,13 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-
-    // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     screens: {
       'sm': '640px',
       'md': '768px',
-      'lg': '1150px', // change the value of lg to 1150px
+      'lg': '1150px',
       'xl': '1280px',
       '2xl': '1536px',
     },
@@ -29,18 +27,18 @@ module.exports = {
       'darkblue': '#1E013A',
       'offwhite': 'rgba(255, 255, 255, 0.75)',
       'lightblack': 'rgba(0, 0, 0, 0.55)',
-      'bluish' : 'rgba(14, 13, 13, 0.75)',
-      'testColor' : 'rgba(54, 54, 54, 0.75)',
+      'bluish': 'rgba(14, 13, 13, 0.75)',
+      'testColor': 'rgba(54, 54, 54, 0.75)',
       'grey': '#909090',
-      'bgblue' : '#02398A',
-      'darkgrey' : '#747474',
-      'faqblue' : '#0861FF',
-      'gold' : '#FAAF38',
+      'bgblue': '#02398A',
+      'darkgrey': '#747474',
+      'faqblue': '#0861FF',
+      'gold': '#FAAF38',
       'hoblue': '#0000FF',
-      'btnblue' : "#267dff",
-      'bggrey' : '#DDDDDD',
-      'footer' : 'rgba(226, 223, 223, 0.75)',
-      'linegrey' : "#C4C4C4"
+      'btnblue': "#267dff",
+      'bggrey': '#DDDDDD',
+      'footer': 'rgba(226, 223, 223, 0.75)',
+      'linegrey': "#C4C4C4"
     },
     fontSize: {
       xs: ['0.75rem', { lineHeight: '1rem' }],
@@ -59,7 +57,17 @@ module.exports = {
       '65xl': ['65px', { lineHeight: '1' }],
       '80xl': ['80px', { lineHeight: '6rem' }],
     },
-    extend: {},
+    extend: {
+      animation: {
+        'fade-in': 'fadeIn 0.5s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0, transform: 'scale(0.95)' },
+          '100%': { opacity: 1, transform: 'scale(1)' },
+        },
+      },
+    },
   },
   plugins: [],
 }

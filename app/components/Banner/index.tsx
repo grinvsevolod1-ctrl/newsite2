@@ -104,6 +104,7 @@ const Banner = () => {
                 leaveTo="opacity-0"
               >
                 <Dialog.Panel className="w-full max-w-3xl bg-white rounded-2xl p-6 md:p-8 shadow-xl transform transition-all relative">
+                  {/* Заголовок */}
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-3xl font-bold text-center flex-1 flex items-center justify-center space-x-2">
                       <span>🚀 Запуск проекта с NetNext</span>
@@ -118,7 +119,11 @@ const Banner = () => {
                   </div>
 
                   {/* Форма */}
-                  <ProjectForm currency={currency} setCurrency={setCurrency} closeModal={closeModal} />
+                  <ProjectForm
+                    currency={currency}
+                    setCurrency={setCurrency}
+                    closeModal={closeModal}
+                  />
 
                   {/* Примеры проектов */}
                   <div className="mt-8">

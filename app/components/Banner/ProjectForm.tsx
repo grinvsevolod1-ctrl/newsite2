@@ -10,7 +10,39 @@ type Props = {
   closeModal: () => void;
 };
 
+const translations = {
+  ru: {
+    name: "Ваше имя",
+    phone: "Ваш номер телефона",
+    placeholderPhone: "например, +375 (29) 123-45-67",
+    service: "Выберите услугу",
+    message: "Опишите задачу или идею...",
+    agree: "Я согласен с условиями обработки данных",
+    send: "Отправить запрос",
+    success: "Спасибо! Ваша заявка отправлена.",
+    usd: "USD",
+    byn: "BYN",
+    estimate: "💰 Оценочная стоимость",
+  },
+  en: {
+    name: "Your name",
+    phone: "Your phone number",
+    placeholderPhone: "e.g. +375 (29) 123-45-67",
+    service: "Select a service",
+    message: "Describe your idea or task...",
+    agree: "I agree to the data processing terms",
+    send: "Submit request",
+    success: "Thank you! Your request has been sent.",
+    usd: "USD",
+    byn: "BYN",
+    estimate: "💰 Estimated price",
+  },
+};
+
 const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
+  const [lang, setLang] = useState<"ru" | "en">("ru");
+  const t = translations[lang];
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
@@ -19,6 +51,27 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
   const [regionCode, setRegionCode] = useState("+375");
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const browserLang = navigator.language.startsWith("ru") ? "ru" : "en";
+    setLang(browserLang as "ru" | "en");
+  }, []);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("projectFormDraft");
+    if (saved) {
+      const draft = JSON.parse(saved);
+      setName(draft.name || "");
+      setPhone(draft.phone || "");
+      setMessage(draft.message || "");
+    }
+  }, []);
+
+  useEffect(() => {
+    const draft = { name, phone, message };
+    localStorage.setItem("projectFormDraft", JSON.stringify(draft));
+  }, [name, phone, message]);
 
   useEffect(() => {
     const userRegion = "BY";
@@ -51,14 +104,16 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreeTerms) {
-      alert("Пожалуйста, подтвердите согласие с условиями");
+      alert("⚠️ " + t.agree);
       return;
     }
     const digits = phone.replace(/\D/g, "");
     if (digits.length < 10 || digits.length > 15) {
-      alert("Введите корректный номер телефона");
+      alert("⚠️ " + t.phone);
       return;
     }
+
+    setIsSubmitting(true);
 
     const price = getConvertedPrice();
     const text = `
@@ -70,34 +125,50 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
 💬 Сообщение: ${message}
     `;
 
-    await fetch(`https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID,
-        text,
+    await Promise.all([
+      fetch(`https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID,
+          text,
+        }),
       }),
-    });
+      fetch(process.env.NEXT_PUBLIC_CRM_ENDPOINT || "", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          phone,
+          projectType,
+          price,
+          currency,
+          message,
+          source: "NetNext.site",
+        }),
+      }),
+    ]);
 
     setFormSuccess(true);
-    setName("");
-    setPhone("");
-    setMessage("");
-    setProjectType("");
-    setEstimatedPriceUSD(0);
-    setAgreeTerms(false);
+    setIsSubmitting(false);
+    localStorage.removeItem("projectFormDraft");
     setTimeout(closeModal, 5000);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+      <div className="flex justify-end gap-2 mb-2">
+        <button type="button" onClick={() => setLang("ru")} className={lang === "ru" ? "font-bold" : ""}>🇷🇺</button>
+        <button type="button" onClick={() => setLang("en")} className={lang === "en" ? "font-bold" : ""}>🇬🇧</button>
+      </div>
+
       <input
         type="text"
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
         autoFocus
-        placeholder="Ваше имя"
+        placeholder={t.name}
         className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
       />
 
@@ -113,7 +184,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
             <input
               {...inputProps}
               type="tel"
-              placeholder={`Ваш номер телефона (${regionCode} (29) 123-45-67)`}
+              placeholder={`${t.phone} (${t.placeholderPhone})`}
               className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
             />
           )}
@@ -127,7 +198,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         required
         className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
       >
-        <option value="">Выберите услугу</option>
+        <option value="">{t.service}</option>
         <option value="landing">Лендинг</option>
         <option value="corporate">Корпоративный сайт</option>
         <option value="ecommerce">Интернет-магазин</option>
@@ -139,7 +210,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
 
       {estimatedPriceUSD > 0 && (
         <p className="text-sm text-gray-600">
-          💰 Оценочная стоимость: <strong>{getConvertedPrice()} {currency}</strong>
+          {t.estimate}: <strong>{getConvertedPrice()} {currency}</strong>
         </p>
       )}
 
@@ -147,7 +218,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         required
-        placeholder="Опишите задачу или идею..."
+        placeholder={t.message}
         className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue resize-none min-h-[80px]"
       />
 
@@ -161,11 +232,11 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
           required
         />
         <label htmlFor="terms" className="text-sm text-gray-600">
-          Я согласен с условиями обработки данных
+          {t.agree}
         </label>
       </div>
 
-      <div className="flex justify-center gap-4 mb-2">
+           <div className="flex justify-center gap-4 mb-2">
         <button
           type="button"
           onClick={() => setCurrency("USD")}
@@ -173,7 +244,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
             currency === "USD" ? "bg-blue text-white" : "bg-gray-200"
           }`}
         >
-          USD
+          {t.usd}
         </button>
         <button
           type="button"
@@ -182,21 +253,29 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
             currency === "BYN" ? "bg-blue text-white" : "bg-gray-200"
           }`}
         >
-          BYN
+          {t.byn}
         </button>
       </div>
 
       <button
         type="submit"
-        aria-label="Отправить форму"
-        className="w-full bg-blue text-white py-3 px-4 rounded-md hover:bg-hoblue transition font-semibold"
+        aria-label={t.send}
+        disabled={isSubmitting}
+        className={`w-full py-3 px-4 rounded-md font-semibold transition ${
+          isSubmitting
+            ? "bg-gray-400 text-white cursor-not-allowed"
+            : "bg-blue text-white hover:bg-hoblue"
+        }`}
       >
-        Отправить запрос
+        {isSubmitting ? "⏳ Отправка..." : t.send}
       </button>
 
       {formSuccess && (
-        <div role="alert" className="mt-4 p-4 bg-green-100 text-green-700 rounded">
-          Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время.
+        <div
+          role="alert"
+          className="mt-4 p-4 bg-green-100 text-green-700 rounded text-center animate-fade-in"
+        >
+          ✅ {t.success}
         </div>
       )}
     </form>
