@@ -1,8 +1,10 @@
 "use client";
+
 import Image from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useEffect } from "react";
 import Link from "next/link";
+import InputMask from "react-input-mask"; // маска номера телефона
 
 const sliderImages = [
   "/images/site/1.png",
@@ -13,25 +15,33 @@ const sliderImages = [
 const Banner = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
   const [projectType, setProjectType] = useState("");
   const [estimatedPriceUSD, setEstimatedPriceUSD] = useState(0);
   const [currency, setCurrency] = useState("USD");
   const [regionCode, setRegionCode] = useState("+375");
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [agreeTerms, setAgreeTerms] = useState(false); // чекбокс согласия
+  const [agreeTerms, setAgreeTerms] = useState(false);
+  const [formSuccess, setFormSuccess] = useState(false);
 
+  // Открытие/закрытие модального окна
   const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const closeModal = () => {
+    setIsOpen(false);
+    setFormSuccess(false);
+  };
 
   useEffect(() => {
-    const userRegion = "BY";
+    // Определение региона (заглушка)
+    const userRegion = "BY"; // Можно заменить на реальную логику определения региона
     if (userRegion === "BY") setRegionCode("+375");
     else if (userRegion === "RU") setRegionCode("+7");
     else if (userRegion === "UA") setRegionCode("+380");
     else setRegionCode("+1");
   }, []);
 
+  // Обновление оценки стоимости
   useEffect(() => {
     switch (projectType) {
       case "landing": setEstimatedPriceUSD(300); break;
@@ -45,6 +55,7 @@ const Banner = () => {
     }
   }, [projectType]);
 
+  // Автоматическая смена слайда
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
@@ -65,10 +76,17 @@ const Banner = () => {
       alert("Пожалуйста, подтвердите согласие с условиями");
       return;
     }
+    const phoneDigits = phone.replace(/\D/g, "");
+    const phoneRegex = /^\d{7,15}$/;
+    if (!phoneRegex.test(phoneDigits)) {
+      alert("Пожалуйста, введите корректный номер телефона");
+      return;
+    }
     const price = getConvertedPrice();
     const text = `
 🚀 Новый проект:
 👤 Имя: ${name}
+📞 Телефон: ${phone}
 📦 Услуга: ${projectType}
 💰 Оценка: ${price} ${currency}
 💬 Сообщение: ${message}
@@ -78,8 +96,13 @@ const Banner = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ chat_id: 940316027, text })
     });
-    closeModal();
+    setFormSuccess(true);
+    setTimeout(() => {
+      closeModal();
+    }, 5000);
+    // Очистка формы
     setName("");
+    setPhone("");
     setMessage("");
     setProjectType("");
     setEstimatedPriceUSD(0);
@@ -88,13 +111,15 @@ const Banner = () => {
 
   return (
     <>
+      {/* Верхний блок с изображением и текстом */}
       <div className="w-full bg-white relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 items-center min-h-[80vh] max-w-7xl mx-auto px-6 lg:px-8">
-          {/* TEXT BLOCK */}
-          <div className="flex flex-col justify-center py-12 px-4 md:px-8 text-center lg:text-left">
-            <button className="text-blue bg-lightblue hover:shadow-xl text-sm md:text-lg font-bold px-6 py-1 rounded-3xl tracking-wider hover:text-white hover:bg-black mx-auto lg:mx-0 mb-4">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col-reverse lg:flex-row items-center min-h-[80vh]">
+          {/* Текст */}
+          <div className="flex flex-col justify-center py-12 px-4 md:px-8 text-center lg:text-left order-2 lg:order-1">
+            {/* Убрал кнопку "NetNext" */}
+            {/* <button className="text-blue bg-lightblue hover:shadow-xl text-sm md:text-lg font-bold px-6 py-1 rounded-3xl tracking-wider hover:text-white hover:bg-black mx-auto lg:mx-0 mb-4">
               NetNext
-            </button>
+            </button> */}
             <h1 className="text-4xl md:text-6xl font-bold text-darkpurple leading-tight mb-4">
               Мы создаём<br /> современные сайты<br /> и цифровые решения
             </h1>
@@ -115,9 +140,8 @@ const Banner = () => {
               Начать проект
             </button>
           </div>
-
-          {/* IMAGE BLOCK */}
-          <div className="relative w-full h-[80vh] hidden lg:block">
+          {/* Изображение чуть выше */}
+          <div className="relative w-full h-[80vh] flex justify-center order-1 lg:order-2 mb-4 lg:mb-0">
             <Image
               src="/images/banner/banner.svg"
               alt="hero-image"
@@ -125,20 +149,15 @@ const Banner = () => {
               className="object-cover rounded-3xl"
               priority
             />
+            {/* Слайдер в углу */}
             <div className="absolute bottom-4 right-4 bg-white bg-opacity-80 rounded-xl p-2 shadow max-w-[200px]">
-              <Image
-                src={sliderImages[currentSlide]}
-                alt={`slide-${currentSlide}`}
-                width={200}
-                height={120}
-                className="rounded-md"
-              />
+              <Image src={sliderImages[currentSlide]} alt={`slide-${currentSlide}`} width={200} height={120} className="rounded-md" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* МОДАЛЬНОЕ ОКНО */}
+      {/* Модальное окно */}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={closeModal}>
           <Transition.Child
@@ -147,8 +166,8 @@ const Banner = () => {
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"
             leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
           >
             <div className="fixed inset-0 bg-black bg-opacity-40" />
           </Transition.Child>
@@ -165,14 +184,10 @@ const Banner = () => {
                 leaveTo="opacity-0"
               >
                 <Dialog.Panel className="w-full max-w-3xl bg-white rounded-2xl p-6 md:p-8 shadow-xl transform transition-all relative">
-                  {/* Заголовок и кнопка закрытия */}
+                  {/* Заголовок и закрытие */}
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-3xl font-bold text-center flex-1">Запуск проекта с NetNext</h2>
-                    <button
-                      onClick={closeModal}
-                      className="text-gray-500 hover:text-gray-700"
-                      aria-label="Закрыть"
-                    >
+                    <button onClick={closeModal} className="text-gray-500 hover:text-gray-700" aria-label="Закрыть">
                       ✕
                     </button>
                   </div>
@@ -209,6 +224,24 @@ const Banner = () => {
                       className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue"
                     />
 
+                    {/* Телефон с маской */}
+                    <InputMask
+                      mask="+999 (99) 999-99-99"
+                      maskChar=" "
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    >
+                      {(inputProps) => (
+                        <input
+                          {...inputProps}
+                          type="tel"
+                          placeholder="Ваш номер телефона (+375 (29) 123-45-67)"
+                          className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue"
+                        />
+                      )}
+                    </InputMask>
+
                     {/* Услуга */}
                     <select
                       value={projectType}
@@ -242,7 +275,7 @@ const Banner = () => {
                       className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue resize-none min-h-[80px]"
                     />
 
-                    {/* Чекбокс согласия */}
+                    {/* Галочка согласия */}
                     <div className="flex items-start mt-2">
                       <input
                         type="checkbox"
@@ -265,6 +298,13 @@ const Banner = () => {
                       Отправить запрос
                     </button>
                   </form>
+
+                  {/* Успешное сообщение */}
+                  {formSuccess && (
+                    <div className="mt-4 p-4 bg-green-100 text-green-700 rounded">
+                      Спасибо! Ваша заявка отправлена. Мы свяжемся с вами в ближайшее время.
+                    </div>
+                  )}
 
                   {/* Примеры проектов */}
                   <div className="mt-8">
