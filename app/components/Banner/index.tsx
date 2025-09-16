@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState, useEffect } from "react";
 import Link from "next/link";
 import InputMask from "react-input-mask"; // маска номера телефона
-import { AiFillAlert } from 'react-icons/ai'; // добавляем импорт иконки
+import { AiFillAlert } from 'react-icons/ai'; // иконка
 
 const sliderImages = [
   "/images/site/1.png",
@@ -26,7 +26,6 @@ const Banner = () => {
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
 
-  // Открытие/закрытие модального окна
   const openModal = () => setIsOpen(true);
   const closeModal = () => {
     setIsOpen(false);
@@ -101,7 +100,6 @@ const Banner = () => {
     setTimeout(() => {
       closeModal();
     }, 5000);
-    // Очистка формы
     setName("");
     setPhone("");
     setMessage("");
@@ -189,7 +187,7 @@ const Banner = () => {
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-3xl font-bold text-center flex-1 flex items-center justify-center space-x-2">
                       <AiFillAlert className="w-6 h-6 text-red-500" />
-                      Запуск проекта с NetNext
+                      <span>Запуск проекта с NetNext</span>
                     </h2>
                     <button onClick={closeModal} className="text-gray-500 hover:text-gray-700" aria-label="Закрыть">
                       ✕
@@ -228,23 +226,27 @@ const Banner = () => {
                       className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue"
                     />
 
-                    {/* Телефон с маской */}
-                    <InputMask
-                      mask="+999 (99) 999-99-99"
-                      maskChar=" "
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      required
-                    >
-                      {(inputProps) => (
-                        <input
-                          {...inputProps}
-                          type="tel"
-                          placeholder="Ваш номер телефона (+375 (29) 123-45-67)"
-                          className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue"
-                        />
-                      )}
-                    </InputMask>
+                    {/* Телефон с маской и иконкой */}
+                    <div className="relative w-full">
+                      <InputMask
+                        mask="+999 (99) 999-99-99"
+                        maskChar=" "
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        required
+                      >
+                        {(inputProps) => (
+                          <input
+                            {...inputProps}
+                            type="tel"
+                            placeholder="Ваш номер телефона (+375 (29) 123-45-67)"
+                            className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue"
+                          />
+                        )}
+                      </InputMask>
+                      {/* Иконка справа внутри поля */}
+                      <AiFillAlert className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 text-red-500" />
+                    </div>
 
                     {/* Услуга */}
                     <select
