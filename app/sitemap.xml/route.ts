@@ -5,7 +5,7 @@ import { articlesData } from "@/app/lib/articlesData";
 const BASE_URL = "https://netnext.site";
 
 export async function GET() {
-  const staticPages = ["", "about", "contact", "services", "cv"];
+  const staticPages = ["", "about", "contact", "services", "cv", "joinus"];
 
   const serviceSlugs = [
     "telegram-bots",

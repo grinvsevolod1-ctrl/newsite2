@@ -41,7 +41,19 @@ const sections: SectionType[] = [
 
 const Footer = () => {
   return (
-    <footer className="bg-black text-white pt-32 pb-10 -mt-40">
+    <footer
+      className="bg-black text-white pt-32 pb-10 -mt-40"
+      itemScope
+      itemType="https://schema.org/Organization"
+    >
+      <meta itemProp="name" content="NetNext.site" />
+      <meta itemProp="url" content="https://netnext.site" />
+      <meta itemProp="telephone" content="+375291414555" />
+      <meta itemProp="sameAs" content="https://t.me/skufig1" />
+      <meta itemProp="sameAs" content="https://instagram.com/netnext.site" />
+      <meta itemProp="sameAs" content="https://wa.me/375291414555" />
+      <meta itemProp="sameAs" content="viber://chat?number=+375291414555" />
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-y-10 gap-x-16">
           {/* Бренд */}
@@ -51,21 +63,15 @@ const Footer = () => {
               Адаптивные цифровые системы: Telegram, CRM, сайты, визуал. Всё масштабируемо и сопровождаемо.
             </p>
             <div className="flex gap-4">
-              <div className="footer-icons">
-                <Link href="https://t.me/skufig1" target="_blank">
-                  <Image src="/images/footer/telegram.svg" alt="Telegram" width={20} height={20} />
-                </Link>
-              </div>
-              <div className="footer-icons">
-                <Link href="https://instagram.com" target="_blank">
-                  <Image src="/images/footer/instagram.svg" alt="Instagram" width={20} height={20} />
-                </Link>
-              </div>
-              <div className="footer-icons">
-                <Link href="https://github.com" target="_blank">
-                  <Image src="/images/footer/github.svg" alt="GitHub" width={20} height={20} />
-                </Link>
-              </div>
+              <Link href="https://t.me/skufig1" target="_blank" itemProp="sameAs">
+                <Image src="/images/footer/telegram.svg" alt="Telegram" width={20} height={20} />
+              </Link>
+              <Link href="https://instagram.com/netnext.site" target="_blank" itemProp="sameAs">
+                <Image src="/images/footer/instagram.svg" alt="Instagram" width={20} height={20} />
+              </Link>
+              <Link href="https://github.com/rourory" target="_blank" itemProp="sameAs">
+                <Image src="/images/footer/github.svg" alt="GitHub" width={20} height={20} />
+              </Link>
             </div>
           </div>
 
@@ -86,10 +92,19 @@ const Footer = () => {
           ))}
         </div>
 
+        {/* Контактная точка */}
+        <div itemScope itemType="https://schema.org/ContactPoint" className="mt-12 text-sm text-gray-400">
+          <meta itemProp="contactType" content="customer support" />
+          <meta itemProp="areaServed" content="BY" />
+          <meta itemProp="availableLanguage" content="Russian" />
+          <p>Связь: <span itemProp="telephone">+375 29 14 - 14 - 555</span></p>
+          <p>Email: <span itemProp="email">info@netnext.site</span></p>
+        </div>
+
         {/* Нижняя строка */}
         <div className="mt-16 border-t border-gray-700 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
           <p className="text-center md:text-left">
-            © 2025 NetNext. Все права защищены.
+            © {new Date().getFullYear()} NetNext.site. Все права защищены.
           </p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <Link href="/privacy" className="hover:text-white transition">Политика конфиденциальности</Link>
