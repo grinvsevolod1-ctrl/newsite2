@@ -1,40 +1,57 @@
-export interface Article {
-  slug: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  image: string;
-  tags: string[];
-  date: string;
-  readingTime: string;
-  author: string;
-  link: string;
-}
-
-export const articlesData: Article[] = [
+export const articlesData = [
   {
     slug: "telegram-bot-manager",
     title: "Как Telegram-бот заменил менеджера",
     subtitle: "Автоматизация заказов и верификации",
-    description: "Мы рассказываем, как бот стал полноценным сотрудником: от заказов до воронок.",
+    description: "Бот стал полноценным сотрудником: принимает заказы, проверяет пользователей, отправляет уведомления.",
     image: "/images/articles/article.png",
     tags: ["Telegram", "боты", "автоматизация"],
     date: "2025-09-01",
     readingTime: "4 мин",
     author: "NetNext / Telegram",
-    link: "/cases/telegram-bot",
   },
   {
     slug: "branding-systems",
     title: "Визуальные системы в Instagram и CRM",
     subtitle: "Как мы масштабируем брендинг",
-    description: "Паттерны, адаптация, визуальные гайды и интеграция с CRM.",
+    description: "Паттерны, визуальные гайды, адаптация под соцсети и CRM. Всё работает как единая система.",
     image: "/images/articles/article2.png",
     tags: ["брендинг", "CRM", "Instagram"],
     date: "2025-08-15",
     readingTime: "3 мин",
     author: "NetNext / Брендинг",
-    link: "/services/branding-style",
   },
-  // Добавь остальные статьи по аналогии
+  {
+    slug: "site-support-subscription",
+    title: "Сопровождение сайта как сервис",
+    subtitle: "Что входит в подписку NetNext",
+    description: "Обновления, визуальные правки, SEO, Telegram-интеграции и техническая поддержка.",
+    image: "/images/articles/article3.png",
+    tags: ["поддержка", "сайт", "сервис"],
+    date: "2025-07-10",
+    readingTime: "5 мин",
+    author: "NetNext / Поддержка",
+  },
+  {
+    slug: "telegram-crm-integration",
+    title: "Интеграция Telegram + amoCRM",
+    subtitle: "Как мы автоматизируем воронки",
+    description: "Формы, уведомления, webhooks, аналитика. Всё работает в Telegram и CRM.",
+    image: "/images/articles/article2.png",
+    tags: ["интеграция", "CRM", "Telegram"],
+    date: "2025-06-20",
+    readingTime: "6 мин",
+    author: "NetNext / Интеграции",
+  },
+  {
+    slug: "mobile-app-mall",
+    title: "Мобильное приложение для ТЦ",
+    subtitle: "Навигация, события, push",
+    description: "Карта, события, арендаторы, push-уведомления. Всё адаптировано под iOS и Android.",
+    image: "/images/articles/article3.png",
+    tags: ["мобильные", "приложения", "торговля"],
+    date: "2025-05-05",
+    readingTime: "4 мин",
+    author: "NetNext / Приложения",
+  },
 ];
