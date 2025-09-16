@@ -56,7 +56,7 @@ const Banner = () => {
           </div>
 
           {/* Изображение баннера */}
-          <div className="relative w-full h-[70vh] -mt-10 flex justify-center order-1 lg:order-2 mb-4 lg:mb-0">
+          <div className="relative w-full h-[70vh] flex justify-center order-1 lg:order-2 mb-4 lg:mb-0">
             <Image
               src="/images/banner/banner.svg"
               alt="hero-image"
