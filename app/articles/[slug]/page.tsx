@@ -41,9 +41,12 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
   const prev = articlesData[idx - 1];
   const next = articlesData[idx + 1];
 
+  // Объявляем функцию внутри компонента
   const handleCopyLink = () => {
     if (typeof window !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(window.location.href).catch((err) => {
+        console.error("Ошибка копирования:", err);
+      });
     }
   };
 
@@ -53,7 +56,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
       itemScope
       itemType="https://schema.org/Article"
     >
-      {/* Breadcrumbs */}
+      {/* Хлебные крошки */}
       <nav
         className="text-sm mb-6"
         aria-label="Breadcrumb"
@@ -79,13 +82,13 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         </ol>
       </nav>
 
-      {/* Title */}
+      {/* Заголовки */}
       <h1 className="text-4xl font-bold text-center mb-4" itemProp="headline">
         {article.title}
       </h1>
       <h2 className="text-xl text-center text-gray-600 mb-6">{article.subtitle}</h2>
 
-      {/* Cover Image */}
+      {/* Обложка */}
       <div className="flex justify-center mb-10">
         <Image
           src={article.image}
@@ -97,13 +100,13 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         />
       </div>
 
-      {/* Author and Date */}
+      {/* Автор и дата */}
       <div className="text-sm text-center text-gray-500 mb-12">
         <span itemProp="author">{article.author}</span> •{" "}
         <time itemProp="datePublished">{article.date}</time>
       </div>
 
-      {/* Article Body */}
+      {/* Тело статьи */}
       <div className="prose prose-lg max-w-none text-gray-800 mb-16" itemProp="articleBody">
         <p>{article.description}</p>
 
@@ -130,7 +133,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         </p>
       </div>
 
-      {/* Share */}
+      {/* Поделиться */}
       <div className="text-center mb-16">
         <h4 className="text-lg font-semibold mb-4">Поделиться статьёй</h4>
         <div className="flex justify-center gap-4 flex-wrap">
@@ -163,7 +166,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         </div>
       </div>
 
-      {/* Prev / Next Navigation */}
+      {/* Навигация Prev / Next */}
       <div className="flex justify-between border-t pt-6 text-sm mb-16">
         {prev ? (
           <Link href={`/articles/${prev.slug}`} className="text-blue hover:underline">
@@ -181,7 +184,7 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         )}
       </div>
 
-      {/* Related Articles */}
+      {/* Похожие статьи */}
       <div className="border-t pt-10">
         <h3 className="text-2xl font-bold mb-6">Похожие статьи</h3>
         <div className="flex gap-6 overflow-x-auto pb-4 -mx-2 px-2 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible">
