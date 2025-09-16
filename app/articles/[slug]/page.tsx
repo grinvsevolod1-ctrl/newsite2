@@ -34,8 +34,12 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 }
 
 export default function ArticlePage({ params }: { params: { slug: string } }) {
-  const article = articlesData.find((a) => a.slug === params.slug);
-  if (!article) return notFound();
+  const idx = articlesData.findIndex((a) => a.slug === params.slug);
+  if (idx === -1) return notFound();
+
+  const article = articlesData[idx];
+  const prev = articlesData[idx - 1];
+  const next = articlesData[idx + 1];
 
   return (
     <article
@@ -43,27 +47,57 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
       itemScope
       itemType="https://schema.org/Article"
     >
+      {/* Breadcrumbs */}
+      <nav
+        className="text-sm mb-6"
+        aria-label="Breadcrumb"
+        itemScope
+        itemType="https://schema.org/BreadcrumbList"
+      >
+        <ol className="flex flex-wrap gap-2">
+          <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+            <Link href="/" itemProp="item">
+              <span itemProp="name">Главная</span>
+            </Link>
+            <meta itemProp="position" content="1" />
+          </li>
+          <li>/</li>
+          <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+            <Link href="/articles" itemProp="item">
+              <span itemProp="name">Статьи</span>
+            </Link>
+            <meta itemProp="position" content="2" />
+          </li>
+          <li>/</li>
+          <li className="text-gray-500">{article.title}</li>
+        </ol>
+      </nav>
+
+      {/* Title */}
       <h1 className="text-4xl font-bold text-center mb-4" itemProp="headline">
         {article.title}
       </h1>
       <h2 className="text-xl text-center text-gray-600 mb-6">{article.subtitle}</h2>
 
+      {/* Cover Image */}
       <div className="flex justify-center mb-10">
         <Image
           src={article.image}
           alt={article.title}
           width={800}
           height={500}
-          className="rounded-xl"
+          className="rounded-xl shadow-lg"
           itemProp="image"
         />
       </div>
 
+      {/* Author and Date */}
       <div className="text-sm text-center text-gray-500 mb-12">
         <span itemProp="author">{article.author}</span> •{" "}
-        <span itemProp="datePublished">{article.date}</span>
+        <time itemProp="datePublished">{article.date}</time>
       </div>
 
+      {/* Article Body */}
       <div className="prose prose-lg max-w-none text-gray-800 mb-16" itemProp="articleBody">
         <p>{article.description}</p>
 
@@ -72,9 +106,10 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
           <li>Интеграция Telegram-бота с CRM</li>
           <li>Автоматизация заявок и уведомлений</li>
           <li>Адаптация под мобильные и десктоп</li>
+          <li>SEO-оптимизация и аналитика</li>
         </ul>
 
-        <blockquote>
+        <blockquote className="border-l-4 border-blue pl-4 italic text-gray-600">
           «Бот стал полноценным менеджером: он принимает заявки, проверяет пользователей и отправляет уведомления в Telegram и CRM.»
         </blockquote>
 
@@ -82,10 +117,15 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
         <p>
           Сокращение времени обработки заявок на 70%, снижение нагрузки на команду, повышение конверсии через автоматизацию.
         </p>
+
+        <h3>Как это работает:</h3>
+        <p>
+          Пользователь заходит в Telegram-бот, выбирает услугу, заполняет форму. Данные автоматически попадают в CRM, менеджер получает уведомление, а клиент — подтверждение.
+        </p>
       </div>
 
-      {/* Поделиться */}
-      <div className="text-center">
+      {/* Share */}
+      <div className="text-center mb-16">
         <h4 className="text-lg font-semibold mb-4">Поделиться статьёй</h4>
         <div className="flex justify-center gap-4 flex-wrap">
           <Link
@@ -108,6 +148,61 @@ export default function ArticlePage({ params }: { params: { slug: string } }) {
           >
             Email
           </Link>
+          <button
+            onClick={() => navigator.clipboard.writeText(window.location.href)}
+            className="bg-gray-500 text-white px-4 py-2 rounded-full hover:bg-gray-600 transition text-sm"
+          >
+            Скопировать ссылку
+          </button>
+        </div>
+      </div>
+
+      {/* Prev / Next Navigation */}
+      <div className="flex justify-between border-t pt-6 text-sm mb-16">
+        {prev ? (
+          <Link href={`/articles/${prev.slug}`} className="text-blue hover:underline">
+            ← {prev.title}
+          </Link>
+        ) : (
+          <span />
+        )}
+        {next ? (
+          <Link href={`/articles/${next.slug}`} className="text-blue hover:underline">
+            {next.title} →
+          </Link>
+        ) : (
+          <span />
+        )}
+      </div>
+
+      {/* Related Articles */}
+      <div className="border-t pt-10">
+        <h3 className="text-2xl font-bold mb-6">Похожие статьи</h3>
+        <div className="flex gap-6 overflow-x-auto pb-4 -mx-2 px-2 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:overflow-visible">
+          {articlesData
+            .filter((a) => a.slug !== article.slug)
+            .slice(0, 3)
+            .map((rel, i) => (
+              <Link
+                key={i}
+                href={`/articles/${rel.slug}`}
+                className="min-w-[260px] sm:min-w-0 bg-white rounded-xl shadow hover:shadow-lg transition flex-shrink-0"
+              >
+                <div className="relative w-full h-44">
+                  <Image
+                    src={rel.image}
+                    alt={rel.title}
+                    fill
+                    className="rounded-t-xl object-cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <h4 className="text-lg font-semibold mb-1">{rel.title}</h4>
+                  <p className="text-sm text-gray-600 mb-2">{rel.subtitle}</p>
+                  <span className="text-xs text-gray-400">{rel.date}</span>
+                </div>
+              </Link>
+            ))}
         </div>
       </div>
     </article>
