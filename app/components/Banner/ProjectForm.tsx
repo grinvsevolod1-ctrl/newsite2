@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import InputMask from "react-input-mask";
 
@@ -37,19 +38,10 @@ const translations = {
   },
 };
 
-const services = [
-  { value: "landing", label: "Лендинг" },
-  { value: "corporate", label: "Корпоративный сайт" },
-  { value: "ecommerce", label: "Интернет-магазин" },
-  { value: "telegrambot", label: "Telegram-бот" },
-  { value: "mobileapp", label: "Мобильное приложение" },
-  { value: "smm", label: "SMM и продвижение" },
-  { value: "support", label: "Поддержка сайта" },
-];
-
 const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
   const [lang, setLang] = useState<"ru" | "en">("ru");
   const t = translations[lang];
+
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
@@ -63,15 +55,6 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
   useEffect(() => {
     const browserLang = navigator.language.startsWith("ru") ? "ru" : "en";
     setLang(browserLang as "ru" | "en");
-
-    const region = navigator.language.includes("BY")
-      ? "+375"
-      : navigator.language.includes("RU")
-      ? "+7"
-      : navigator.language.includes("UA")
-      ? "+380"
-      : "+1";
-    setRegionCode(region);
   }, []);
 
   useEffect(() => {
@@ -88,6 +71,14 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
     const draft = { name, phone, message };
     localStorage.setItem("projectFormDraft", JSON.stringify(draft));
   }, [name, phone, message]);
+
+  useEffect(() => {
+    const userRegion = "BY";
+    if (userRegion === "BY") setRegionCode("+375");
+    else if (userRegion === "RU") setRegionCode("+7");
+    else if (userRegion === "UA") setRegionCode("+380");
+    else setRegionCode("+1");
+  }, []);
 
   useEffect(() => {
     const prices: Record<string, number> = {
@@ -111,14 +102,27 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agreeTerms) return;
-
+    if (!agreeTerms) {
+      alert("⚠️ " + t.agree);
+      return;
+    }
     const digits = phone.replace(/\D/g, "");
-    if (digits.length < 10 || digits.length > 15) return;
+    if (digits.length < 10 || digits.length > 15) {
+      alert("⚠️ " + t.phone);
+      return;
+    }
 
     setIsSubmitting(true);
+
     const price = getConvertedPrice();
-    const text = `🚀 Новый проект:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📦 Услуга: ${projectType}\n💰 Оценка: ${price} ${currency}\n💬 Сообщение: ${message}`;
+    const text = `
+🚀 Новый проект:
+👤 Имя: ${name}
+📞 Телефон: ${phone}
+📦 Услуга: ${projectType}
+💰 Оценка: ${price} ${currency}
+💬 Сообщение: ${message}
+    `;
 
     await Promise.all([
       fetch(`https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -147,17 +151,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
     setFormSuccess(true);
     setIsSubmitting(false);
     localStorage.removeItem("projectFormDraft");
-
-    setName("");
-    setPhone("");
-    setMessage("");
-    setProjectType("");
-    setAgreeTerms(false);
-
-    setTimeout(() => {
-      setFormSuccess(false);
-      closeModal();
-    }, 3000);
+    setTimeout(closeModal, 5000);
   };
 
   return (
@@ -185,16 +179,24 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
           onChange={(e) => setPhone(e.target.value)}
           required
         >
-          {((inputProps: any) => (
+          {(inputProps) => (
             <input
               {...inputProps}
               type="tel"
               placeholder={`${t.phone} (${t.placeholderPhone})`}
               className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
             />
-          )) as unknown as React.ReactNode}
+          )}
         </InputMask>
-        <svg xmlns="http://www.w3.org/2000/svg" className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        {/* Заменённая SVG-иконка предупреждения */}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z" />
         </svg>
       </div>
@@ -206,9 +208,13 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
       >
         <option value="">{t.service}</option>
-        {services.map((s) => (
-          <option key={s.value} value={s.value}>{s.label}</option>
-        ))}
+        <option value="landing">Лендинг</option>
+        <option value="corporate">Корпоративный сайт</option>
+        <option value="ecommerce">Интернет-магазин</option>
+        <option value="telegrambot">Telegram-бот</option>
+        <option value="mobileapp">Мобильное приложение</option>
+        <option value="smm">SMM и продвижение</option>
+        <option value="support">Поддержка сайта</option>
       </select>
 
       {estimatedPriceUSD > 0 && (
@@ -225,7 +231,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue resize-none min-h-[80px]"
       />
 
-      <div className="flex items-start mt-2">
+           <div className="flex items-start mt-2">
         <input
           type="checkbox"
           checked={agreeTerms}
@@ -234,7 +240,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
           className="mt-1 mr-2"
           required
         />
-                <label htmlFor="terms" className="text-sm text-gray-600">
+        <label htmlFor="terms" className="text-sm text-gray-600">
           {t.agree}
         </label>
       </div>
