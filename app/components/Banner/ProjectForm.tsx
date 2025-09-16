@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect } from "react";
 import InputMask from "react-input-mask";
 
@@ -38,10 +37,19 @@ const translations = {
   },
 };
 
+const services = [
+  { value: "landing", label: "Лендинг" },
+  { value: "corporate", label: "Корпоративный сайт" },
+  { value: "ecommerce", label: "Интернет-магазин" },
+  { value: "telegrambot", label: "Telegram-бот" },
+  { value: "mobileapp", label: "Мобильное приложение" },
+  { value: "smm", label: "SMM и продвижение" },
+  { value: "support", label: "Поддержка сайта" },
+];
+
 const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
   const [lang, setLang] = useState<"ru" | "en">("ru");
   const t = translations[lang];
-
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
@@ -55,6 +63,15 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
   useEffect(() => {
     const browserLang = navigator.language.startsWith("ru") ? "ru" : "en";
     setLang(browserLang as "ru" | "en");
+
+    const region = navigator.language.includes("BY")
+      ? "+375"
+      : navigator.language.includes("RU")
+      ? "+7"
+      : navigator.language.includes("UA")
+      ? "+380"
+      : "+1";
+    setRegionCode(region);
   }, []);
 
   useEffect(() => {
@@ -71,14 +88,6 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
     const draft = { name, phone, message };
     localStorage.setItem("projectFormDraft", JSON.stringify(draft));
   }, [name, phone, message]);
-
-  useEffect(() => {
-    const userRegion = "BY";
-    if (userRegion === "BY") setRegionCode("+375");
-    else if (userRegion === "RU") setRegionCode("+7");
-    else if (userRegion === "UA") setRegionCode("+380");
-    else setRegionCode("+1");
-  }, []);
 
   useEffect(() => {
     const prices: Record<string, number> = {
@@ -106,6 +115,10 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
       alert("⚠️ " + t.agree);
       return;
     }
+    if (name.trim().length < 2) {
+      alert("⚠️ " + t.name);
+      return;
+    }
     const digits = phone.replace(/\D/g, "");
     if (digits.length < 10 || digits.length > 15) {
       alert("⚠️ " + t.phone);
@@ -113,26 +126,21 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
     }
 
     setIsSubmitting(true);
-
     const price = getConvertedPrice();
-    const text = `
-🚀 Новый проект:
-👤 Имя: ${name}
-📞 Телефон: ${phone}
-📦 Услуга: ${projectType}
-💰 Оценка: ${price} ${currency}
-💬 Сообщение: ${message}
-    `;
+    const text = `🚀 Новый проект:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📦 Услуга: ${projectType}\n💰 Оценка: ${price} ${currency}\n💬 Сообщение: ${message}`;
 
     await Promise.all([
-      fetch(`https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID,
-          text,
-        }),
-      }),
+      fetch(
+        `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID,
+            text,
+          }),
+        }
+      ),
       fetch(process.env.NEXT_PUBLIC_CRM_ENDPOINT || "", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -151,14 +159,33 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
     setFormSuccess(true);
     setIsSubmitting(false);
     localStorage.removeItem("projectFormDraft");
-    setTimeout(closeModal, 5000);
+    setName("");
+    setPhone("");
+    setMessage("");
+    setProjectType("");
+    setAgreeTerms(false);
+    setTimeout(() => {
+      closeModal();
+    }, 5000);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
       <div className="flex justify-end gap-2 mb-2">
-        <button type="button" onClick={() => setLang("ru")} className={lang === "ru" ? "font-bold" : ""}>🇷🇺</button>
-        <button type="button" onClick={() => setLang("en")} className={lang === "en" ? "font-bold" : ""}>🇬🇧</button>
+        <button
+          type="button"
+          onClick={() => setLang("ru")}
+          className={lang === "ru" ? "font-bold" : ""}
+        >
+          🇷🇺
+        </button>
+        <button
+          type="button"
+          onClick={() => setLang("en")}
+          className={lang === "en" ? "font-bold" : ""}
+        >
+          🇬🇧
+        </button>
       </div>
 
       <input
@@ -188,7 +215,6 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
             />
           )}
         </InputMask>
-        {/* Заменённая SVG-иконка предупреждения */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-red-500"
@@ -197,24 +223,26 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
           stroke="currentColor"
           strokeWidth={2}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z" />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v2m0 4h.01M12 5a7 7 0 100 14 7 7 0 000-14z"
+          />
         </svg>
       </div>
 
-      <select
+        <select
         value={projectType}
         onChange={(e) => setProjectType(e.target.value)}
         required
         className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
       >
         <option value="">{t.service}</option>
-        <option value="landing">Лендинг</option>
-        <option value="corporate">Корпоративный сайт</option>
-        <option value="ecommerce">Интернет-магазин</option>
-        <option value="telegrambot">Telegram-бот</option>
-        <option value="mobileapp">Мобильное приложение</option>
-        <option value="smm">SMM и продвижение</option>
-        <option value="support">Поддержка сайта</option>
+        {services.map((s) => (
+          <option key={s.value} value={s.value}>
+            {s.label}
+          </option>
+        ))}
       </select>
 
       {estimatedPriceUSD > 0 && (
@@ -231,7 +259,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue resize-none min-h-[80px]"
       />
 
-           <div className="flex items-start mt-2">
+      <div className="flex items-start mt-2">
         <input
           type="checkbox"
           checked={agreeTerms}
