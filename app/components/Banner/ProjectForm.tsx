@@ -12,7 +12,7 @@ const translations = {
   ru: {
     name: "Ваше имя",
     phone: "Ваш номер телефона",
-    placeholderPhone: "например, +375 (29) 123-45-67",
+    placeholderPhone: "например, +375 (29) 14-14-555",
     service: "Выберите услугу",
     message: "Опишите задачу или идею...",
     agree: "Я согласен с условиями обработки данных",
@@ -113,22 +113,22 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
     e.preventDefault();
     if (!agreeTerms) return;
 
+    const digits = phone.replace(/\D/g, "");
+    if (digits.length < 10 || digits.length > 15) return;
+
     setIsSubmitting(true);
     const price = getConvertedPrice();
     const text = `🚀 Новый проект:\n👤 Имя: ${name}\n📞 Телефон: ${phone}\n📦 Услуга: ${projectType}\n💰 Оценка: ${price} ${currency}\n💬 Сообщение: ${message}`;
 
     await Promise.all([
-      fetch(
-        `https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN}/sendMessage`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID,
-            text,
-          }),
-        }
-      ),
+      fetch(`https://api.telegram.org/bot${process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID,
+          text,
+        }),
+      }),
       fetch(process.env.NEXT_PUBLIC_CRM_ENDPOINT || "", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -147,14 +147,19 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
     setFormSuccess(true);
     setIsSubmitting(false);
     localStorage.removeItem("projectFormDraft");
+
+    // Очистка формы
     setName("");
     setPhone("");
     setMessage("");
     setProjectType("");
     setAgreeTerms(false);
+
+    // Закрытие модального окна
     setTimeout(() => {
+      setFormSuccess(false);
       closeModal();
-    }, 5000);
+    }, 3000);
   };
 
   return (
@@ -164,7 +169,15 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         <button type="button" onClick={() => setLang("en")} className={lang === "en" ? "font-bold" : ""}>🇬🇧</button>
       </div>
 
-      <input type="text" value={name} onChange={(e) => setName(e.target.value)} required autoFocus placeholder={t.name} className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue" />
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        required
+        autoFocus
+        placeholder={t.name}
+        className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
+      />
 
       <div className="relative w-full">
         <InputMask
@@ -174,7 +187,7 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
           onChange={(e) => setPhone(e.target.value)}
           required
         >
-          {(inputProps: React.InputHTMLAttributes<HTMLInputElement>) => (
+          {(inputProps) => (
             <input
               {...inputProps}
               type="tel"
@@ -188,7 +201,12 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         </svg>
       </div>
 
-      <select value={projectType} onChange={(e) => setProjectType(e.target.value)} required className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue">
+      <select
+        value={projectType}
+        onChange={(e) => setProjectType(e.target.value)}
+        required
+        className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue"
+      >
         <option value="">{t.service}</option>
         {services.map((s) => (
           <option key={s.value} value={s.value}>{s.label}</option>
@@ -201,14 +219,29 @@ const ProjectForm = ({ currency, setCurrency, closeModal }: Props) => {
         </p>
       )}
 
-      <textarea value={message} onChange={(e) => setMessage(e.target.value)} required placeholder={t.message} className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue resize-none min-h-[80px]" />
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        required
+        placeholder={t.message}
+        className="w-full border rounded-md px-4 py-3 focus:ring-2 focus:ring-blue resize-none min-h-[80px]"
+      />
 
-      <div className="flex items-start mt-2">
-        <input type="checkbox" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} id="terms" className="mt-1 mr-2" required />
-        <label htmlFor="terms" className="text-sm text-gray-600">{t.agree}</label>
+            <div className="flex items-start mt-2">
+        <input
+          type="checkbox"
+          checked={agreeTerms}
+          onChange={(e) => setAgreeTerms(e.target.checked)}
+          id="terms"
+          className="mt-1 mr-2"
+          required
+        />
+        <label htmlFor="terms" className="text-sm text-gray-600">
+          {t.agree}
+        </label>
       </div>
 
-           <div className="flex justify-center gap-4 mb-2">
+      <div className="flex justify-center gap-4 mb-2">
         <button
           type="button"
           onClick={() => setCurrency("USD")}
