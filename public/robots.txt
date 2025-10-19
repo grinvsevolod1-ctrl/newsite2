@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin and auth pages
+Disallow: /profile
+Disallow: /dashboard
+
+# Sitemap
+Sitemap: https://www.netnext.site/sitemap.xml
