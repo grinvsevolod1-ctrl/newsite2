@@ -6,14 +6,50 @@ import { Analytics } from "@vercel/analytics/next"
 import { LocaleProvider } from "@/contexts/locale-context"
 import { Header } from "@/components/header/header"
 import { Footer } from "@/components/footer/footer"
-import { AIChatWidget } from "@/components/chat/ai-chat-widget"
 import { StructuredData } from "@/components/seo/structured-data"
-import { CustomCursor } from "@/components/effects/custom-cursor"
-import { SimpleBackground } from "@/components/effects/simple-background"
-import { PageProgress } from "@/components/effects/page-progress"
-import { ScrollToTop } from "@/components/effects/scroll-to-top"
 import { Suspense } from "react"
+import dynamic from "next/dynamic"
 import "./globals.css"
+
+const AIChatWidget = dynamic(
+  () => import("@/components/chat/ai-chat-widget").then((mod) => ({ default: mod.AIChatWidget })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+)
+
+const CustomCursor = dynamic(
+  () => import("@/components/effects/custom-cursor").then((mod) => ({ default: mod.CustomCursor })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+)
+
+const SimpleBackground = dynamic(
+  () => import("@/components/effects/simple-background").then((mod) => ({ default: mod.SimpleBackground })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+)
+
+const PageProgress = dynamic(
+  () => import("@/components/effects/page-progress").then((mod) => ({ default: mod.PageProgress })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+)
+
+const ScrollToTop = dynamic(
+  () => import("@/components/effects/scroll-to-top").then((mod) => ({ default: mod.ScrollToTop })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+)
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.netnext.site"),
@@ -123,6 +159,8 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#000000" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
       </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <LocaleProvider>
