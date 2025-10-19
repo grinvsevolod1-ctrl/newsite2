@@ -8,48 +8,8 @@ import { Header } from "@/components/header/header"
 import { Footer } from "@/components/footer/footer"
 import { StructuredData } from "@/components/seo/structured-data"
 import { Suspense } from "react"
-import dynamic from "next/dynamic"
+import { AIChatWidget, CustomCursor, SimpleBackground, PageProgress, ScrollToTop } from "@/components/client-wrapper"
 import "./globals.css"
-
-const AIChatWidget = dynamic(
-  () => import("@/components/chat/ai-chat-widget").then((mod) => ({ default: mod.AIChatWidget })),
-  {
-    ssr: false,
-    loading: () => null,
-  },
-)
-
-const CustomCursor = dynamic(
-  () => import("@/components/effects/custom-cursor").then((mod) => ({ default: mod.CustomCursor })),
-  {
-    ssr: false,
-    loading: () => null,
-  },
-)
-
-const SimpleBackground = dynamic(
-  () => import("@/components/effects/simple-background").then((mod) => ({ default: mod.SimpleBackground })),
-  {
-    ssr: false,
-    loading: () => null,
-  },
-)
-
-const PageProgress = dynamic(
-  () => import("@/components/effects/page-progress").then((mod) => ({ default: mod.PageProgress })),
-  {
-    ssr: false,
-    loading: () => null,
-  },
-)
-
-const ScrollToTop = dynamic(
-  () => import("@/components/effects/scroll-to-top").then((mod) => ({ default: mod.ScrollToTop })),
-  {
-    ssr: false,
-    loading: () => null,
-  },
-)
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.netnext.site"),
