@@ -277,15 +277,15 @@ export function AIChatWidget() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={locale === "ru" ? "Напишите сообщение..." : "Type a message..."}
                   disabled={isLoading}
-                  className="flex-1 bg-background/50 border-primary/20 focus:border-primary/40 rounded-xl text-xs sm:text-sm h-9 sm:h-10 px-3"
+                  className="flex-1 bg-background border-2 border-primary/30 focus:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 rounded-xl text-xs sm:text-sm h-10 sm:h-11 px-3 sm:px-4 placeholder:text-muted-foreground/60 transition-all"
                 />
                 <Button
                   type="submit"
                   size="icon"
                   disabled={isLoading || !input.trim()}
-                  className="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-gradient-to-br from-primary to-accent hover:scale-105 transition-transform shadow-lg disabled:opacity-50 shrink-0"
+                  className="h-10 w-10 sm:h-11 sm:w-11 rounded-xl bg-gradient-to-br from-primary to-accent hover:scale-105 transition-transform shadow-lg disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                 >
-                  <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
+                  <Send className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-white" />
                 </Button>
               </div>
             </form>
