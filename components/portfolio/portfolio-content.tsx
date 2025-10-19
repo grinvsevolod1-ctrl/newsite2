@@ -59,14 +59,14 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
   })
 
   return (
-    <div className="min-h-screen pb-20 bg-black relative overflow-hidden">
+    <div className="min-h-screen pt-20 sm:pt-24 pb-20 bg-black relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5 animate-gradient" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.1),transparent_50%)]" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-12 sm:mb-16 space-y-4 sm:space-y-6">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] backdrop-blur-md border border-primary/10 mb-4">
-            <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+            <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary animate-pulse" />
             <span className="text-sm text-muted-foreground">
               {locale === "ru" ? "Наши лучшие работы" : "Our Best Work"}
             </span>

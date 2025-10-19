@@ -55,7 +55,9 @@ export function AIChatWidget() {
         }),
       })
 
-      if (!response.ok) throw new Error("Failed to get response")
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
 
       const reader = response.body?.getReader()
       const decoder = new TextDecoder()
@@ -105,8 +107,8 @@ export function AIChatWidget() {
           role: "assistant",
           content:
             locale === "ru"
-              ? "Извините, произошла ошибка. Пожалуйста, попробуйте позже."
-              : "Sorry, an error occurred. Please try again later.",
+              ? "Извините, произошла ошибка. Пожалуйста, попробуйте позже или свяжитесь с нами: +375291414555"
+              : "Sorry, an error occurred. Please try again later or contact us: +375291414555",
         },
       ])
     } finally {
@@ -116,16 +118,14 @@ export function AIChatWidget() {
 
   return (
     <>
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50">
-        {/* Pulsing glow effect */}
+      <div className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 md:bottom-6 md:right-6 z-50">
         <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-secondary rounded-full blur-xl opacity-60 animate-pulse" />
 
-        {/* Main button */}
         <Button
           onClick={() => setIsOpen(!isOpen)}
           size="lg"
           className={cn(
-            "relative h-14 w-14 sm:h-16 sm:w-16 rounded-full shadow-2xl transition-all duration-300",
+            "relative h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full shadow-2xl transition-all duration-300",
             "bg-gradient-to-br from-primary via-accent to-secondary",
             "hover:scale-110 hover:shadow-[0_0_40px_rgba(34,211,238,0.6)]",
             "border-2 border-white/20",
@@ -133,26 +133,24 @@ export function AIChatWidget() {
             isOpen && "rotate-90",
           )}
         >
-          {/* Animated background gradient */}
           <div className="absolute inset-0 bg-gradient-to-br from-primary/50 via-accent/50 to-secondary/50 animate-gradient-shift" />
 
-          {/* Icon */}
           <div className="relative z-10">
             {isOpen ? (
-              <X className="h-6 w-6 sm:h-7 sm:w-7 text-white transition-transform group-hover:rotate-90" />
+              <X className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 text-white transition-transform group-hover:rotate-90" />
             ) : (
-              <MessageCircle className="h-6 w-6 sm:h-7 sm:w-7 text-white transition-transform group-hover:scale-110" />
+              <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 text-white transition-transform group-hover:scale-110" />
             )}
           </div>
 
-          {/* Sparkle effect */}
-          {!isOpen && <Sparkles className="absolute top-1 right-1 h-3 w-3 sm:h-4 sm:w-4 text-white animate-pulse" />}
+          {!isOpen && (
+            <Sparkles className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 h-3 w-3 sm:h-4 sm:w-4 text-white animate-pulse" />
+          )}
         </Button>
 
-        {/* Notification badge */}
         {!isOpen && messages.length === 0 && (
-          <div className="absolute -top-1 -right-1 h-5 w-5 bg-red-500 rounded-full border-2 border-background flex items-center justify-center animate-bounce">
-            <span className="text-[10px] font-bold text-white">!</span>
+          <div className="absolute -top-1 -right-1 h-4 w-4 sm:h-5 sm:w-5 bg-red-500 rounded-full border-2 border-background flex items-center justify-center animate-bounce">
+            <span className="text-[9px] sm:text-[10px] font-bold text-white">!</span>
           </div>
         )}
       </div>
@@ -161,28 +159,27 @@ export function AIChatWidget() {
         <Card
           className={cn(
             "fixed z-50 shadow-2xl flex flex-col border-2 border-primary/20 bg-background/95 backdrop-blur-xl animate-in slide-in-from-bottom-4 duration-300",
-            // Mobile: full screen with safe padding
-            "inset-4 sm:inset-auto",
-            // Desktop: fixed size bottom right
-            "sm:bottom-24 sm:right-6 sm:w-[420px] sm:h-[600px]",
-            // Tablet: slightly smaller
-            "md:w-[440px] md:h-[650px]",
+            "bottom-[4.5rem] right-3 left-3",
+            "max-h-[calc(100vh-6rem)]",
+            "sm:bottom-20 sm:right-4 sm:left-auto sm:w-[380px] sm:h-[550px]",
+            "md:bottom-24 md:right-6 md:w-[420px] md:h-[600px]",
+            "lg:w-[440px] lg:h-[650px]",
           )}
         >
-          <CardHeader className="border-b border-primary/20 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 backdrop-blur-sm shrink-0">
+          <CardHeader className="border-b border-primary/20 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 backdrop-blur-sm shrink-0 p-3 sm:p-4">
             <CardTitle className="flex items-center justify-between">
-              <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-2">
                 <div className="relative">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-full blur-md opacity-60" />
-                  <div className="relative h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                    <Bot className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                  <div className="relative h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                    <Bot className="h-4 w-4 sm:h-4.5 sm:w-4.5 md:h-5 md:w-5 text-white" />
                   </div>
                 </div>
-                <div>
-                  <div className="font-bold text-base sm:text-lg gradient-text">
+                <div className="min-w-0">
+                  <div className="font-bold text-sm sm:text-base md:text-lg gradient-text truncate">
                     {locale === "ru" ? "AI Помощник" : "AI Assistant"}
                   </div>
-                  <div className="text-[10px] sm:text-xs text-muted-foreground font-normal">
+                  <div className="text-[10px] sm:text-xs text-muted-foreground font-normal truncate">
                     {locale === "ru" ? "Онлайн • Отвечает мгновенно" : "Online • Responds instantly"}
                   </div>
                 </div>
@@ -191,29 +188,29 @@ export function AIChatWidget() {
                 variant="ghost"
                 size="icon"
                 onClick={() => setIsOpen(false)}
-                className="h-8 w-8 rounded-full hover:bg-primary/10 shrink-0"
+                className="h-7 w-7 sm:h-8 sm:w-8 rounded-full hover:bg-primary/10 shrink-0"
               >
-                <X className="h-4 w-4" />
+                <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               </Button>
             </CardTitle>
           </CardHeader>
 
-          <CardContent className="flex-1 flex flex-col p-0 min-h-0">
+          <CardContent className="flex-1 flex flex-col p-0 min-h-0 overflow-hidden">
             <ScrollArea className="flex-1 p-3 sm:p-4" ref={scrollRef}>
-              <div className="space-y-3 sm:space-y-4">
+              <div className="space-y-3">
                 {messages.length === 0 && (
-                  <div className="text-center py-8 sm:py-12 space-y-3 sm:space-y-4">
+                  <div className="text-center py-6 sm:py-8 md:py-12 space-y-3">
                     <div className="relative inline-block">
                       <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-full blur-xl opacity-40 animate-pulse" />
-                      <div className="relative h-16 w-16 sm:h-20 sm:w-20 mx-auto rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                        <Bot className="h-8 w-8 sm:h-10 sm:w-10 text-white" />
+                      <div className="relative h-14 w-14 sm:h-16 sm:w-16 md:h-20 md:w-20 mx-auto rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                        <Bot className="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 text-white" />
                       </div>
                     </div>
-                    <div className="space-y-2 px-4">
-                      <p className="text-base sm:text-lg font-semibold gradient-text">
+                    <div className="space-y-2 px-3 sm:px-4">
+                      <p className="text-sm sm:text-base md:text-lg font-semibold gradient-text">
                         {locale === "ru" ? "Привет! 👋" : "Hello! 👋"}
                       </p>
-                      <p className="text-xs sm:text-sm text-muted-foreground max-w-xs mx-auto">
+                      <p className="text-xs sm:text-sm text-muted-foreground max-w-xs mx-auto leading-relaxed">
                         {locale === "ru"
                           ? "Я AI помощник NetNext. Задайте мне любой вопрос о наших услугах, ценах или процессе разработки!"
                           : "I'm NetNext AI assistant. Ask me anything about our services, pricing, or development process!"}
@@ -225,18 +222,18 @@ export function AIChatWidget() {
                   <div
                     key={message.id}
                     className={cn(
-                      "flex gap-2 sm:gap-3 animate-in fade-in-0 slide-in-from-bottom-2 duration-300",
+                      "flex gap-2 animate-in fade-in-0 slide-in-from-bottom-2 duration-300",
                       message.role === "user" ? "justify-end" : "justify-start",
                     )}
                   >
                     {message.role === "assistant" && (
-                      <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 shadow-lg">
-                        <Bot className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
+                      <div className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 shadow-lg">
+                        <Bot className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-white" />
                       </div>
                     )}
                     <div
                       className={cn(
-                        "rounded-2xl px-3 py-2 sm:px-4 sm:py-3 max-w-[80%] sm:max-w-[75%] shadow-md",
+                        "rounded-2xl px-3 py-2 sm:px-3.5 sm:py-2.5 max-w-[85%] sm:max-w-[80%] md:max-w-[75%] shadow-md",
                         message.role === "user"
                           ? "bg-gradient-to-br from-primary to-accent text-white"
                           : "bg-muted/50 backdrop-blur-sm text-foreground border border-primary/10",
@@ -247,22 +244,22 @@ export function AIChatWidget() {
                       </p>
                     </div>
                     {message.role === "user" && (
-                      <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br from-secondary to-accent flex items-center justify-center shrink-0 shadow-lg">
-                        <User className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
+                      <div className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-secondary to-accent flex items-center justify-center shrink-0 shadow-lg">
+                        <User className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-white" />
                       </div>
                     )}
                   </div>
                 ))}
                 {isLoading && (
-                  <div className="flex gap-2 sm:gap-3 justify-start animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
-                    <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 shadow-lg">
-                      <Bot className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-white" />
+                  <div className="flex gap-2 justify-start animate-in fade-in-0 slide-in-from-bottom-2 duration-300">
+                    <div className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 shadow-lg">
+                      <Bot className="h-3 w-3 sm:h-3.5 sm:w-3.5 md:h-4 md:w-4 text-white" />
                     </div>
-                    <div className="rounded-2xl px-3 py-2 sm:px-4 sm:py-3 bg-muted/50 backdrop-blur-sm border border-primary/10">
+                    <div className="rounded-2xl px-3 py-2 sm:px-3.5 sm:py-2.5 bg-muted/50 backdrop-blur-sm border border-primary/10">
                       <div className="flex gap-1.5">
-                        <div className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-primary animate-bounce" />
-                        <div className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-accent animate-bounce [animation-delay:0.2s]" />
-                        <div className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-secondary animate-bounce [animation-delay:0.4s]" />
+                        <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-primary animate-bounce" />
+                        <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-accent animate-bounce [animation-delay:0.2s]" />
+                        <div className="h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full bg-secondary animate-bounce [animation-delay:0.4s]" />
                       </div>
                     </div>
                   </div>
@@ -272,15 +269,15 @@ export function AIChatWidget() {
 
             <form
               onSubmit={handleSubmit}
-              className="p-3 sm:p-4 border-t border-primary/20 bg-muted/30 backdrop-blur-sm shrink-0"
+              className="p-2.5 sm:p-3 md:p-4 border-t border-primary/20 bg-muted/30 backdrop-blur-sm shrink-0"
             >
-              <div className="flex gap-2">
+              <div className="flex gap-1.5 sm:gap-2">
                 <Input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={locale === "ru" ? "Напишите сообщение..." : "Type a message..."}
                   disabled={isLoading}
-                  className="flex-1 bg-background/50 border-primary/20 focus:border-primary/40 rounded-xl text-sm sm:text-base h-9 sm:h-10"
+                  className="flex-1 bg-background/50 border-primary/20 focus:border-primary/40 rounded-xl text-xs sm:text-sm h-9 sm:h-10 px-3"
                 />
                 <Button
                   type="submit"

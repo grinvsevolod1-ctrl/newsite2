@@ -9,32 +9,39 @@ import { Footer } from "@/components/footer/footer"
 import { AIChatWidget } from "@/components/chat/ai-chat-widget"
 import { StructuredData } from "@/components/seo/structured-data"
 import { CustomCursor } from "@/components/effects/custom-cursor"
-import { ParticlesBackground } from "@/components/effects/particles-background"
+import { SimpleBackground } from "@/components/effects/simple-background"
 import { PageProgress } from "@/components/effects/page-progress"
 import { ScrollToTop } from "@/components/effects/scroll-to-top"
 import { Suspense } from "react"
-import { WebGLBackground } from "@/components/effects/webgl-background"
 import "./globals.css"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.netnext.site"),
   title: {
-    default: "NetNext - Premium Software Development Studio",
+    default: "NetNext - Разработка сайтов и приложений в Минске, Беларусь | Студия веб-разработки",
     template: "%s | NetNext",
   },
   description:
-    "50+ professional developers creating innovative web, mobile, AI, and desktop solutions for businesses worldwide. Expert team delivering high-quality software development services.",
+    "Профессиональная разработка сайтов, мобильных приложений, Telegram ботов и AI решений в Минске. 50+ опытных разработчиков. Разработка под ключ для бизнеса в Беларуси и СНГ. ✓ Гарантия качества ✓ Поддержка 24/7",
   keywords: [
-    "software development",
-    "web development",
-    "mobile app development",
-    "AI solutions",
-    "telegram bots",
-    "custom design",
+    "разработка сайтов Минск",
+    "создание сайтов Беларусь",
+    "разработка мобильных приложений Минск",
+    "веб-студия Минск",
+    "разработка под ключ",
+    "создание интернет-магазина",
+    "разработка Telegram ботов",
+    "AI решения Беларусь",
+    "IT аутсорсинг Минск",
+    "веб-разработка РБ",
+    "создание сайтов Гомель",
+    "разработка приложений Брест",
+    "веб-студия Гродно",
+    "IT компания Беларусь",
     "NetNext",
-    "Belarus developers",
-    "offshore development",
-    "IT outsourcing",
+    "React разработка",
+    "Next.js Минск",
+    "мобильная разработка iOS Android",
   ],
   authors: [{ name: "NetNext", url: "https://www.netnext.site" }],
   creator: "NetNext",
@@ -47,24 +54,25 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ru_RU",
-    alternateLocale: ["en_US"],
+    alternateLocale: ["be_BY", "en_US"],
     url: "https://www.netnext.site",
-    siteName: "NetNext",
-    title: "NetNext - Premium Software Development Studio",
-    description: "50+ professional developers creating innovative solutions for businesses worldwide",
+    siteName: "NetNext - Студия разработки",
+    title: "NetNext - Разработка сайтов и приложений в Минске, Беларусь",
+    description:
+      "Профессиональная разработка сайтов, мобильных приложений и Telegram ботов в Минске. 50+ опытных разработчиков. Разработка под ключ для бизнеса в Беларуси.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "NetNext - Software Development Studio",
+        alt: "NetNext - Студия разработки в Минске",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "NetNext - Premium Software Development Studio",
-    description: "50+ professional developers creating innovative solutions for businesses worldwide",
+    title: "NetNext - Разработка сайтов и приложений в Минске",
+    description: "Профессиональная разработка для бизнеса в Беларуси. 50+ опытных разработчиков.",
     images: ["/og-image.png"],
   },
   robots: {
@@ -83,13 +91,21 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.netnext.site",
     languages: {
-      ru: "https://www.netnext.site",
-      en: "https://www.netnext.site",
+      "ru-BY": "https://www.netnext.site",
+      "be-BY": "https://www.netnext.site",
+      "ru-RU": "https://www.netnext.site",
+      en: "https://www.netnext.site/en",
     },
   },
   verification: {
     google: "google-site-verification-code",
     yandex: "yandex-verification-code",
+  },
+  other: {
+    "geo.region": "BY",
+    "geo.placename": "Minsk",
+    "geo.position": "53.9006;27.559",
+    ICBM: "53.9006, 27.559",
   },
     generator: 'v0.app'
 }
@@ -112,9 +128,8 @@ export default function RootLayout({
         <LocaleProvider>
           <Suspense fallback={null}>
             <ScrollToTop />
-            <WebGLBackground />
+            <SimpleBackground />
             <CustomCursor />
-            <ParticlesBackground />
             <PageProgress />
             <Header />
             <main>{children}</main>
