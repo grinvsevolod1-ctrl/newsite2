@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, type ReactNode } from "react"
+import { useEffect, useRef, type ReactNode, memo } from "react"
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -9,7 +9,12 @@ interface ScrollRevealProps {
   direction?: "up" | "down" | "left" | "right" | "fade"
 }
 
-export function ScrollReveal({ children, className = "", delay = 0, direction = "up" }: ScrollRevealProps) {
+export const ScrollReveal = memo(function ScrollReveal({
+  children,
+  className = "",
+  delay = 0,
+  direction = "up",
+}: ScrollRevealProps) {
   const elementRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -22,11 +27,15 @@ export function ScrollReveal({ children, className = "", delay = 0, direction = 
           if (entry.isIntersecting) {
             setTimeout(() => {
               element.classList.add("scroll-revealed")
+              observer.disconnect()
             }, delay)
           }
         })
       },
-      { threshold: 0.1 },
+      {
+        threshold: 0.1,
+        rootMargin: "50px", // Start animation slightly before element is visible
+      },
     )
 
     observer.observe(element)
@@ -59,9 +68,10 @@ export function ScrollReveal({ children, className = "", delay = 0, direction = 
         opacity: 0,
         transform: getInitialTransform(),
         transition: "opacity 0.6s ease-out, transform 0.6s ease-out",
+        willChange: "opacity, transform", // Added for better performance
       }}
     >
       {children}
     </div>
   )
-}
+})

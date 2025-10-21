@@ -6,18 +6,35 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
 export const metadata: Metadata = {
-  title: "Отзывы клиентов - Реальные отзывы о работе с NetNext",
+  title: "Отзывы клиентов о NetNext - Разработка в Минске, Беларусь",
   description:
-    "Отзывы клиентов NetNext о разработке веб-приложений, мобильных приложений, ботов. Рейтинг 4.9/5 на основе 127 отзывов. Читайте реальные истории успеха.",
-  keywords: ["отзывы о NetNext", "отзывы клиентов разработка", "рейтинг студии разработки", "отзывы о разработчиках"],
+    "Отзывы клиентов NetNext о разработке сайтов, мобильных приложений, ботов в Минске и Беларуси. Рейтинг 4.9/5 на основе 127 отзывов. Читайте реальные истории успеха от клиентов из Минска, Гомеля, Бреста, Гродно.",
+  keywords: [
+    "отзывы о NetNext Минск",
+    "отзывы клиентов разработка Беларусь",
+    "рейтинг студии разработки Минск",
+    "отзывы о разработчиках РБ",
+    "веб-студия отзывы Минск",
+    "разработка сайтов отзывы Беларусь",
+  ],
   openGraph: {
-    title: "Отзывы клиентов о NetNext",
-    description: "Рейтинг 4.9/5 на основе 127 отзывов. Читайте реальные истории успеха.",
+    title: "Отзывы клиентов о NetNext - Минск, Беларусь",
+    description: "Рейтинг 4.9/5 на основе 127 отзывов. Читайте реальные истории успеха от клиентов из Беларуси.",
     url: "https://www.netnext.site/reviews",
     type: "website",
+    locale: "ru_RU",
+    alternateLocale: ["be_BY"],
   },
   alternates: {
     canonical: "https://www.netnext.site/reviews",
+    languages: {
+      "ru-BY": "https://www.netnext.site/reviews",
+      "be-BY": "https://www.netnext.site/reviews",
+    },
+  },
+  other: {
+    "geo.region": "BY",
+    "geo.placename": "Minsk",
   },
 }
 

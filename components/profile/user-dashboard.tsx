@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -24,9 +23,9 @@ interface Profile {
   phone: string | null
   avatar_url: string | null
   company: string | null
+  role: string | null
   preferred_language: string | null
   preferred_currency: string | null
-  role: string | null
 }
 
 interface Calculation {
@@ -157,7 +156,7 @@ export function UserDashboard() {
       role: profile.role,
       avatar_url: profile.avatar_url,
       preferred_language: profile.preferred_language,
-      preferred_currency: profile.preferred_currency,
+      preferred_currency: profile.preferred_currency?.toLowerCase(), // Convert to lowercase
       updated_at: new Date().toISOString(),
     })
 
@@ -399,14 +398,14 @@ export function UserDashboard() {
                         <Label htmlFor="currency">{t.profile.currency}</Label>
                         <select
                           id="currency"
-                          value={profile?.preferred_currency || "BYN"}
+                          value={profile?.preferred_currency?.toLowerCase() || "byn"}
                           onChange={(e) => setProfile({ ...profile!, preferred_currency: e.target.value })}
-                          className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                          className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         >
-                          <option value="BYN">BYN</option>
-                          <option value="USD">USD</option>
-                          <option value="EUR">EUR</option>
-                          <option value="RUB">RUB</option>
+                          <option value="byn">BYN (Белорусский рубль)</option>
+                          <option value="usd">USD (Доллар США)</option>
+                          <option value="eur">EUR (Евро)</option>
+                          <option value="rub">RUB (Российский рубль)</option>
                         </select>
                       </div>
                     </div>

@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { LocaleProvider } from "@/contexts/locale-context"
+import { ToastProvider } from "@/contexts/toast-context"
 import { Header } from "@/components/header/header"
 import { Footer } from "@/components/footer/footer"
 import { StructuredData } from "@/components/seo/structured-data"
@@ -124,16 +125,18 @@ export default function RootLayout({
       </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <LocaleProvider>
-          <Suspense fallback={null}>
-            <ScrollToTop />
-            <SimpleBackground />
-            <CustomCursor />
-            <PageProgress />
-            <Header />
-            <main>{children}</main>
-            <Footer />
-            <AIChatWidget />
-          </Suspense>
+          <ToastProvider>
+            <Suspense fallback={null}>
+              <ScrollToTop />
+              <SimpleBackground />
+              <CustomCursor />
+              <PageProgress />
+              <Header />
+              <main>{children}</main>
+              <Footer />
+              <AIChatWidget />
+            </Suspense>
+          </ToastProvider>
         </LocaleProvider>
         <Analytics />
       </body>
