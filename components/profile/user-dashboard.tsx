@@ -10,11 +10,31 @@ import { Label } from "@/components/ui/label"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useRouter } from "next/navigation"
-import { Loader2, Save, Calculator, Briefcase, LogOut, Upload, Mail, FileText, Handshake } from "lucide-react"
+import {
+  Loader2,
+  Save,
+  Calculator,
+  Briefcase,
+  LogOut,
+  Upload,
+  Mail,
+  FileText,
+  Handshake,
+  Shield,
+  Users,
+  Code,
+  Zap,
+  ShoppingBag,
+} from "lucide-react"
 import { TiltCard } from "@/components/effects/tilt-card"
 import { ScrollReveal } from "@/components/effects/scroll-reveal"
 import { useLocale } from "@/contexts/locale-context"
 import { translations } from "@/lib/translations"
+import { AdminPanel } from "@/components/dashboard/admin-panel"
+import ManagerPanel from "@/components/dashboard/manager-panel"
+import DeveloperPanel from "@/components/dashboard/developer-panel"
+import FreelancerPanel from "@/components/dashboard/freelancer-panel"
+import ClientPanel from "@/components/dashboard/client-panel"
 
 interface Profile {
   id: string
@@ -218,6 +238,13 @@ export function UserDashboard() {
     return colors[status as keyof typeof colors] || colors.pending
   }
 
+  const getTabsCount = () => {
+    if (!profile?.role) return 3
+    if (profile.role === "admin") return 4
+    if (["manager", "developer", "freelancer", "client", "customer"].includes(profile.role)) return 4
+    return 3
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -255,7 +282,12 @@ export function UserDashboard() {
                 {profile?.full_name || (locale === "ru" ? "Пользователь" : "User")}
               </h1>
               <p className="text-muted-foreground">{profile?.email}</p>
-              {profile?.role && <p className="text-sm text-primary">{profile.role}</p>}
+              {profile?.role && (
+                <div className="flex items-center gap-2 mt-1">
+                  <Shield className="w-4 h-4 text-primary" />
+                  <span className="text-sm font-medium text-primary capitalize">{profile.role}</span>
+                </div>
+              )}
             </div>
           </div>
           <Button onClick={handleLogout} variant="outline" className="gap-2 bg-transparent">
@@ -328,10 +360,41 @@ export function UserDashboard() {
         </div>
 
         <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-6">
+          <TabsList className={`grid w-full grid-cols-${getTabsCount()} mb-6`}>
             <TabsTrigger value="profile">{t.profile.title}</TabsTrigger>
             <TabsTrigger value="calculations">{t.profile.calculations}</TabsTrigger>
             <TabsTrigger value="activity">{t.profile.activity}</TabsTrigger>
+
+            {profile?.role === "admin" && (
+              <TabsTrigger value="admin" className="gap-2">
+                <Shield className="w-4 h-4" />
+                Admin
+              </TabsTrigger>
+            )}
+            {profile?.role === "manager" && (
+              <TabsTrigger value="manager" className="gap-2">
+                <Users className="w-4 h-4" />
+                Manager
+              </TabsTrigger>
+            )}
+            {profile?.role === "developer" && (
+              <TabsTrigger value="developer" className="gap-2">
+                <Code className="w-4 h-4" />
+                Developer
+              </TabsTrigger>
+            )}
+            {profile?.role === "freelancer" && (
+              <TabsTrigger value="freelancer" className="gap-2">
+                <Zap className="w-4 h-4" />
+                Freelancer
+              </TabsTrigger>
+            )}
+            {(profile?.role === "client" || profile?.role === "customer") && (
+              <TabsTrigger value="client" className="gap-2">
+                <ShoppingBag className="w-4 h-4" />
+                Orders
+              </TabsTrigger>
+            )}
           </TabsList>
 
           <TabsContent value="profile">
@@ -596,6 +659,36 @@ export function UserDashboard() {
               )}
             </div>
           </TabsContent>
+
+          {profile?.role === "admin" && (
+            <TabsContent value="admin">
+              <AdminPanel />
+            </TabsContent>
+          )}
+
+          {profile?.role === "manager" && (
+            <TabsContent value="manager">
+              <ManagerPanel />
+            </TabsContent>
+          )}
+
+          {profile?.role === "developer" && (
+            <TabsContent value="developer">
+              <DeveloperPanel />
+            </TabsContent>
+          )}
+
+          {profile?.role === "freelancer" && (
+            <TabsContent value="freelancer">
+              <FreelancerPanel />
+            </TabsContent>
+          )}
+
+          {(profile?.role === "client" || profile?.role === "customer") && (
+            <TabsContent value="client">
+              <ClientPanel isCustomer={profile?.role === "customer"} />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </ScrollReveal>

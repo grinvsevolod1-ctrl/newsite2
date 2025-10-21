@@ -33,7 +33,7 @@ interface Order {
   profiles: { full_name: string; email: string }
 }
 
-export function AdminPanel() {
+const AdminPanel = () => {
   const [users, setUsers] = useState<User[]>([])
   const [orders, setOrders] = useState<Order[]>([])
   const [stats, setStats] = useState({ totalUsers: 0, totalOrders: 0, totalRevenue: 0, pendingOrders: 0 })
@@ -373,3 +373,6 @@ export function AdminPanel() {
     </div>
   )
 }
+
+export { AdminPanel }
+export default AdminPanel
