@@ -1,8 +1,7 @@
 "use client"
 
 import type React from "react"
-
-import { useRef, type ReactNode } from "react"
+import { useRef, type ReactNode, memo } from "react"
 
 interface TiltCardProps {
   children: ReactNode
@@ -10,7 +9,7 @@ interface TiltCardProps {
   intensity?: number
 }
 
-export function TiltCard({ children, className = "", intensity = 15 }: TiltCardProps) {
+export const TiltCard = memo(function TiltCard({ children, className = "", intensity = 15 }: TiltCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -46,4 +45,4 @@ export function TiltCard({ children, className = "", intensity = 15 }: TiltCardP
       {children}
     </div>
   )
-}
+})
