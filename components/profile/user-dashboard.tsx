@@ -24,9 +24,9 @@ interface Profile {
   phone: string | null
   avatar_url: string | null
   company: string | null
+  role: string | null
   preferred_language: string | null
   preferred_currency: string | null
-  role: string | null
 }
 
 interface Calculation {
@@ -157,7 +157,7 @@ export function UserDashboard() {
       role: profile.role,
       avatar_url: profile.avatar_url,
       preferred_language: profile.preferred_language,
-      preferred_currency: profile.preferred_currency,
+      preferred_currency: profile.preferred_currency?.toLowerCase(), // Convert to lowercase
       updated_at: new Date().toISOString(),
     })
 
@@ -399,14 +399,14 @@ export function UserDashboard() {
                         <Label htmlFor="currency">{t.profile.currency}</Label>
                         <select
                           id="currency"
-                          value={profile?.preferred_currency || "BYN"}
+                          value={profile?.preferred_currency?.toLowerCase() || "byn"}
                           onChange={(e) => setProfile({ ...profile!, preferred_currency: e.target.value })}
-                          className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                          className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                         >
-                          <option value="BYN">BYN</option>
-                          <option value="USD">USD</option>
-                          <option value="EUR">EUR</option>
-                          <option value="RUB">RUB</option>
+                          <option value="byn">BYN (Белорусский рубль)</option>
+                          <option value="usd">USD (Доллар США)</option>
+                          <option value="eur">EUR (Евро)</option>
+                          <option value="rub">RUB (Российский рубль)</option>
                         </select>
                       </div>
                     </div>
@@ -503,102 +503,4 @@ export function UserDashboard() {
                                 )}
                               </p>
                             </div>
-                            <span
-                              className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(submission.status)}`}
-                            >
-                              {submission.status}
-                            </span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Job Applications */}
-            {jobApplications.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  Отклики на вакансии
-                </h3>
-                <div className="grid gap-3">
-                  {jobApplications.map((application, index) => (
-                    <ScrollReveal key={application.id} delay={index * 30}>
-                      <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-medium">{application.name}</p>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {new Date(application.created_at).toLocaleDateString(
-                                  locale === "ru" ? "ru-RU" : "en-US",
-                                )}
-                              </p>
-                            </div>
-                            <span
-                              className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(application.status)}`}
-                            >
-                              {application.status}
-                            </span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Partnership Requests */}
-            {partnershipRequests.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Handshake className="w-5 h-5" />
-                  Запросы на партнерство
-                </h3>
-                <div className="grid gap-3">
-                  {partnershipRequests.map((request, index) => (
-                    <ScrollReveal key={request.id} delay={index * 30}>
-                      <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="font-medium">{request.company_name}</p>
-                              <p className="text-sm text-muted-foreground">{request.partnership_type}</p>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {new Date(request.created_at).toLocaleDateString(locale === "ru" ? "ru-RU" : "en-US")}
-                              </p>
-                            </div>
-                            <span
-                              className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(request.status)}`}
-                            >
-                              {request.status}
-                            </span>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </ScrollReveal>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {contactSubmissions.length === 0 && jobApplications.length === 0 && partnershipRequests.length === 0 && (
-              <ScrollReveal>
-                <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-                  <CardContent className="flex flex-col items-center justify-center py-12">
-                    <Briefcase className="w-12 h-12 text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground text-center">{t.profile.activityHistory}</p>
-                  </CardContent>
-                </Card>
-              </ScrollReveal>
-            )}
-          </div>
-        </TabsContent>
-      </Tabs>
-    </div>
-  )
-}
+             
