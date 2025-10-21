@@ -150,7 +150,7 @@ export function AchievementSystem() {
             <div className="overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-background/95 to-background/80 p-6 shadow-2xl backdrop-blur-xl">
               <div className="mb-2 flex items-center gap-2">
                 <Trophy className="h-5 w-5 text-primary" />
-                <span className="text-sm font-semibold text-primary">Достижение разблокировано!</span>
+                <span className="text-sm font-semibold text-primary">Дост��жение разблокировано!</span>
               </div>
               <div className="flex items-start gap-4">
                 <div
