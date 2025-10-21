@@ -46,6 +46,30 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/faq"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform">{t.nav.faq}</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/reviews"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform">{t.nav.reviews}</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/freelance"
+                  className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center group"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform">{t.nav.freelance}</span>
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/partnership"
                   className="text-muted-foreground hover:text-primary transition-colors inline-flex items-center group"
                 >
