@@ -104,6 +104,7 @@ export const metadata: Metadata = {
     "geo.position": "53.9006;27.559",
     ICBM: "53.9006, 27.559",
   },
+    generator: 'v0.app'
 }
 
 export default function RootLayout({

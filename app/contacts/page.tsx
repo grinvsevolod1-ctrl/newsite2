@@ -1,6 +1,8 @@
 import { ContactContent } from "@/components/contacts/contact-content"
 import type { Metadata } from "next"
 
+export const dynamic = "force-dynamic"
+
 export const metadata: Metadata = {
   title: "Контакты - Связаться с нами | NetNext",
   description:

@@ -4,6 +4,8 @@ import { BlobMorph } from "@/components/effects/blob-morph"
 import { ScrollReveal } from "@/components/effects/scroll-reveal"
 import { TiltCard } from "@/components/effects/tilt-card"
 
+export const dynamic = "force-dynamic"
+
 export const metadata = {
   title: "Авторизация | NetNext",
   description: "Войдите или создайте аккаунт",

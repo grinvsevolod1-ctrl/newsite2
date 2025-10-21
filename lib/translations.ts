@@ -17,6 +17,15 @@ export const translations = {
       faq: "FAQ",
       reviews: "Отзывы",
     },
+    contact: {
+      title: "Свяжитесь с нами",
+      name: "Имя",
+      email: "Email",
+      phone: "Телефон",
+      company: "Компания",
+      message: "Сообщение",
+      send: "Отправить",
+    },
     footer: {
       company: "Компания",
       legal: "Правовая информация",
@@ -172,6 +181,15 @@ export const translations = {
       about: "About",
       faq: "FAQ",
       reviews: "Reviews",
+    },
+    contact: {
+      title: "Contact Us",
+      name: "Name",
+      email: "Email",
+      phone: "Phone",
+      company: "Company",
+      message: "Message",
+      send: "Send",
     },
     footer: {
       company: "Company",
