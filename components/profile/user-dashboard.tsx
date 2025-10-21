@@ -227,8 +227,8 @@ export function UserDashboard() {
   }
 
   return (
-    <div className="space-y-6">
-      <ScrollReveal>
+    <ScrollReveal>
+      <div className="space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative">
@@ -263,243 +263,341 @@ export function UserDashboard() {
             {t.nav.logout}
           </Button>
         </div>
-      </ScrollReveal>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-        <ScrollReveal delay={50}>
-          <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/20 rounded-lg">
-                  <Calculator className="w-5 h-5 text-primary" />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+          <ScrollReveal delay={50}>
+            <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/20 rounded-lg">
+                    <Calculator className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{calculations.length}</p>
+                    <p className="text-xs text-muted-foreground">Расчеты</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-2xl font-bold">{calculations.length}</p>
-                  <p className="text-xs text-muted-foreground">Расчеты</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </ScrollReveal>
-        <ScrollReveal delay={100}>
-          <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/20 rounded-lg">
-                  <Mail className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{contactSubmissions.length}</p>
-                  <p className="text-xs text-muted-foreground">Заявки</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </ScrollReveal>
-        <ScrollReveal delay={150}>
-          <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/20 rounded-lg">
-                  <FileText className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{jobApplications.length}</p>
-                  <p className="text-xs text-muted-foreground">Отклики</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </ScrollReveal>
-        <ScrollReveal delay={200}>
-          <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-primary/20 rounded-lg">
-                  <Handshake className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <p className="text-2xl font-bold">{partnershipRequests.length}</p>
-                  <p className="text-xs text-muted-foreground">Партнерство</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </ScrollReveal>
-      </div>
-
-      <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 mb-6">
-          <TabsTrigger value="profile">{t.profile.title}</TabsTrigger>
-          <TabsTrigger value="calculations">{t.profile.calculations}</TabsTrigger>
-          <TabsTrigger value="activity">{t.profile.activity}</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="profile">
-          <ScrollReveal delay={100}>
-            <TiltCard>
-              <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-                <CardHeader>
-                  <CardTitle>{t.profile.personalInfo}</CardTitle>
-                  <CardDescription>{t.profile.updateData}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSaveProfile} className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="fullName">{t.profile.fullName}</Label>
-                        <Input
-                          id="fullName"
-                          value={profile?.full_name || ""}
-                          onChange={(e) => setProfile({ ...profile!, full_name: e.target.value })}
-                          className="h-11"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={profile?.email || ""}
-                          disabled
-                          className="h-11 opacity-60"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">{t.profile.phone}</Label>
-                        <Input
-                          id="phone"
-                          type="tel"
-                          value={profile?.phone || ""}
-                          onChange={(e) => setProfile({ ...profile!, phone: e.target.value })}
-                          className="h-11"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="company">{t.profile.company}</Label>
-                        <Input
-                          id="company"
-                          value={profile?.company || ""}
-                          onChange={(e) => setProfile({ ...profile!, company: e.target.value })}
-                          className="h-11"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="role">Должность</Label>
-                        <Input
-                          id="role"
-                          value={profile?.role || ""}
-                          onChange={(e) => setProfile({ ...profile!, role: e.target.value })}
-                          className="h-11"
-                          placeholder="Например: CEO, Developer"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="currency">{t.profile.currency}</Label>
-                        <select
-                          id="currency"
-                          value={profile?.preferred_currency?.toLowerCase() || "byn"}
-                          onChange={(e) => setProfile({ ...profile!, preferred_currency: e.target.value })}
-                          className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                        >
-                          <option value="byn">BYN (Белорусский рубль)</option>
-                          <option value="usd">USD (Доллар США)</option>
-                          <option value="eur">EUR (Евро)</option>
-                          <option value="rub">RUB (Российский рубль)</option>
-                        </select>
-                      </div>
-                    </div>
-                    {message && (
-                      <p
-                        className={`text-sm p-3 rounded-lg ${message.type === "success" ? "text-green-600 bg-green-600/10" : "text-destructive bg-destructive/10"}`}
-                      >
-                        {message.text}
-                      </p>
-                    )}
-                    <Button type="submit" disabled={isSaving} className="gap-2">
-                      {isSaving ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          {t.profile.saving}
-                        </>
-                      ) : (
-                        <>
-                          <Save className="w-4 h-4" />
-                          {t.profile.saveChanges}
-                        </>
-                      )}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
-            </TiltCard>
+              </CardContent>
+            </Card>
           </ScrollReveal>
-        </TabsContent>
+          <ScrollReveal delay={100}>
+            <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/20 rounded-lg">
+                    <Mail className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{contactSubmissions.length}</p>
+                    <p className="text-xs text-muted-foreground">Заявки</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollReveal>
+          <ScrollReveal delay={150}>
+            <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/20 rounded-lg">
+                    <FileText className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{jobApplications.length}</p>
+                    <p className="text-xs text-muted-foreground">Отклики</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollReveal>
+          <ScrollReveal delay={200}>
+            <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
+              <CardContent className="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/20 rounded-lg">
+                    <Handshake className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold">{partnershipRequests.length}</p>
+                    <p className="text-xs text-muted-foreground">Партнерство</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </ScrollReveal>
+        </div>
 
-        <TabsContent value="calculations">
-          <div className="grid gap-4">
-            {calculations.length === 0 ? (
-              <ScrollReveal>
+        <Tabs defaultValue="profile" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 mb-6">
+            <TabsTrigger value="profile">{t.profile.title}</TabsTrigger>
+            <TabsTrigger value="calculations">{t.profile.calculations}</TabsTrigger>
+            <TabsTrigger value="activity">{t.profile.activity}</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="profile">
+            <ScrollReveal delay={100}>
+              <TiltCard>
                 <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-                  <CardContent className="flex flex-col items-center justify-center py-12">
-                    <Calculator className="w-12 h-12 text-muted-foreground mb-4" />
-                    <p className="text-muted-foreground text-center">{t.profile.noCalculations}</p>
-                    <Button onClick={() => router.push("/calculator")} className="mt-4">
-                      {t.profile.createCalculation}
-                    </Button>
+                  <CardHeader>
+                    <CardTitle>{t.profile.personalInfo}</CardTitle>
+                    <CardDescription>{t.profile.updateData}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleSaveProfile} className="space-y-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="fullName">{t.profile.fullName}</Label>
+                          <Input
+                            id="fullName"
+                            value={profile?.full_name || ""}
+                            onChange={(e) => setProfile({ ...profile!, full_name: e.target.value })}
+                            className="h-11"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Email</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            value={profile?.email || ""}
+                            disabled
+                            className="h-11 opacity-60"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="phone">{t.profile.phone}</Label>
+                          <Input
+                            id="phone"
+                            type="tel"
+                            value={profile?.phone || ""}
+                            onChange={(e) => setProfile({ ...profile!, phone: e.target.value })}
+                            className="h-11"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="company">{t.profile.company}</Label>
+                          <Input
+                            id="company"
+                            value={profile?.company || ""}
+                            onChange={(e) => setProfile({ ...profile!, company: e.target.value })}
+                            className="h-11"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="role">Должность</Label>
+                          <Input
+                            id="role"
+                            value={profile?.role || ""}
+                            onChange={(e) => setProfile({ ...profile!, role: e.target.value })}
+                            className="h-11"
+                            placeholder="Например: CEO, Developer"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="currency">{t.profile.currency}</Label>
+                          <select
+                            id="currency"
+                            value={profile?.preferred_currency?.toLowerCase() || "byn"}
+                            onChange={(e) => setProfile({ ...profile!, preferred_currency: e.target.value })}
+                            className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                          >
+                            <option value="byn">BYN (Белорусский рубль)</option>
+                            <option value="usd">USD (Доллар США)</option>
+                            <option value="eur">EUR (Евро)</option>
+                            <option value="rub">RUB (Российский рубль)</option>
+                          </select>
+                        </div>
+                      </div>
+                      {message && (
+                        <p
+                          className={`text-sm p-3 rounded-lg ${message.type === "success" ? "text-green-600 bg-green-600/10" : "text-destructive bg-destructive/10"}`}
+                        >
+                          {message.text}
+                        </p>
+                      )}
+                      <Button type="submit" disabled={isSaving} className="gap-2">
+                        {isSaving ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            {t.profile.saving}
+                          </>
+                        ) : (
+                          <>
+                            <Save className="w-4 h-4" />
+                            {t.profile.saveChanges}
+                          </>
+                        )}
+                      </Button>
+                    </form>
                   </CardContent>
                 </Card>
-              </ScrollReveal>
-            ) : (
-              calculations.map((calc, index) => (
-                <ScrollReveal key={calc.id} delay={index * 50}>
-                  <TiltCard>
-                    <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20 hover:border-primary/40 transition-colors">
-                      <CardHeader>
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <CardTitle className="text-lg">{calc.project_type}</CardTitle>
-                            <CardDescription>
-                              {new Date(calc.created_at).toLocaleDateString(locale === "ru" ? "ru-RU" : "en-US")}
-                            </CardDescription>
-                          </div>
-                          <div className="text-right">
-                            <p className="text-2xl font-bold gradient-text">
-                              {calc.estimated_price.toLocaleString()} {calc.currency}
-                            </p>
-                          </div>
-                        </div>
-                      </CardHeader>
-                    </Card>
-                  </TiltCard>
-                </ScrollReveal>
-              ))
-            )}
-          </div>
-        </TabsContent>
+              </TiltCard>
+            </ScrollReveal>
+          </TabsContent>
 
-        <TabsContent value="activity">
-          <div className="space-y-6">
-            {/* Contact Submissions */}
-            {contactSubmissions.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Mail className="w-5 h-5" />
-                  Заявки на услуги
-                </h3>
-                <div className="grid gap-3">
-                  {contactSubmissions.map((submission, index) => (
-                    <ScrollReveal key={submission.id} delay={index * 30}>
-                      <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
-                        <CardContent className="p-4">
-                          <div className="flex items-center justify-between">
+          <TabsContent value="calculations">
+            <div className="grid gap-4">
+              {calculations.length === 0 ? (
+                <ScrollReveal>
+                  <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
+                    <CardContent className="flex flex-col items-center justify-center py-12">
+                      <Calculator className="w-12 h-12 text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground text-center">{t.profile.noCalculations}</p>
+                      <Button onClick={() => router.push("/calculator")} className="mt-4">
+                        {t.profile.createCalculation}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </ScrollReveal>
+              ) : (
+                calculations.map((calc, index) => (
+                  <ScrollReveal key={calc.id} delay={index * 50}>
+                    <TiltCard>
+                      <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20 hover:border-primary/40 transition-colors">
+                        <CardHeader>
+                          <div className="flex items-start justify-between">
                             <div>
-                              <p className="font-medium">{submission.name}</p>
-                              <p className="text-sm text-muted-foreground">{submission.service_type}</p>
-                              <p className="text-xs text-muted-foreground mt-1">
-                                {new Date(submission.created_at).toLocaleDateString(
-                                  locale === "ru" ? "ru-RU" : "en-US",
-                                )}
+                              <CardTitle className="text-lg">{calc.project_type}</CardTitle>
+                              <CardDescription>
+                                {new Date(calc.created_at).toLocaleDateString(locale === "ru" ? "ru-RU" : "en-US")}
+                              </CardDescription>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-2xl font-bold gradient-text">
+                                {calc.estimated_price.toLocaleString()} {calc.currency}
                               </p>
                             </div>
-              
+                          </div>
+                        </CardHeader>
+                      </Card>
+                    </TiltCard>
+                  </ScrollReveal>
+                ))
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="activity">
+            <div className="space-y-6">
+              {/* Contact Submissions */}
+              {contactSubmissions.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                    <Mail className="w-5 h-5" />
+                    Заявки на услуги
+                  </h3>
+                  <div className="grid gap-3">
+                    {contactSubmissions.map((submission, index) => (
+                      <ScrollReveal key={submission.id} delay={index * 30}>
+                        <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-medium">{submission.name}</p>
+                                <p className="text-sm text-muted-foreground">{submission.service_type}</p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {new Date(submission.created_at).toLocaleDateString(
+                                    locale === "ru" ? "ru-RU" : "en-US",
+                                  )}
+                                </p>
+                              </div>
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(submission.status)}`}
+                              >
+                                {submission.status}
+                              </span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </ScrollReveal>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Job Applications */}
+              {jobApplications.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                    <FileText className="w-5 h-5" />
+                    Отклики на вакансии
+                  </h3>
+                  <div className="grid gap-3">
+                    {jobApplications.map((application, index) => (
+                      <ScrollReveal key={application.id} delay={index * 30}>
+                        <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-medium">{application.name}</p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {new Date(application.created_at).toLocaleDateString(
+                                    locale === "ru" ? "ru-RU" : "en-US",
+                                  )}
+                                </p>
+                              </div>
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(application.status)}`}
+                              >
+                                {application.status}
+                              </span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </ScrollReveal>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Partnership Requests */}
+              {partnershipRequests.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                    <Handshake className="w-5 h-5" />
+                    Запросы на партнерство
+                  </h3>
+                  <div className="grid gap-3">
+                    {partnershipRequests.map((request, index) => (
+                      <ScrollReveal key={request.id} delay={index * 30}>
+                        <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="font-medium">{request.company_name}</p>
+                                <p className="text-sm text-muted-foreground">{request.partnership_type}</p>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                  {new Date(request.created_at).toLocaleDateString(locale === "ru" ? "ru-RU" : "en-US")}
+                                </p>
+                              </div>
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(request.status)}`}
+                              >
+                                {request.status}
+                              </span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </ScrollReveal>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {contactSubmissions.length === 0 && jobApplications.length === 0 && partnershipRequests.length === 0 && (
+                <ScrollReveal>
+                  <Card className="bg-white/[0.04] backdrop-blur-xl border-primary/20">
+                    <CardContent className="flex flex-col items-center justify-center py-12">
+                      <Briefcase className="w-12 h-12 text-muted-foreground mb-4" />
+                      <p className="text-muted-foreground text-center">{t.profile.activityHistory}</p>
+                    </CardContent>
+                  </Card>
+                </ScrollReveal>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </ScrollReveal>
+  )
+}
