@@ -290,25 +290,25 @@ export function OrderForm() {
                 <FormItem>
                   <FormLabel>Промокод (необязательно)</FormLabel>
                   <div className="flex gap-2">
-                    <FormControl>
-                      <Input
-                        placeholder="Введите промокод"
-                        {...field}
-                        value={field.value || ""}
-                        onChange={(e) => {
-                          field.onChange(e)
-                          const value = e.target.value
-                          if (value.length >= 3) {
-                            checkPromoCode(value)
-                          } else {
-                            setPromoDiscount(0)
-                            setPromoCode(null)
-                          }
-                        }}
-                      />
-                    </FormControl>
+                    <Input
+                      placeholder="Введите промокод"
+                      value={field.value || ""}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        field.onChange(value)
+                        if (value.length >= 3) {
+                          checkPromoCode(value)
+                        } else {
+                          setPromoDiscount(0)
+                          setPromoCode(null)
+                        }
+                      }}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      className="flex-1"
+                    />
                     {promoCode && (
-                      <div className="flex items-center gap-1 text-green-600">
+                      <div className="flex items-center gap-1 text-green-600 shrink-0">
                         <Check className="h-4 w-4" />
                         <span className="text-sm font-medium">-{promoDiscount}%</span>
                       </div>

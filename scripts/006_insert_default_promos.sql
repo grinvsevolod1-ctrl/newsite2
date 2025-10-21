@@ -6,7 +6,8 @@ VALUES
   ('TRANSFER2024', 'fixed', 0, 'Бесплатный перенос сайта при заказе разработки от 50000₽', 'Free website migration with development order over 50000₽', NOW(), NOW() + INTERVAL '1 year', true, 500),
   ('SUPPORT3M', 'fixed', 0, '3 месяца бесплатной технической поддержки при заказе от 100000₽', '3 months of free technical support with order over 100000₽', NOW(), NOW() + INTERVAL '1 year', true, 500),
   ('PREMIUM25', 'percentage', 25, 'Скидка 25% на премиум пакет разработки', '25% discount on premium development package', NOW(), NOW() + INTERVAL '6 months', true, 100),
-  ('NEWYEAR2025', 'percentage', 20, 'Новогодняя скидка 20% на все услуги', 'New Year 20% discount on all services', NOW(), NOW() + INTERVAL '3 months', true, 200)
+  ('NEWYEAR2025', 'percentage', 20, 'Новогодняя скидка 20% на все услуги', 'New Year 20% discount on all services', NOW(), NOW() + INTERVAL '3 months', true, 200),
+  ('AUDIT2025', 'fixed', 0, 'Бесплатный аудит сайта и консультация по улучшению', 'Free website audit and improvement consultation', NOW(), NOW() + INTERVAL '1 year', true, 300)
 ON CONFLICT (code) DO UPDATE SET
   discount_type = EXCLUDED.discount_type,
   discount_value = EXCLUDED.discount_value,

@@ -441,3 +441,19 @@ html {
 .animate-shimmer {
   animation: toast-shimmer 2s linear infinite;
 }
+
+/* Added media query to prevent chat widget overflow on small screens */
+@media (max-width: 640px) {
+  .chat-widget-container {
+    max-height: calc(100vh - 7rem);
+    max-height: calc(100dvh - 7rem);
+  }
+}
+
+/* Improved scrollbar visibility on mobile */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+}
