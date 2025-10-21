@@ -36,7 +36,7 @@ export function HeroSection() {
               className="absolute top-1/2 left-1/2 w-[120px] sm:w-[250px] md:w-[400px] h-[120px] sm:h-[250px] md:h-[400px] bg-secondary/20 rounded-full animate-glow blur-3xl"
               style={{ animationDelay: "4s" }}
             />
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.03)_1px,transparent_1px)] bg-[size:30px_30px] sm:bg-[size:50px_50px] md:bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.1)_1px,transparent_1px)] bg-[size:30px_30px] sm:bg-[size:50px_50px] md:bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
           </>
         )}
       </div>

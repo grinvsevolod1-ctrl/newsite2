@@ -3,22 +3,24 @@ import { PortfolioContent } from "@/components/portfolio/portfolio-content"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Portfolio - Our Projects & Case Studies | NetNext",
+  title: "Портфолио - Наши Проекты и Кейсы | NetNext",
   description:
-    "NetNext Portfolio: 50+ successful projects in web development, mobile apps, Telegram bots, AI solutions. View our work and case studies from clients worldwide.",
+    "Портфолио NetNext: более 50 успешных проектов в веб-разработке, мобильных приложениях, Telegram-ботах, AI решениях. Посмотрите наши работы и кейсы клиентов со всего мира.",
   keywords: [
-    "development portfolio",
-    "web development examples",
-    "mobile app portfolio",
-    "telegram bot examples",
-    "AI projects",
-    "case studies",
-    "NetNext portfolio",
-    "software development showcase",
+    "портфолио разработки",
+    "примеры веб-разработки",
+    "портфолио мобильных приложений",
+    "примеры telegram ботов",
+    "AI проекты",
+    "кейсы",
+    "портфолио NetNext",
+    "примеры разработки ПО",
+    "веб-студия портфолио",
+    "разработка сайтов примеры",
   ],
   openGraph: {
-    title: "Portfolio - Our Projects & Case Studies | NetNext",
-    description: "50+ successful projects. View our work and case studies from clients worldwide.",
+    title: "Портфолио - Наши Проекты и Кейсы | NetNext",
+    description: "Более 50 успешных проектов. Посмотрите наши работы и кейсы клиентов со всего мира.",
     url: "https://www.netnext.site/portfolio",
     type: "website",
     images: [
@@ -26,14 +28,14 @@ export const metadata: Metadata = {
         url: "/og-portfolio.png",
         width: 1200,
         height: 630,
-        alt: "NetNext Portfolio",
+        alt: "Портфолио NetNext",
       },
     ],
   },
   alternates: {
     canonical: "https://www.netnext.site/portfolio",
     languages: {
-      ru: "https://www.netnext.site/ru/portfolio",
+      ru: "https://www.netnext.site/portfolio",
       en: "https://www.netnext.site/en/portfolio",
     },
   },

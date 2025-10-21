@@ -100,62 +100,75 @@ export function UserDashboard() {
   const loadUserData = async () => {
     const supabase = createClient()
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-    if (!user) {
-      router.push("/auth")
-      return
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
+
+      if (!user) {
+        router.push("/auth")
+        return
+      }
+
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", user.id)
+        .single()
+
+      if (profileError) {
+        console.error("Profile error:", profileError)
+      }
+
+      const { data: calculationsData } = await supabase
+        .from("price_calculations")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10)
+
+      const { data: contactsData } = await supabase
+        .from("contact_submissions")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10)
+
+      const { data: jobsData } = await supabase
+        .from("job_applications")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10)
+
+      const { data: partnershipsData } = await supabase
+        .from("partnership_requests")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(10)
+
+      setProfile(
+        profileData || {
+          id: user.id,
+          email: user.email,
+          full_name: null,
+          phone: null,
+          avatar_url: null,
+          company: null,
+          role: null,
+          preferred_language: "ru",
+          preferred_currency: "BYN",
+        },
+      )
+      setCalculations(calculationsData || [])
+      setContactSubmissions(contactsData || [])
+      setJobApplications(jobsData || [])
+      setPartnershipRequests(partnershipsData || [])
+      setIsLoading(false)
+    } catch (error) {
+      console.error("[v0] Error loading user data:", error)
     }
-
-    const { data: profileData } = await supabase.from("profiles").select("*").eq("id", user.id).single()
-
-    const { data: calculationsData } = await supabase
-      .from("price_calculations")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(10)
-
-    const { data: contactsData } = await supabase
-      .from("contact_submissions")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(10)
-
-    const { data: jobsData } = await supabase
-      .from("job_applications")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(10)
-
-    const { data: partnershipsData } = await supabase
-      .from("partnership_requests")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(10)
-
-    setProfile(
-      profileData || {
-        id: user.id,
-        email: user.email,
-        full_name: null,
-        phone: null,
-        avatar_url: null,
-        company: null,
-        role: null,
-        preferred_language: "ru",
-        preferred_currency: "BYN",
-      },
-    )
-    setCalculations(calculationsData || [])
-    setContactSubmissions(contactsData || [])
-    setJobApplications(jobsData || [])
-    setPartnershipRequests(partnershipsData || [])
-    setIsLoading(false)
   }
 
   const handleSaveProfile = async (e: React.FormEvent) => {
@@ -236,6 +249,13 @@ export function UserDashboard() {
       new: "bg-blue-500/20 text-blue-600",
     }
     return colors[status as keyof typeof colors] || colors.pending
+  }
+
+  const getTabsGridClass = () => {
+    const count = getTabsCount()
+    if (count === 4) return "grid-cols-4"
+    if (count === 3) return "grid-cols-3"
+    return "grid-cols-3"
   }
 
   const getTabsCount = () => {
@@ -360,7 +380,7 @@ export function UserDashboard() {
         </div>
 
         <Tabs defaultValue="profile" className="w-full">
-          <TabsList className={`grid w-full grid-cols-${getTabsCount()} mb-6`}>
+          <TabsList className={`grid w-full ${getTabsGridClass()} mb-6`}>
             <TabsTrigger value="profile">{t.profile.title}</TabsTrigger>
             <TabsTrigger value="calculations">{t.profile.calculations}</TabsTrigger>
             <TabsTrigger value="activity">{t.profile.activity}</TabsTrigger>
@@ -444,16 +464,6 @@ export function UserDashboard() {
                             value={profile?.company || ""}
                             onChange={(e) => setProfile({ ...profile!, company: e.target.value })}
                             className="h-11"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="role">Должность</Label>
-                          <Input
-                            id="role"
-                            value={profile?.role || ""}
-                            onChange={(e) => setProfile({ ...profile!, role: e.target.value })}
-                            className="h-11"
-                            placeholder="Например: CEO, Developer"
                           />
                         </div>
                         <div className="space-y-2">

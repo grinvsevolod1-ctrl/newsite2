@@ -4,6 +4,8 @@ import { AnimatedStats } from "@/components/home/animated-stats"
 import { TechnologiesSection } from "@/components/home/technologies-section"
 import { ReviewsCarousel } from "@/components/reviews/reviews-carousel"
 import { CTASection } from "@/components/home/cta-section"
+import { PromoSection } from "@/components/promo/promo-section"
+import { WelcomePopup } from "@/components/promo/welcome-popup"
 
 export default function HomePage() {
   return (
@@ -12,8 +14,10 @@ export default function HomePage() {
       <ServicesSection />
       <AnimatedStats />
       <TechnologiesSection />
+      <PromoSection />
       <ReviewsCarousel />
       <CTASection />
+      <WelcomePopup />
     </div>
   )
 }
