@@ -211,10 +211,12 @@ export function OrderForm() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Детали заказа</CardTitle>
-        <CardDescription>Выберите услугу и пакет, примените промокод для получения скидки</CardDescription>
+    <Card className="border-2 border-cyan-500/20 shadow-xl shadow-cyan-500/5">
+      <CardHeader className="space-y-1 pb-6">
+        <CardTitle className="text-2xl">Детали заказа</CardTitle>
+        <CardDescription className="text-base">
+          Выберите услугу и пакет, примените промокод для получения скидки
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -224,16 +226,16 @@ export function OrderForm() {
               name="serviceType"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Тип услуги</FormLabel>
+                  <FormLabel className="text-base font-medium">Тип услуги</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-12 text-base">
                         <SelectValue placeholder="Выберите тип услуги" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {services.map((service) => (
-                        <SelectItem key={service.value} value={service.value}>
+                        <SelectItem key={service.value} value={service.value} className="text-base">
                           {service.label} - от {service.basePrice} BYN
                         </SelectItem>
                       ))}
@@ -249,16 +251,16 @@ export function OrderForm() {
               name="packageName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Пакет</FormLabel>
+                  <FormLabel className="text-base font-medium">Пакет</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-12 text-base">
                         <SelectValue placeholder="Выберите пакет" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       {packages.map((pkg) => (
-                        <SelectItem key={pkg.value} value={pkg.value}>
+                        <SelectItem key={pkg.value} value={pkg.value} className="text-base">
                           {pkg.label}
                         </SelectItem>
                       ))}
@@ -274,9 +276,13 @@ export function OrderForm() {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Описание проекта</FormLabel>
+                  <FormLabel className="text-base font-medium">Описание проекта</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Расскажите о вашем проекте..." className="min-h-[120px]" {...field} />
+                    <Textarea
+                      placeholder="Расскажите о вашем проекте подробнее..."
+                      className="min-h-[140px] text-base resize-none"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -288,7 +294,7 @@ export function OrderForm() {
               name="promoCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Промокод (необязательно)</FormLabel>
+                  <FormLabel className="text-base font-medium">Промокод (необязательно)</FormLabel>
                   <div className="flex gap-2">
                     <Input
                       placeholder="Введите промокод"
@@ -305,12 +311,12 @@ export function OrderForm() {
                       }}
                       onBlur={field.onBlur}
                       name={field.name}
-                      className="flex-1"
+                      className="flex-1 h-12 text-base"
                     />
                     {promoCode && (
-                      <div className="flex items-center gap-1 text-green-600 shrink-0">
-                        <Check className="h-4 w-4" />
-                        <span className="text-sm font-medium">-{promoDiscount}%</span>
+                      <div className="flex items-center gap-2 px-4 bg-green-500/10 text-green-600 rounded-lg shrink-0">
+                        <Check className="h-5 w-5" />
+                        <span className="text-sm font-semibold">-{promoDiscount}%</span>
                       </div>
                     )}
                   </div>
@@ -320,46 +326,56 @@ export function OrderForm() {
             />
 
             {calculatedPrice > 0 && (
-              <Card className="bg-muted">
+              <Card className="bg-gradient-to-br from-cyan-500/5 to-blue-500/5 border-2 border-cyan-500/20">
                 <CardContent className="pt-6">
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Базовая стоимость:</span>
-                      <span>{(calculatedPrice / (1 - promoDiscount / 100)).toFixed(2)} BYN</span>
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-base">
+                      <span className="text-muted-foreground">Базовая стоимость:</span>
+                      <span className="font-medium">
+                        {(calculatedPrice / (1 - promoDiscount / 100)).toFixed(2)} BYN
+                      </span>
                     </div>
                     {promoDiscount > 0 && (
-                      <div className="flex justify-between text-sm text-green-600">
-                        <span>Скидка ({promoDiscount}%):</span>
-                        <span>-{(calculatedPrice / (1 - promoDiscount / 100) - calculatedPrice).toFixed(2)} BYN</span>
+                      <div className="flex justify-between text-base text-green-600 dark:text-green-500">
+                        <span className="font-medium">Скидка ({promoDiscount}%):</span>
+                        <span className="font-semibold">
+                          -{(calculatedPrice / (1 - promoDiscount / 100) - calculatedPrice).toFixed(2)} BYN
+                        </span>
                       </div>
                     )}
-                    <div className="flex justify-between text-lg font-bold pt-2 border-t">
-                      <span>Итого:</span>
-                      <span>{calculatedPrice.toFixed(2)} BYN</span>
+                    <div className="flex justify-between text-xl font-bold pt-3 border-t-2 border-cyan-500/20">
+                      <span>Итого к оплате:</span>
+                      <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
+                        {calculatedPrice.toFixed(2)} BYN
+                      </span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            <Button type="submit" className="w-full" disabled={isLoading || !user}>
+            <Button
+              type="submit"
+              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 shadow-lg shadow-cyan-500/20"
+              disabled={isLoading || !user}
+            >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Обработка...
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Обработка заказа...
                 </>
               ) : (
                 <>
-                  <CreditCard className="mr-2 h-4 w-4" />
+                  <CreditCard className="mr-2 h-5 w-5" />
                   {user ? "Перейти к оплате" : "Войдите для оформления заказа"}
                 </>
               )}
             </Button>
 
             {!user && (
-              <p className="text-sm text-center text-muted-foreground">
+              <p className="text-sm text-center text-muted-foreground bg-muted/50 p-4 rounded-lg">
                 Необходимо{" "}
-                <a href="/auth" className="text-cyan-600 hover:underline">
+                <a href="/auth" className="text-cyan-600 hover:text-cyan-700 font-medium hover:underline">
                   войти в систему
                 </a>{" "}
                 для оформления заказа

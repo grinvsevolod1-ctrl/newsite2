@@ -116,18 +116,18 @@ export function PromoSection() {
   if (activePromos.length === 0) return null
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 lg:py-24 relative overflow-hidden">
+    <section className="py-16 sm:py-20 md:py-24 lg:py-28 relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-cyan-500/5 to-background" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
       <div className="container relative px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-          <Badge className="mb-3 sm:mb-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0 text-xs sm:text-sm">
-            <Sparkles className="h-3 w-3 mr-1" />
+        <div className="text-center mb-10 sm:mb-14 lg:mb-16">
+          <Badge className="mb-4 sm:mb-5 bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0 text-xs sm:text-sm px-4 py-1.5">
+            <Sparkles className="h-3.5 w-3.5 mr-1.5" />
             {locale === "ru" ? "Специальные предложения" : "Special Offers"}
           </Badge>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 px-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-5 px-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
             {isAuthenticated
               ? locale === "ru"
                 ? "Эксклюзивные предложения для вас"
@@ -136,7 +136,7 @@ export function PromoSection() {
                 ? "Начните с выгодой"
                 : "Start with benefits"}
           </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto px-4 leading-relaxed">
             {isAuthenticated
               ? locale === "ru"
                 ? "Специальные условия для наших клиентов"
@@ -147,81 +147,84 @@ export function PromoSection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12">
-          {activePromos.map((promo, index) => {
-            const Icon = getPromoIcon(index)
-            const gradient = getPromoGradient(index)
+        <div className="max-w-7xl mx-auto mb-10 sm:mb-14">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+            {activePromos.map((promo, index) => {
+              const Icon = getPromoIcon(index)
+              const gradient = getPromoGradient(index)
 
-            return (
-              <Card
-                key={promo.id}
-                className="relative overflow-hidden group hover:shadow-xl transition-all duration-300 border-2 hover:border-cyan-500/50 min-h-[280px] sm:min-h-[300px] flex flex-col"
-              >
-                {/* Gradient background */}
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-5 group-hover:opacity-10 transition-opacity`}
-                />
+              return (
+                <Card
+                  key={promo.id}
+                  className="relative overflow-hidden group hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 border-2 hover:border-cyan-500/50 h-full flex flex-col"
+                >
+                  {/* Gradient background */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-5 group-hover:opacity-10 transition-opacity`}
+                  />
 
-                <div className="relative p-5 sm:p-6 space-y-3 sm:space-y-4 flex-1 flex flex-col">
-                  {/* Icon */}
-                  <div className={`inline-flex p-2.5 sm:p-3 rounded-xl bg-gradient-to-br ${gradient} w-fit`}>
-                    <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                  <div className="relative p-6 sm:p-7 space-y-4 sm:space-y-5 flex-1 flex flex-col">
+                    {/* Icon */}
+                    <div
+                      className={`inline-flex p-3 sm:p-3.5 rounded-xl bg-gradient-to-br ${gradient} w-fit shadow-lg`}
+                    >
+                      <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="space-y-2.5 flex-1">
+                      <h3 className="text-xl sm:text-2xl font-bold leading-tight">
+                        {promo.discount_type === "percentage" && promo.discount_value > 0
+                          ? `${promo.discount_value}% ${locale === "ru" ? "скидка" : "discount"}`
+                          : locale === "ru"
+                            ? "Бесплатно"
+                            : "Free"}
+                      </h3>
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed min-h-[2.5rem]">
+                        {locale === "ru" ? promo.description_ru : promo.description_en}
+                      </p>
+                    </div>
+
+                    {/* Promo code */}
+                    <div className="flex items-center gap-2.5 p-3 sm:p-3.5 bg-muted/50 rounded-lg mt-auto border border-border/50">
+                      <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap font-medium">
+                        {locale === "ru" ? "Промокод:" : "Code:"}
+                      </span>
+                      <code className="flex-1 font-mono font-bold text-sm sm:text-base truncate">{promo.code}</code>
+                      <Check className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-green-500 flex-shrink-0" />
+                    </div>
                   </div>
-
-                  {/* Content */}
-                  <div className="space-y-2 flex-1">
-                    <h3 className="text-lg sm:text-xl font-bold">
-                      {promo.discount_type === "percentage" && promo.discount_value > 0
-                        ? `${promo.discount_value}% ${locale === "ru" ? "скидка" : "discount"}`
-                        : locale === "ru"
-                          ? "Бесплатно"
-                          : "Free"}
-                    </h3>
-                    <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-                      {locale === "ru" ? promo.description_ru : promo.description_en}
-                    </p>
-                  </div>
-
-                  {/* Promo code */}
-                  <div className="flex items-center gap-2 p-2.5 sm:p-3 bg-muted rounded-lg mt-auto">
-                    <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
-                      {locale === "ru" ? "Промокод:" : "Code:"}
-                    </span>
-                    <code className="flex-1 font-mono font-bold text-xs sm:text-sm truncate">{promo.code}</code>
-                    <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-500 flex-shrink-0" />
-                  </div>
-                </div>
-              </Card>
-            )
-          })}
+                </Card>
+              )
+            })}
+          </div>
         </div>
 
-        {/* CTA */}
         <div className="text-center px-4">
           {isAuthenticated ? (
             <Button
               size="lg"
               onClick={() => router.push("/order")}
-              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white group w-full sm:w-auto text-sm sm:text-base"
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white group w-full sm:w-auto text-base sm:text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
             >
               {locale === "ru" ? "Оформить заказ" : "Place order"}
-              <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           ) : (
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-stretch sm:items-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center max-w-2xl mx-auto">
               <Button
                 size="lg"
                 onClick={() => router.push("/auth")}
-                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white group w-full sm:w-auto text-sm sm:text-base"
+                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white group w-full sm:flex-1 text-base sm:text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
               >
                 {locale === "ru" ? "Зарегистрироваться" : "Sign up"}
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
               <Button
                 size="lg"
                 variant="outline"
                 onClick={() => router.push("/order")}
-                className="w-full sm:w-auto text-sm sm:text-base"
+                className="w-full sm:flex-1 text-base sm:text-lg px-8 py-6 border-2 hover:bg-muted transition-all"
               >
                 {locale === "ru" ? "Заказать без регистрации" : "Order without registration"}
               </Button>
