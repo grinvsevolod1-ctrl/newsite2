@@ -91,20 +91,24 @@ export function HeroSection() {
               variant="outline"
               className="w-full sm:w-auto text-sm sm:text-base md:text-lg h-11 sm:h-12 md:h-14 lg:h-16 min-w-[180px] sm:min-w-[200px] bg-white/[0.06] backdrop-blur-xl backdrop-saturate-[200%] border-primary/30 hover:bg-white/[0.08] hover:scale-105 rounded-full transition-all duration-300"
             >
-              <Link href="/portfolio">{t.hero.learnMore}</Link>
+              <Link href="/faq">{locale === "ru" ? "Узнать больше" : "Learn More"}</Link>
             </Button>
           </div>
 
           {!videoPlaying && (
-            <button
-              onClick={() => setVideoPlaying(true)}
-              className={`inline-flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-white/[0.06] backdrop-blur-xl backdrop-saturate-[200%] border border-primary/20 rounded-full hover:scale-110 transition-all duration-300 group animate-pulse-glow text-sm sm:text-base ${
+            <Button
+              asChild
+              size="lg"
+              variant="outline"
+              className={`inline-flex items-center gap-2 px-4 py-2.5 sm:px-6 sm:py-3 bg-white/[0.06] backdrop-blur-xl backdrop-saturate-[200%] border border-primary/20 rounded-full hover:scale-110 transition-all duration-300 group text-sm sm:text-base ${
                 mounted ? "opacity-100" : "opacity-0"
               }`}
             >
-              <Play className="h-4 w-4 sm:h-5 sm:w-5 text-primary group-hover:text-accent transition-colors flex-shrink-0" />
-              <span className="font-medium">{locale === "ru" ? "Смотреть видео" : "Watch Video"}</span>
-            </button>
+              <Link href="/portfolio" className="flex items-center gap-2">
+                <Play className="h-4 w-4 sm:h-5 sm:w-5 text-primary group-hover:text-accent transition-colors flex-shrink-0" />
+                <span className="font-medium">{t.hero.learnMore}</span>
+              </Link>
+            </Button>
           )}
 
           <div
