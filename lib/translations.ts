@@ -35,7 +35,7 @@ export const translations = {
       rights: "Все права защищены",
     },
     hero: {
-      title: "Разработка программного обеспечения мирового класса",
+      title: "Разработка сайтов и программного обеспечения любого уровня под ключ",
       subtitle: "50+ профессиональных разработчиков создают инновационные решения для вашего бизнеса",
       cta: "Начать проект",
       learnMore: "Узнать больше",
@@ -200,7 +200,7 @@ export const translations = {
       rights: "All rights reserved",
     },
     hero: {
-      title: "World-Class Software Development",
+      title: "Development of websites and software of any level on a turnkey basis",
       subtitle: "50+ professional developers creating innovative solutions for your business",
       cta: "Start Project",
       learnMore: "Learn More",
