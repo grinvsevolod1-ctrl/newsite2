@@ -27,7 +27,7 @@ export function CalculatorContent() {
   const [saved, setSaved] = useState(false)
 
   const projectTypes = [
-    { value: "web", label: locale === "ru" ? "Сайт" : "Web Application", basePrice: 300 },
+    { value: "web", label: locale === "ru" ? "Веб-приложение" : "Web Application", basePrice: 2000 },
     { value: "mobile", label: locale === "ru" ? "Мобильное приложение" : "Mobile App", basePrice: 3000 },
     { value: "bot", label: locale === "ru" ? "Telegram бот" : "Telegram Bot", basePrice: 800 },
     { value: "ai", label: locale === "ru" ? "AI решение" : "AI Solution", basePrice: 4000 },
@@ -330,7 +330,7 @@ export function CalculatorContent() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="phone" className="text-sm sm:text-base">
-                      {locale === "ru" ? "Телефон" : "Phone"}
+                      {locale === "ru" ? "Телефон" : "Phone"} <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="phone"
@@ -339,6 +339,7 @@ export function CalculatorContent() {
                       value={contactInfo.phone}
                       onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
                       className="h-12 text-base"
+                      required
                     />
                   </div>
                   <div className="space-y-2">
@@ -408,23 +409,23 @@ export function CalculatorContent() {
                     <Button
                       onClick={handleSave}
                       className="w-full h-12 sm:h-14 text-base sm:text-lg"
-                      disabled={isSaving}
+                      disabled={isSaving || !contactInfo.phone}
                     >
                       {isSaving ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
-                          {locale === "ru" ? "Сохранение..." : "Saving..."}
+                          {locale === "ru" ? "Отправка..." : "Sending..."}
                         </>
                       ) : (
                         <>
                           <Save className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-                          {locale === "ru" ? "Сохранить расчет" : "Save Calculation"}
+                          {locale === "ru" ? "Оформить заявку" : "Submit Request"}
                         </>
                       )}
                     </Button>
                     {saved && (
                       <p className="text-xs sm:text-sm text-green-600 text-center">
-                        {locale === "ru" ? "Расчет сохранен!" : "Calculation saved!"}
+                        {locale === "ru" ? "Заявка отправлена!" : "Request submitted!"}
                       </p>
                     )}
                   </div>
