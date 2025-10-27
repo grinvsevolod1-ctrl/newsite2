@@ -35,10 +35,10 @@ export const translations = {
       rights: "Все права защищены",
     },
     hero: {
-      title: "Разработка сайтов и программного обеспечения любого уровня под ключ",
+      title: "Разработка сайтов и программного обеспечения любой сложности",
       subtitle: "50+ профессиональных разработчиков создают инновационные решения для вашего бизнеса",
-      cta: "Начать проект",
-      learnMore: "Узнать больше",
+      cta: "Заказать",
+      learnMore: "Портфолио",
     },
     services: {
       title: "Наши услуги",
@@ -200,10 +200,10 @@ export const translations = {
       rights: "All rights reserved",
     },
     hero: {
-      title: "Development of websites and software of any level on a turnkey basis",
+      title: "Website and Software Development of Any Complexity",
       subtitle: "50+ professional developers creating innovative solutions for your business",
-      cta: "Start Project",
-      learnMore: "Learn More",
+      cta: "Order",
+      learnMore: "Portfolio",
     },
     services: {
       title: "Our Services",
