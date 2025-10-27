@@ -105,7 +105,6 @@ export const metadata: Metadata = {
     "geo.position": "53.9006;27.559",
     ICBM: "53.9006, 27.559",
   },
-    generator: 'v0.app'
 }
 
 export default function RootLayout({
@@ -123,6 +122,23 @@ export default function RootLayout({
         <meta name="theme-color" content="#000000" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <Script
+          id="google-tag"
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17669639829"
+        />
+        <Script
+          id="google-tag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-17669639829');
+            `,
+          }}
+        />
         <Script
           id="yandex-metrika"
           strategy="afterInteractive"
