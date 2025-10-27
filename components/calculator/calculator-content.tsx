@@ -39,19 +39,19 @@ export function CalculatorContent() {
     {
       id: "auth",
       name: { ru: "Система авторизации", en: "Authentication System" },
-      price: 500,
+      price: 350,
       category: "web,mobile,desktop",
     },
     {
       id: "admin",
       name: { ru: "Админ панель", en: "Admin Panel" },
-      price: 800,
+      price: 600,
       category: "web,mobile,bot",
     },
     {
       id: "payment",
       name: { ru: "Платежная система", en: "Payment System" },
-      price: 1000,
+      price: 600,
       category: "web,mobile,bot",
     },
     {
@@ -63,7 +63,7 @@ export function CalculatorContent() {
     {
       id: "realtime",
       name: { ru: "Реалтайм функции", en: "Real-time Features" },
-      price: 700,
+      price: 500,
       category: "web,mobile",
     },
     {
@@ -75,7 +75,7 @@ export function CalculatorContent() {
     {
       id: "notifications",
       name: { ru: "Push уведомления", en: "Push Notifications" },
-      price: 500,
+      price: 300,
       category: "web,mobile,bot",
     },
     {
@@ -99,31 +99,31 @@ export function CalculatorContent() {
     {
       id: "chat",
       name: { ru: "Чат/Мессенджер", en: "Chat/Messenger" },
-      price: 1200,
+      price: 900,
       category: "web,mobile",
     },
     {
       id: "ai-integration",
       name: { ru: "AI интеграция", en: "AI Integration" },
-      price: 1500,
+      price: 400,
       category: "web,mobile,bot,desktop",
     },
     {
       id: "social",
       name: { ru: "Социальные функции", en: "Social Features" },
-      price: 800,
+      price: 500,
       category: "web,mobile",
     },
     {
       id: "maps",
       name: { ru: "Карты/Геолокация", en: "Maps/Geolocation" },
-      price: 600,
+      price: 400,
       category: "web,mobile",
     },
     {
       id: "video",
       name: { ru: "Видео функции", en: "Video Features" },
-      price: 1000,
+      price: 500,
       category: "web,mobile",
     },
   ]
