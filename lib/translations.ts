@@ -43,7 +43,7 @@ export const translations = {
     services: {
       title: "Наши услуги",
       web: "Веб-разработка",
-      webDesc: "Современные веб-приложения и сайты",
+      webDesc: "Современные сайты и веб-приложения",
       mobile: "Мобильные приложения",
       mobileDesc: "iOS и Android приложения",
       bot: "Telegram боты",
@@ -208,7 +208,7 @@ export const translations = {
     services: {
       title: "Our Services",
       web: "Web Development",
-      webDesc: "Modern web applications and websites",
+      webDesc: "Modern websites and web applications",
       mobile: "Mobile Apps",
       mobileDesc: "iOS and Android applications",
       bot: "Telegram Bots",
