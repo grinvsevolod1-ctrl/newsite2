@@ -57,7 +57,7 @@ export function AIChatWidget() {
             icon: <DollarSign className="h-4 w-4" />,
             question: "Сколько стоит разработка сайта?",
             answer:
-              "Стоимость разработки сайта зависит от сложности проекта:\n\n• Лендинг: от 500 BYN\n• Корпоративный сайт: от 1500 BYN\n• Интернет-магазин: от 3000 BYN\n• Веб-приложение: от 5000 BYN\n\nТочную стоимость можно рассчитать в нашем калькуляторе или получить персональное предложение, связавшись с нами.",
+              "Стоимость разработки сайта зависит от сложности проекта:\n\n• Лендинг (одностраничный сайт): от 300 BYN\n• Корпоративный сайт: от 800 BYN\n• Интернет-магазин: от 2000 BYN\n• Веб-приложение: от 3000 BYN\n\nТочную стоимость можно рассчитать в нашем калькуляторе или получить персональное предложение, связавшись с нами.",
             category: "Цены",
           },
           {
@@ -108,7 +108,7 @@ export function AIChatWidget() {
             icon: <DollarSign className="h-4 w-4" />,
             question: "How much does website development cost?",
             answer:
-              "Website development cost depends on project complexity:\n\n• Landing page: from $50\n• Corporate website: from $150\n• E-commerce: from $300\n• Web application: from $500\n\nYou can calculate exact cost in our calculator or get a personalized quote by contacting us.",
+              "Website development cost depends on project complexity:\n\n• Landing page: from 300 BYN (~$100)\n• Corporate website: from 800 BYN (~$270)\n• E-commerce: from 2000 BYN (~$670)\n• Web application: from 3000 BYN (~$1000)\n\nYou can calculate exact cost in our calculator or get a personalized quote by contacting us.",
             category: "Pricing",
           },
           {
