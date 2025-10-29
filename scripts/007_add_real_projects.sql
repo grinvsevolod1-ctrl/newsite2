@@ -220,7 +220,7 @@ INSERT INTO projects (
 (
   'StartupBrand - Брендинг стартапа',
   'StartupBrand - Startup Branding',
-  'Полный брендинг для технологического стартапа. Логотип, фирменный стиль, гайдлайны, презентации, маркетинговые материалы.',
+  'Полный ��рендинг для технологического стартапа. Логотип, фирменный стиль, гайдлайны, презентации, маркетинговые материалы.',
   'Complete branding for tech startup. Logo, corporate identity, guidelines, presentations, marketing materials.',
   'design',
   ARRAY['Figma', 'Adobe Illustrator', 'Brand Strategy', 'Typography', 'Color Theory'],
