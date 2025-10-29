@@ -31,11 +31,11 @@ const orderSchema = z.object({
 type OrderFormValues = z.infer<typeof orderSchema>
 
 const services = [
-  { value: "landing", label: "Лендинг", basePrice: 500 },
-  { value: "corporate", label: "Корпоративный сайт", basePrice: 1500 },
-  { value: "ecommerce", label: "Интернет-магазин", basePrice: 3000 },
-  { value: "webapp", label: "Веб-приложение", basePrice: 5000 },
-  { value: "mobile", label: "Мобильное приложение", basePrice: 7000 },
+  { value: "landing", label: "Лендинг (одностраничный сайт)", basePrice: 300 },
+  { value: "corporate", label: "Корпоративный сайт", basePrice: 800 },
+  { value: "ecommerce", label: "Интернет-магазин", basePrice: 2000 },
+  { value: "webapp", label: "Веб-приложение", basePrice: 3000 },
+  { value: "mobile", label: "Мобильное приложение", basePrice: 4000 },
 ]
 
 const packages = [
