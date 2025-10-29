@@ -44,6 +44,12 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "NetNext - Разработка сайтов и приложений в Минске",
+    description: "Профессиональная разработка для бизнеса в Беларуси. 50+ опытных разработчиков.",
+    images: ["/og-image.png"],
+  },
   alternates: {
     canonical: "https://www.netnext.site",
     languages: {
