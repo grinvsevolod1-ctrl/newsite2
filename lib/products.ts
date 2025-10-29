@@ -16,12 +16,12 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
   // Web Development
   {
     id: "web-landing",
-    name: "Лендинг",
+    name: "Лендинг (одностраничный сайт)",
     nameEn: "Landing Page",
     description: "Одностраничный сайт для презентации продукта или услуги",
     descriptionEn: "Single page website for product or service presentation",
-    priceInCents: 50000, // $500
-    currency: "USD",
+    priceInCents: 30000, // 300 BYN
+    currency: "BYN",
     serviceType: "web",
     features: [
       "Адаптивный дизайн",
@@ -44,8 +44,8 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     nameEn: "Corporate Website",
     description: "Многостраничный сайт для бизнеса",
     descriptionEn: "Multi-page website for business",
-    priceInCents: 150000, // $1500
-    currency: "USD",
+    priceInCents: 80000, // 800 BYN
+    currency: "BYN",
     serviceType: "web",
     popular: true,
     features: ["До 10 страниц", "Админ панель", "SEO оптимизация", "Блог", "Мультиязычность", "3 месяца поддержки"],
@@ -57,8 +57,8 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     nameEn: "E-commerce",
     description: "Полнофункциональный интернет-магазин",
     descriptionEn: "Full-featured online store",
-    priceInCents: 300000, // $3000
-    currency: "USD",
+    priceInCents: 200000, // 2000 BYN
+    currency: "BYN",
     serviceType: "web",
     features: [
       "Каталог товаров",
@@ -84,8 +84,8 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     nameEn: "Mobile App (Basic)",
     description: "Простое мобильное приложение для iOS или Android",
     descriptionEn: "Simple mobile app for iOS or Android",
-    priceInCents: 200000, // $2000
-    currency: "USD",
+    priceInCents: 120000, // 1200 BYN
+    currency: "BYN",
     serviceType: "mobile",
     features: [
       "1 платформа (iOS или Android)",
@@ -108,8 +108,8 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     nameEn: "Mobile App (Advanced)",
     description: "Кроссплатформенное приложение с расширенным функционалом",
     descriptionEn: "Cross-platform app with advanced features",
-    priceInCents: 400000, // $4000
-    currency: "USD",
+    priceInCents: 250000, // 2500 BYN
+    currency: "BYN",
     serviceType: "mobile",
     popular: true,
     features: [
@@ -136,8 +136,8 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     nameEn: "Telegram Bot (Basic)",
     description: "Простой бот для автоматизации задач",
     descriptionEn: "Simple bot for task automation",
-    priceInCents: 30000, // $300
-    currency: "USD",
+    priceInCents: 40000, // 400 BYN
+    currency: "BYN",
     serviceType: "telegram",
     features: ["До 10 команд", "Базовая логика", "Интеграция с API", "1 месяц поддержки"],
     featuresEn: ["Up to 10 commands", "Basic logic", "API integration", "1 month support"],
@@ -148,8 +148,8 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     nameEn: "Telegram Bot (Advanced)",
     description: "Бот с AI и расширенным функционалом",
     descriptionEn: "Bot with AI and advanced features",
-    priceInCents: 80000, // $800
-    currency: "USD",
+    priceInCents: 100000, // 1000 BYN
+    currency: "BYN",
     serviceType: "telegram",
     popular: true,
     features: [
@@ -169,8 +169,8 @@ export const SERVICE_PACKAGES: ServicePackage[] = [
     nameEn: "AI Chatbot",
     description: "Умный чат-бот с обработкой естественного языка",
     descriptionEn: "Smart chatbot with natural language processing",
-    priceInCents: 100000, // $1000
-    currency: "USD",
+    priceInCents: 150000, // 1500 BYN
+    currency: "BYN",
     serviceType: "ai",
     features: [
       "GPT-4 интеграция",
