@@ -1,0 +1,65 @@
+{
+  "name": "NetNext - Разработка сайтов и приложений",
+  "short_name": "NetNext",
+  "description": "Профессиональная разработка сайтов, мобильных приложений и Telegram ботов в Минске",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#22d3ee",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.jpg",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.jpg",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "lang": "ru",
+  "dir": "ltr",
+  "scope": "/",
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Калькулятор",
+      "short_name": "Калькулятор",
+      "description": "Рассчитать стоимость проекта",
+      "url": "/calculator",
+      "icons": [{ "src": "/icon-192.jpg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Портфолио",
+      "short_name": "Портфолио",
+      "description": "Наши работы",
+      "url": "/portfolio",
+      "icons": [{ "src": "/icon-192.jpg", "sizes": "192x192" }]
+    },
+    {
+      "name": "Контакты",
+      "short_name": "Контакты",
+      "description": "Связаться с нами",
+      "url": "/contacts",
+      "icons": [{ "src": "/icon-192.jpg", "sizes": "192x192" }]
+    }
+  ]
+}

@@ -24,6 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/order`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${baseUrl}/contacts`,
       lastModified: currentDate,
       changeFrequency: "monthly",
@@ -64,6 +70,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: currentDate,
       changeFrequency: "weekly",
       priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/case-studies`,
+      lastModified: currentDate,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: currentDate,
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: currentDate,
+      changeFrequency: "yearly",
+      priority: 0.3,
     },
   ]
 }

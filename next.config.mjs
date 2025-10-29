@@ -44,9 +44,55 @@ const nextConfig = {
             key: "Referrer-Policy",
             value: "origin-when-cross-origin",
           },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+      {
+        source: "/manifest.json",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "application/manifest+json",
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/sw.js",
+        headers: [
+          {
+            key: "Content-Type",
+            value: "application/javascript",
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=0, must-revalidate",
+          },
+          {
+            key: "Service-Worker-Allowed",
+            value: "/",
+          },
+        ],
+      },
+      {
+        source: "/:all*(svg|jpg|jpeg|png|gif|ico|webp)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
         ],
       },
     ]
+  },
+  experimental: {
+    reactCompiler: true,
   },
 }
 

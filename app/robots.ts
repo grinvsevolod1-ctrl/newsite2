@@ -8,16 +8,23 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/admin/", "/_next/", "/private/"],
+        disallow: ["/api/", "/admin/", "/_next/", "/private/", "/profile/", "/auth/"],
       },
       {
         userAgent: "Googlebot",
         allow: "/",
-        disallow: ["/api/", "/admin/"],
+        disallow: ["/api/", "/admin/", "/profile/", "/auth/"],
+        crawlDelay: 0,
       },
       {
         userAgent: "Yandex",
         allow: "/",
+        disallow: ["/api/", "/admin/", "/profile/", "/auth/"],
+        crawlDelay: 1,
+      },
+      {
+        userAgent: "YandexImages",
+        allow: ["/", "/images/", "/portfolio/"],
         disallow: ["/api/", "/admin/"],
       },
     ],

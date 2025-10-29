@@ -1,8 +1,9 @@
 "use client"
 
 import dynamic from "next/dynamic"
+import { usePerformance } from "@/contexts/performance-context"
 
-export const AIChatWidget = dynamic(
+const AIChatWidget = dynamic(
   () => import("@/components/chat/ai-chat-widget").then((mod) => ({ default: mod.AIChatWidget })),
   {
     ssr: false,
@@ -10,7 +11,7 @@ export const AIChatWidget = dynamic(
   },
 )
 
-export const CustomCursor = dynamic(
+const CustomCursor = dynamic(
   () => import("@/components/effects/custom-cursor").then((mod) => ({ default: mod.CustomCursor })),
   {
     ssr: false,
@@ -18,7 +19,7 @@ export const CustomCursor = dynamic(
   },
 )
 
-export const SimpleBackground = dynamic(
+const SimpleBackground = dynamic(
   () => import("@/components/effects/simple-background").then((mod) => ({ default: mod.SimpleBackground })),
   {
     ssr: false,
@@ -26,7 +27,7 @@ export const SimpleBackground = dynamic(
   },
 )
 
-export const PageProgress = dynamic(
+const PageProgress = dynamic(
   () => import("@/components/effects/page-progress").then((mod) => ({ default: mod.PageProgress })),
   {
     ssr: false,
@@ -34,10 +35,33 @@ export const PageProgress = dynamic(
   },
 )
 
-export const ScrollToTop = dynamic(
+const ScrollToTop = dynamic(
   () => import("@/components/effects/scroll-to-top").then((mod) => ({ default: mod.ScrollToTop })),
   {
     ssr: false,
     loading: () => null,
   },
 )
+
+const InstallPrompt = dynamic(
+  () => import("@/components/pwa/install-prompt").then((mod) => ({ default: mod.InstallPrompt })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+)
+
+export function ClientWrapper() {
+  const { shouldUseHeavyEffects, mode } = usePerformance()
+
+  return (
+    <>
+      <AIChatWidget />
+      {shouldUseHeavyEffects && mode === "high" && <CustomCursor />}
+      <SimpleBackground />
+      <PageProgress />
+      <ScrollToTop />
+      <InstallPrompt />
+    </>
+  )
+}

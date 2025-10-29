@@ -5,11 +5,12 @@ import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { LocaleProvider } from "@/contexts/locale-context"
 import { ToastProvider } from "@/contexts/toast-context"
+import { PerformanceProvider } from "@/contexts/performance-context"
 import { Header } from "@/components/header/header"
 import { Footer } from "@/components/footer/footer"
 import { StructuredData } from "@/components/seo/structured-data"
 import { Suspense } from "react"
-import { AIChatWidget, CustomCursor, SimpleBackground, PageProgress, ScrollToTop } from "@/components/client-wrapper"
+import { ClientWrapper } from "@/components/client-wrapper"
 import Script from "next/script"
 import "./globals.css"
 
@@ -105,6 +106,17 @@ export const metadata: Metadata = {
     "geo.position": "53.9006;27.559",
     ICBM: "53.9006, 27.559",
   },
+  manifest: "/manifest.json",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.jpg", type: "image/svg+xml" },
+      { url: "/favicon-16x16.jpg", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.jpg", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.jpg", sizes: "180x180", type: "image/png" }],
+  },
+    generator: 'v0.app'
 }
 
 export default function RootLayout({
@@ -116,12 +128,17 @@ export default function RootLayout({
     <html lang="ru" suppressHydrationWarning>
       <head>
         <StructuredData />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="NetNext" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#22d3ee" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://mc.yandex.ru" />
         <Script
           id="google-tag"
           strategy="afterInteractive"
@@ -171,16 +188,14 @@ export default function RootLayout({
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <LocaleProvider>
           <ToastProvider>
-            <Suspense fallback={null}>
-              <ScrollToTop />
-              <SimpleBackground />
-              <CustomCursor />
-              <PageProgress />
-              <Header />
-              <main>{children}</main>
-              <Footer />
-              <AIChatWidget />
-            </Suspense>
+            <PerformanceProvider>
+              <Suspense fallback={null}>
+                <Header />
+                <main>{children}</main>
+                <Footer />
+                <ClientWrapper />
+              </Suspense>
+            </PerformanceProvider>
           </ToastProvider>
         </LocaleProvider>
         <Analytics />

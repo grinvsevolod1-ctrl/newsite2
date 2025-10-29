@@ -27,7 +27,7 @@ export function CalculatorContent() {
   const [saved, setSaved] = useState(false)
 
   const projectTypes = [
-    { value: "web", label: locale === "ru" ? "Веб-сайт" : "Web Site", basePrice: 300 },
+    { value: "web", label: locale === "ru" ? "Веб-приложение" : "Web Application", basePrice: 2000 },
     { value: "mobile", label: locale === "ru" ? "Мобильное приложение" : "Mobile App", basePrice: 3000 },
     { value: "bot", label: locale === "ru" ? "Telegram бот" : "Telegram Bot", basePrice: 800 },
     { value: "ai", label: locale === "ru" ? "AI решение" : "AI Solution", basePrice: 4000 },
@@ -39,19 +39,19 @@ export function CalculatorContent() {
     {
       id: "auth",
       name: { ru: "Система авторизации", en: "Authentication System" },
-      price: 350,
+      price: 500,
       category: "web,mobile,desktop",
     },
     {
       id: "admin",
       name: { ru: "Админ панель", en: "Admin Panel" },
-      price: 600,
+      price: 800,
       category: "web,mobile,bot",
     },
     {
       id: "payment",
       name: { ru: "Платежная система", en: "Payment System" },
-      price: 600,
+      price: 1000,
       category: "web,mobile,bot",
     },
     {
@@ -63,7 +63,7 @@ export function CalculatorContent() {
     {
       id: "realtime",
       name: { ru: "Реалтайм функции", en: "Real-time Features" },
-      price: 500,
+      price: 700,
       category: "web,mobile",
     },
     {
@@ -75,7 +75,7 @@ export function CalculatorContent() {
     {
       id: "notifications",
       name: { ru: "Push уведомления", en: "Push Notifications" },
-      price: 300,
+      price: 500,
       category: "web,mobile,bot",
     },
     {
@@ -99,31 +99,31 @@ export function CalculatorContent() {
     {
       id: "chat",
       name: { ru: "Чат/Мессенджер", en: "Chat/Messenger" },
-      price: 900,
+      price: 1200,
       category: "web,mobile",
     },
     {
       id: "ai-integration",
       name: { ru: "AI интеграция", en: "AI Integration" },
-      price: 400,
+      price: 1500,
       category: "web,mobile,bot,desktop",
     },
     {
       id: "social",
       name: { ru: "Социальные функции", en: "Social Features" },
-      price: 500,
+      price: 800,
       category: "web,mobile",
     },
     {
       id: "maps",
       name: { ru: "Карты/Геолокация", en: "Maps/Geolocation" },
-      price: 400,
+      price: 600,
       category: "web,mobile",
     },
     {
       id: "video",
       name: { ru: "Видео функции", en: "Video Features" },
-      price: 500,
+      price: 1000,
       category: "web,mobile",
     },
   ]

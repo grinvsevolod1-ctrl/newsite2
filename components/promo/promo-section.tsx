@@ -8,12 +8,14 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { createBrowserClient } from "@supabase/ssr"
 import { useLocale } from "@/contexts/locale-context"
+import { usePerformance } from "@/contexts/performance-context"
 
 export function PromoSection() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [activePromos, setActivePromos] = useState<any[]>([])
   const router = useRouter()
   const { t, locale } = useLocale()
+  const { performanceMode } = usePerformance()
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -113,13 +115,18 @@ export function PromoSection() {
     return gradients[index % gradients.length]
   }
 
+  const shouldAnimate = performanceMode !== "low"
+
   if (activePromos.length === 0) return null
 
   return (
     <section className="py-16 sm:py-20 md:py-24 lg:py-28 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-cyan-500/5 to-background" />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
+      {shouldAnimate && (
+        <>
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-cyan-500/5 to-background" />
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
+        </>
+      )}
 
       <div className="container relative px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 sm:mb-14 lg:mb-16">
@@ -156,22 +163,25 @@ export function PromoSection() {
               return (
                 <Card
                   key={promo.id}
-                  className="relative overflow-hidden group hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 border-2 hover:border-cyan-500/50 h-full flex flex-col"
+                  className={`relative overflow-hidden group border-2 h-full flex flex-col ${
+                    shouldAnimate
+                      ? "hover:shadow-2xl hover:scale-[1.02] transition-all duration-300 hover:border-cyan-500/50"
+                      : "shadow-lg"
+                  }`}
                 >
-                  {/* Gradient background */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-5 group-hover:opacity-10 transition-opacity`}
-                  />
+                  {shouldAnimate && (
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-5 group-hover:opacity-10 transition-opacity`}
+                    />
+                  )}
 
                   <div className="relative p-6 sm:p-7 space-y-4 sm:space-y-5 flex-1 flex flex-col">
-                    {/* Icon */}
                     <div
                       className={`inline-flex p-3 sm:p-3.5 rounded-xl bg-gradient-to-br ${gradient} w-fit shadow-lg`}
                     >
                       <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                     </div>
 
-                    {/* Content */}
                     <div className="space-y-2.5 flex-1">
                       <h3 className="text-xl sm:text-2xl font-bold leading-tight">
                         {promo.discount_type === "percentage" && promo.discount_value > 0
@@ -185,7 +195,6 @@ export function PromoSection() {
                       </p>
                     </div>
 
-                    {/* Promo code */}
                     <div className="flex items-center gap-2.5 p-3 sm:p-3.5 bg-muted/50 rounded-lg mt-auto border border-border/50">
                       <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap font-medium">
                         {locale === "ru" ? "Промокод:" : "Code:"}
@@ -200,7 +209,7 @@ export function PromoSection() {
           </div>
         </div>
 
-        <div className="text-center px-4">
+        <div className="flex justify-center px-4">
           {isAuthenticated ? (
             <Button
               size="lg"
@@ -211,11 +220,11 @@ export function PromoSection() {
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           ) : (
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center max-w-2xl mx-auto">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center w-full sm:w-auto max-w-2xl">
               <Button
                 size="lg"
                 onClick={() => router.push("/auth")}
-                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white group w-full sm:flex-1 text-base sm:text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
+                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white group w-full sm:w-auto text-base sm:text-lg px-8 py-6 shadow-lg hover:shadow-xl transition-all"
               >
                 {locale === "ru" ? "Зарегистрироваться" : "Sign up"}
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -224,9 +233,9 @@ export function PromoSection() {
                 size="lg"
                 variant="outline"
                 onClick={() => router.push("/order")}
-                className="w-full sm:flex-1 text-base sm:text-lg px-8 py-6 border-2 hover:bg-muted transition-all"
+                className="w-full sm:w-auto text-base sm:text-lg px-8 py-6 border-2 hover:bg-muted transition-all"
               >
-                {locale === "ru" ? "Заказать без регистрации" : "Order without registration"}
+                {locale === "ru" ? "Заказать" : "Order"}
               </Button>
             </div>
           )}

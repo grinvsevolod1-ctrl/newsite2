@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useLocale } from "@/contexts/locale-context"
+import { usePerformance } from "@/contexts/performance-context"
 import {
   MessageCircle,
   X,
@@ -39,12 +40,15 @@ interface QuickQuestion {
 
 export function AIChatWidget() {
   const { locale } = useLocale()
+  const { performanceMode } = usePerformance()
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isTyping, setIsTyping] = useState(false)
   const [showQuickQuestions, setShowQuickQuestions] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  const shouldAnimate = performanceMode !== "low"
 
   const quickQuestions: QuickQuestion[] =
     locale === "ru"
@@ -226,21 +230,25 @@ export function AIChatWidget() {
   return (
     <>
       <div className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 md:bottom-6 md:right-6 z-50">
-        <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-secondary rounded-full blur-xl opacity-60 animate-pulse" />
+        {shouldAnimate && (
+          <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-secondary rounded-full blur-xl opacity-60 animate-pulse" />
+        )}
 
         <Button
           onClick={() => setIsOpen(!isOpen)}
           size="lg"
           className={cn(
-            "relative h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full shadow-2xl transition-all duration-300",
+            "relative h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full shadow-2xl",
             "bg-gradient-to-br from-primary via-accent to-secondary",
-            "hover:scale-110 hover:shadow-[0_0_40px_rgba(34,211,238,0.6)]",
+            shouldAnimate && "hover:scale-110 hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] transition-all duration-300",
             "border-2 border-white/20",
             "group overflow-hidden",
             isOpen && "rotate-90",
           )}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/50 via-accent/50 to-secondary/50 animate-gradient-shift" />
+          {shouldAnimate && (
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/50 via-accent/50 to-secondary/50 animate-gradient-shift" />
+          )}
 
           <div className="relative z-10">
             {isOpen ? (
@@ -265,7 +273,8 @@ export function AIChatWidget() {
       {isOpen && (
         <Card
           className={cn(
-            "fixed z-50 shadow-2xl flex flex-col border-2 border-primary/20 bg-background/95 backdrop-blur-xl animate-in slide-in-from-bottom-4 duration-300",
+            "fixed z-50 shadow-2xl flex flex-col border-2 border-primary/20 bg-background/95 backdrop-blur-xl",
+            shouldAnimate && "animate-in slide-in-from-bottom-4 duration-300",
             "bottom-[4.5rem] right-3 left-3",
             "max-h-[calc(100vh-6rem)]",
             "sm:bottom-20 sm:right-4 sm:left-auto sm:w-[380px] sm:h-[550px]",

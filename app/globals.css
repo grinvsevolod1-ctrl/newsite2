@@ -457,3 +457,69 @@ html {
     height: 6px;
   }
 }
+
+/* Добавляем CSS для отключения анимаций на слабых устройствах */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Оптимизация для слабых устройств через data-атрибут */
+[data-performance="low"] .animate-glow,
+[data-performance="low"] .animate-float,
+[data-performance="low"] .animate-float-delayed,
+[data-performance="low"] .animate-pulse-slow,
+[data-performance="low"] .animate-gradient,
+[data-performance="low"] .animate-shimmer {
+  animation: none !important;
+}
+
+[data-performance="low"] .backdrop-blur-xl,
+[data-performance="low"] .backdrop-blur-lg,
+[data-performance="low"] .backdrop-blur-md {
+  backdrop-filter: none !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+[data-performance="medium"] .animate-glow,
+[data-performance="medium"] .animate-float,
+[data-performance="medium"] .animate-float-delayed {
+  animation-duration: 8s !important;
+}
+
+/* Оптимизация производительности для анимаций */
+.animate-glow,
+.animate-float,
+.animate-float-delayed,
+.animate-pulse-slow,
+.animate-gradient {
+  will-change: transform, opacity;
+}
+
+/* Убираем will-change после завершения анимации */
+.animate-fadeInUp,
+.animate-scaleIn,
+.animate-slideInRight,
+.animate-slideInLeft {
+  will-change: transform, opacity;
+}
+
+.animate-fadeInUp.animation-complete,
+.animate-scaleIn.animation-complete,
+.animate-slideInRight.animation-complete,
+.animate-slideInLeft.animation-complete {
+  will-change: auto;
+}
+
+/* Оптимизация для GPU ускорения */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
