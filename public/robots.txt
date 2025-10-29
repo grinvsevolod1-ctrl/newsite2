@@ -5,6 +5,14 @@ Allow: /
 # Disallow admin and auth pages
 Disallow: /profile
 Disallow: /dashboard
+Disallow: /api/
+Disallow: /admin/
+
+# Allow specific API endpoints for SEO
+Allow: /api/og
+
+# Crawl delay for polite bots
+Crawl-delay: 1
 
 # Sitemap
 Sitemap: https://www.netnext.site/sitemap.xml
