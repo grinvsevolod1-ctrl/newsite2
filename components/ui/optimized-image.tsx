@@ -12,6 +12,7 @@ interface OptimizedImageProps {
   className?: string
   priority?: boolean
   fill?: boolean
+  sizes?: string
 }
 
 export function OptimizedImage({
@@ -22,6 +23,7 @@ export function OptimizedImage({
   className,
   priority = false,
   fill = false,
+  sizes,
 }: OptimizedImageProps) {
   const [isLoading, setIsLoading] = useState(true)
 
@@ -35,7 +37,8 @@ export function OptimizedImage({
         fill={fill}
         priority={priority}
         loading={priority ? "eager" : "lazy"}
-        quality={85}
+        quality={90}
+        sizes={sizes || "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}
         onLoad={() => setIsLoading(false)}
         className={cn(
           "duration-700 ease-in-out",
