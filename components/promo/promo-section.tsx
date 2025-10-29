@@ -155,7 +155,7 @@ export function PromoSection() {
         </div>
 
         <div className="max-w-7xl mx-auto mb-10 sm:mb-14">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 items-stretch">
             {activePromos.map((promo, index) => {
               const Icon = getPromoIcon(index)
               const gradient = getPromoGradient(index)
@@ -182,7 +182,7 @@ export function PromoSection() {
                       <Icon className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                     </div>
 
-                    <div className="space-y-2.5 flex-1">
+                    <div className="space-y-2.5 flex-grow">
                       <h3 className="text-xl sm:text-2xl font-bold leading-tight">
                         {promo.discount_type === "percentage" && promo.discount_value > 0
                           ? `${promo.discount_value}% ${locale === "ru" ? "скидка" : "discount"}`
@@ -190,12 +190,12 @@ export function PromoSection() {
                             ? "Бесплатно"
                             : "Free"}
                       </h3>
-                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed min-h-[2.5rem]">
+                      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                         {locale === "ru" ? promo.description_ru : promo.description_en}
                       </p>
                     </div>
 
-                    <div className="flex items-center gap-2.5 p-3 sm:p-3.5 bg-muted/50 rounded-lg mt-auto border border-border/50">
+                    <div className="flex items-center gap-2.5 p-3 sm:p-3.5 bg-muted/50 rounded-lg border border-border/50 flex-shrink-0">
                       <span className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap font-medium">
                         {locale === "ru" ? "Промокод:" : "Code:"}
                       </span>
