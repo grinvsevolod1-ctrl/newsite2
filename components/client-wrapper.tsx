@@ -57,7 +57,7 @@ export function ClientWrapper() {
   return (
     <>
       <AIChatWidget />
-      {shouldUseHeavyEffects && mode === "high" && <CustomCursor />}
+      <CustomCursor />
       <SimpleBackground />
       <PageProgress />
       <ScrollToTop />
