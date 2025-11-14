@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import { useLocale } from "@/contexts/locale-context"
 import { Filter, ArrowUpRight, Sparkles } from "lucide-react"
 import Image from "next/image"
@@ -39,24 +39,39 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
     }
   }, [searchParams])
 
-  const categories = [
-    { value: "all", label: locale === "ru" ? "Все проекты" : "All Projects" },
-    { value: "web", label: locale === "ru" ? "Веб" : "Web" },
-    { value: "mobile", label: locale === "ru" ? "Мобильные" : "Mobile" },
-    { value: "bot", label: locale === "ru" ? "Боты" : "Bots" },
-    { value: "ai", label: locale === "ru" ? "AI" : "AI" },
-    { value: "desktop", label: locale === "ru" ? "Десктоп" : "Desktop" },
-    { value: "design", label: locale === "ru" ? "Дизайн" : "Design" },
-  ]
+  const categories = useMemo(
+    () => [
+      { value: "all", label: locale === "ru" ? "Все проекты" : "All Projects" },
+      { value: "web", label: locale === "ru" ? "Веб" : "Web" },
+      { value: "mobile", label: locale === "ru" ? "Мобильные" : "Mobile" },
+      { value: "bot", label: locale === "ru" ? "Боты" : "Bots" },
+      { value: "ai", label: locale === "ru" ? "AI" : "AI" },
+      { value: "desktop", label: locale === "ru" ? "Десктоп" : "Desktop" },
+      { value: "design", label: locale === "ru" ? "Дизайн" : "Design" },
+    ],
+    [locale],
+  )
 
-  const filteredProjects =
-    selectedCategory === "all" ? projects : projects.filter((p) => p.category === selectedCategory)
+  const sortedProjects = useMemo(() => {
+    const filtered = selectedCategory === "all" ? projects : projects.filter((p) => p.category === selectedCategory)
+    return [...filtered].sort((a, b) => {
+      if (a.featured && !b.featured) return -1
+      if (!a.featured && b.featured) return 1
+      return 0
+    })
+  }, [projects, selectedCategory])
 
-  const sortedProjects = [...filteredProjects].sort((a, b) => {
-    if (a.featured && !b.featured) return -1
-    if (!a.featured && b.featured) return 1
-    return 0
-  })
+  const handleCategoryChange = useCallback((value: string) => {
+    setSelectedCategory(value)
+  }, [])
+
+  const handleMouseEnter = useCallback((id: string) => {
+    setHoveredProject(id)
+  }, [])
+
+  const handleMouseLeave = useCallback(() => {
+    setHoveredProject(null)
+  }, [])
 
   return (
     <div className="min-h-screen pt-20 sm:pt-24 pb-20 bg-black relative overflow-hidden">
@@ -86,7 +101,7 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
           {categories.map((category) => (
             <button
               key={category.value}
-              onClick={() => setSelectedCategory(category.value)}
+              onClick={() => handleCategoryChange(category.value)}
               className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-sm sm:text-base font-medium transition-all duration-300 min-h-[44px] ${
                 selectedCategory === category.value
                   ? "bg-gradient-to-r from-primary to-accent text-black shadow-lg shadow-primary/25 scale-105"
@@ -115,8 +130,8 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
               return (
                 <div
                   key={project.id}
-                  onMouseEnter={() => setHoveredProject(project.id)}
-                  onMouseLeave={() => setHoveredProject(null)}
+                  onMouseEnter={() => handleMouseEnter(project.id)}
+                  onMouseLeave={handleMouseLeave}
                   className={`group relative rounded-2xl overflow-hidden bg-white/[0.02] backdrop-blur-md border border-white/10 transition-all duration-500 hover:scale-[1.02] hover:border-primary/30 ${
                     isFirstFeatured ? "sm:col-span-2 sm:row-span-2" : ""
                   }`}
@@ -124,7 +139,6 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
                     animationDelay: `${index * 100}ms`,
                   }}
                 >
-                  {/* Project Image with overlay */}
                   {project.image_url && (
                     <div
                       className={`relative overflow-hidden bg-muted ${isFirstFeatured ? "h-64 sm:h-96" : "h-48 sm:h-64"}`}
@@ -134,11 +148,13 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
                         alt={locale === "ru" ? project.title_ru : project.title_en}
                         fill
                         className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        loading="lazy"
+                        quality={75}
+                        placeholder="blur"
+                        blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzIwMjAyMCIvPjwvc3ZnPg=="
                       />
-                      {/* Gradient overlay */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
 
-                      {/* Featured badge */}
                       {project.featured && (
                         <div className="absolute top-4 right-4 px-3 py-1.5 rounded-full bg-gradient-to-r from-primary to-accent text-black text-xs font-bold flex items-center gap-1.5 shadow-lg">
                           <Sparkles className="h-3 w-3" />
@@ -146,7 +162,6 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
                         </div>
                       )}
 
-                      {/* View project button overlay */}
                       {project.project_url && (
                         <a
                           href={project.project_url}
@@ -163,7 +178,6 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
                     </div>
                   )}
 
-                  {/* Project content */}
                   <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
                     <div className="space-y-2">
                       <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white group-hover:text-primary transition-colors duration-300">
@@ -174,7 +188,6 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
                       </p>
                     </div>
 
-                    {/* Technologies */}
                     <div className="flex flex-wrap gap-2">
                       {project.technologies.slice(0, 5).map((tech, techIndex) => (
                         <span
@@ -186,7 +199,6 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
                       ))}
                     </div>
 
-                    {/* Client name */}
                     {project.client_name && (
                       <div className="pt-4 border-t border-white/10">
                         <p className="text-xs text-muted-foreground">
@@ -197,7 +209,6 @@ export function PortfolioContent({ projects }: PortfolioContentProps) {
                     )}
                   </div>
 
-                  {/* Hover glow effect */}
                   <div
                     className={`absolute inset-0 rounded-2xl transition-opacity duration-500 pointer-events-none ${
                       hoveredProject === project.id ? "opacity-100" : "opacity-0"

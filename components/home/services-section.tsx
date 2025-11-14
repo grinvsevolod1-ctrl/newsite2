@@ -7,10 +7,12 @@ import { Globe, Smartphone, Bot, Brain, Monitor, Palette, ArrowUpRight } from "l
 import Link from "next/link"
 import { TiltCard } from "@/components/effects/tilt-card"
 import { ScrollReveal } from "@/components/effects/scroll-reveal"
+import { usePerformance } from "@/contexts/performance-context"
 
 export function ServicesSection() {
   const { locale } = useLocale()
   const t = translations[locale]
+  const { mode } = usePerformance()
 
   const services = [
     {
@@ -53,7 +55,9 @@ export function ServicesSection() {
 
   return (
     <section className="py-16 sm:py-24 md:py-32 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
+      {mode !== "low" && (
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent" />
+      )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <ScrollReveal className="text-center mb-12 sm:mb-16 md:mb-20">
@@ -69,11 +73,13 @@ export function ServicesSection() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
           {services.map((service, index) => (
-            <ScrollReveal key={index} delay={index * 100} direction="up">
+            <ScrollReveal key={index} delay={mode === "low" ? 0 : index * 100} direction="up">
               <TiltCard>
                 <Link href={`/portfolio?category=${service.category}`} className="block">
                   <Card className="group relative overflow-hidden bg-white/[0.04] backdrop-blur-md backdrop-saturate-[180%] border-primary/20 p-6 sm:p-7 md:p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,211,238,0.4),0_0_60px_rgba(34,211,238,0.2)] cursor-pointer h-full">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    {mode !== "low" && (
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    )}
 
                     <div className="relative z-10">
                       <div className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-xl sm:rounded-2xl bg-white/[0.04] backdrop-blur-md backdrop-saturate-[180%] border border-primary/30 flex items-center justify-center mb-4 sm:mb-5 md:mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">

@@ -44,5 +44,5 @@ export function usePerformance() {
   if (!context) {
     throw new Error("usePerformance must be used within PerformanceProvider")
   }
-  return context
+  return { ...context, performanceMode: context.mode }
 }

@@ -14,6 +14,7 @@ import { Suspense } from "react"
 import { ClientWrapper } from "@/components/client-wrapper"
 import Script from "next/script"
 import "./globals.css"
+import { LoadingScreen } from "@/components/ui/loading-screen"
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.netnext.site"),
@@ -110,13 +111,14 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: [
-      { url: "/favicon.jpg", type: "image/svg+xml" },
       { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.png", type: "image/png" },
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
   },
+    generator: 'v0.app'
 }
 
 export default function RootLayout({
@@ -139,7 +141,10 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://mc.yandex.ru" />
-        <link rel="preconnect" href="https://vercel.live" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://mc.yandex.ru" />
+        <link rel="preload" as="image" href="/icon-192.jpg" />
+        <link rel="modulepreload" href="/_next/static/chunks/app/layout.js" />
         <Script
           id="google-tag"
           strategy="afterInteractive"
@@ -187,6 +192,7 @@ export default function RootLayout({
         </noscript>
       </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
+        <LoadingScreen />
         <LocaleProvider>
           <ToastProvider>
             <PerformanceProvider>

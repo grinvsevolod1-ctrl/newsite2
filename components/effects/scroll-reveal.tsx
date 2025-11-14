@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, type ReactNode, memo } from "react"
+import { usePerformance } from "@/contexts/performance-context"
 
 interface ScrollRevealProps {
   children: ReactNode
@@ -16,10 +17,17 @@ export const ScrollReveal = memo(function ScrollReveal({
   direction = "up",
 }: ScrollRevealProps) {
   const elementRef = useRef<HTMLDivElement>(null)
+  const { shouldAnimate, mode } = usePerformance()
 
   useEffect(() => {
     const element = elementRef.current
     if (!element) return
+
+    if (!shouldAnimate || mode === "low") {
+      element.style.opacity = "1"
+      element.style.transform = "none"
+      return
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -34,14 +42,14 @@ export const ScrollReveal = memo(function ScrollReveal({
       },
       {
         threshold: 0.1,
-        rootMargin: "50px", // Start animation slightly before element is visible
+        rootMargin: "50px",
       },
     )
 
     observer.observe(element)
 
     return () => observer.disconnect()
-  }, [delay])
+  }, [delay, shouldAnimate, mode])
 
   const getInitialTransform = () => {
     switch (direction) {
@@ -60,6 +68,10 @@ export const ScrollReveal = memo(function ScrollReveal({
     }
   }
 
+  if (!shouldAnimate || mode === "low") {
+    return <div className={className}>{children}</div>
+  }
+
   return (
     <div
       ref={elementRef}
@@ -67,8 +79,11 @@ export const ScrollReveal = memo(function ScrollReveal({
       style={{
         opacity: 0,
         transform: getInitialTransform(),
-        transition: "opacity 0.6s ease-out, transform 0.6s ease-out",
-        willChange: "opacity, transform", // Added for better performance
+        transition:
+          mode === "medium"
+            ? "opacity 0.4s ease-out, transform 0.4s ease-out"
+            : "opacity 0.6s ease-out, transform 0.6s ease-out",
+        willChange: "opacity, transform",
       }}
     >
       {children}

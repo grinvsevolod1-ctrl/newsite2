@@ -49,6 +49,7 @@ export function AIChatWidget() {
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const shouldAnimate = performanceMode !== "low"
+  const animationDuration = performanceMode === "high" ? 300 : performanceMode === "medium" ? 200 : 100
 
   const quickQuestions: QuickQuestion[] =
     locale === "ru"
@@ -57,14 +58,14 @@ export function AIChatWidget() {
             icon: <DollarSign className="h-4 w-4" />,
             question: "Сколько стоит разработка сайта?",
             answer:
-              "Стоимость разработки сайта зависит от сложности проекта:\n\n• Лендинг (одностраничный сайт): от 300 BYN\n• Корпоративный сайт: от 800 BYN\n• Интернет-магазин: от 2000 BYN\n• Веб-приложение: от 3000 BYN\n\nТочную стоимость можно рассчитать в нашем калькуляторе или получить персональное предложение, связавшись с нами.",
+              "Стоимость разработки сайта зависит от сложности проекта:\n\n• Лендинг: от 300 BYN\n• Корпоративный сайт: от 1500 BYN\n• Интернет-магазин: от 3000 BYN\n• Сайт/Веб-приложение: от 5000 BYN\n\nТочную стоимость можно рассчитать в нашем калькуляторе или получить персональное предложение, связавшись с нами.",
             category: "Цены",
           },
           {
             icon: <Clock className="h-4 w-4" />,
             question: "Какие сроки разработки?",
             answer:
-              "Сроки разработки зависят от типа проекта:\n\n• Лендинг: 5-10 дней\n• Корпоративный сайт: 2-4 недели\n• Интернет-магазин: 4-8 недель\n• Веб-приложение: от 2 месяцев\n\nМы работаем по Agile методологии с еженедельными демо и можем ускорить разработку при необходимости.",
+              "Сроки разработки зависят от типа проекта:\n\n• Лендинг: 5-10 дней\n• Корпоративный сайт: 2-4 недели\n• Интернет-магазин: 4-8 недель\n• Сайт/Веб-приложение: от 2 месяцев\n\nМы работаем по Agile методологии с еженедельными демо и можем ускорить разработку при необходимости.",
             category: "Сроки",
           },
           {
@@ -108,14 +109,14 @@ export function AIChatWidget() {
             icon: <DollarSign className="h-4 w-4" />,
             question: "How much does website development cost?",
             answer:
-              "Website development cost depends on project complexity:\n\n• Landing page: from 300 BYN (~$100)\n• Corporate website: from 800 BYN (~$270)\n• E-commerce: from 2000 BYN (~$670)\n• Web application: from 3000 BYN (~$1000)\n\nYou can calculate exact cost in our calculator or get a personalized quote by contacting us.",
+              "Website development cost depends on project complexity:\n\n• Landing page: from $30\n• Corporate website: from $150\n• E-commerce: from $300\n• Website/Web application: from $500\n\nYou can calculate exact cost in our calculator or get a personalized quote by contacting us.",
             category: "Pricing",
           },
           {
             icon: <Clock className="h-4 w-4" />,
             question: "What are the development timelines?",
             answer:
-              "Development timelines depend on project type:\n\n• Landing page: 5-10 days\n• Corporate website: 2-4 weeks\n• E-commerce: 4-8 weeks\n• Web application: from 2 months\n\nWe work with Agile methodology with weekly demos and can accelerate development if needed.",
+              "Development timelines depend on project type:\n\n• Landing page: 5-10 days\n• Corporate website: 2-4 weeks\n• E-commerce: 4-8 weeks\n• Website/Web application: from 2 months\n\nWe work with Agile methodology with weekly demos and can accelerate development if needed.",
             category: "Timeline",
           },
           {
@@ -230,7 +231,7 @@ export function AIChatWidget() {
   return (
     <>
       <div className="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 md:bottom-6 md:right-6 z-50">
-        {shouldAnimate && (
+        {shouldAnimate && performanceMode === "high" && (
           <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-secondary rounded-full blur-xl opacity-60 animate-pulse" />
         )}
 
@@ -240,13 +241,14 @@ export function AIChatWidget() {
           className={cn(
             "relative h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-full shadow-2xl",
             "bg-gradient-to-br from-primary via-accent to-secondary",
-            shouldAnimate && "hover:scale-110 hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] transition-all duration-300",
+            shouldAnimate && "hover:scale-110 hover:shadow-[0_0_40px_rgba(34,211,238,0.6)] transition-all",
             "border-2 border-white/20",
             "group overflow-hidden",
             isOpen && "rotate-90",
           )}
+          style={{ transitionDuration: `${animationDuration}ms` }}
         >
-          {shouldAnimate && (
+          {shouldAnimate && performanceMode !== "low" && (
             <div className="absolute inset-0 bg-gradient-to-br from-primary/50 via-accent/50 to-secondary/50 animate-gradient-shift" />
           )}
 
@@ -273,14 +275,16 @@ export function AIChatWidget() {
       {isOpen && (
         <Card
           className={cn(
-            "fixed z-50 shadow-2xl flex flex-col border-2 border-primary/20 bg-background/95 backdrop-blur-xl",
-            shouldAnimate && "animate-in slide-in-from-bottom-4 duration-300",
+            "fixed z-50 shadow-2xl flex flex-col border-2 border-primary/20 bg-background/95",
+            performanceMode !== "low" ? "backdrop-blur-xl" : "bg-background",
+            shouldAnimate && `animate-in slide-in-from-bottom-4`,
             "bottom-[4.5rem] right-3 left-3",
             "max-h-[calc(100vh-6rem)]",
             "sm:bottom-20 sm:right-4 sm:left-auto sm:w-[380px] sm:h-[550px]",
             "md:bottom-24 md:right-6 md:w-[420px] md:h-[600px]",
             "lg:w-[440px] lg:h-[650px]",
           )}
+          style={{ animationDuration: `${animationDuration}ms` }}
         >
           <CardHeader className="border-b border-primary/20 bg-gradient-to-r from-primary/10 via-accent/10 to-secondary/10 backdrop-blur-sm shrink-0 p-3 sm:p-4">
             <CardTitle className="flex items-center justify-between">

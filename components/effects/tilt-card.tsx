@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useRef, type ReactNode, memo } from "react"
+import { usePerformance } from "@/contexts/performance-context"
 
 interface TiltCardProps {
   children: ReactNode
@@ -11,6 +12,11 @@ interface TiltCardProps {
 
 export const TiltCard = memo(function TiltCard({ children, className = "", intensity = 15 }: TiltCardProps) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const { shouldUseHeavyEffects, mode } = usePerformance()
+
+  if (!shouldUseHeavyEffects || mode !== "high") {
+    return <div className={className}>{children}</div>
+  }
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return

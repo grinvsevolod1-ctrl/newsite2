@@ -31,11 +31,11 @@ const orderSchema = z.object({
 type OrderFormValues = z.infer<typeof orderSchema>
 
 const services = [
-  { value: "landing", label: "Лендинг (одностраничный сайт)", basePrice: 300 },
-  { value: "corporate", label: "Корпоративный сайт", basePrice: 800 },
-  { value: "ecommerce", label: "Интернет-магазин", basePrice: 2000 },
-  { value: "webapp", label: "Веб-приложение", basePrice: 3000 },
-  { value: "mobile", label: "Мобильное приложение", basePrice: 4000 },
+  { value: "landing", label: "Лендинг", basePrice: 300 },
+  { value: "corporate", label: "Корпоративный сайт", basePrice: 1500 },
+  { value: "ecommerce", label: "Интернет-магазин", basePrice: 3000 },
+  { value: "webapp", label: "Сайт/Веб-приложение", basePrice: 5000 },
+  { value: "mobile", label: "Мобильное приложение", basePrice: 7000 },
 ]
 
 const packages = [
@@ -359,23 +359,27 @@ export function OrderForm() {
                 <FormItem>
                   <FormLabel className="text-sm sm:text-base font-medium">Промокод (необязательно)</FormLabel>
                   <div className="flex gap-2">
-                    <Input
-                      placeholder="Введите промокод"
-                      value={field.value || ""}
-                      onChange={(e) => {
-                        const value = e.target.value
-                        field.onChange(value)
-                        if (value.length >= 3) {
-                          checkPromoCode(value)
-                        } else {
-                          setPromoDiscount(0)
-                          setPromoCode(null)
-                        }
-                      }}
-                      onBlur={field.onBlur}
-                      name={field.name}
-                      className="flex-1 h-11 sm:h-12 text-sm sm:text-base"
-                    />
+                    <FormControl>
+                      <Input
+                        placeholder="Введите промокод"
+                        value={field.value || ""}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          field.onChange(value)
+                          if (value.length >= 3) {
+                            checkPromoCode(value)
+                          } else {
+                            setPromoDiscount(0)
+                            setPromoCode(null)
+                          }
+                        }}
+                        onBlur={field.onBlur}
+                        name={field.name}
+                        ref={field.ref}
+                        disabled={field.disabled}
+                        className="flex-1 h-11 sm:h-12 text-sm sm:text-base"
+                      />
+                    </FormControl>
                     {promoCode && (
                       <div className="flex items-center gap-2 px-4 bg-green-500/10 text-green-600 rounded-lg shrink-0">
                         <Check className="h-5 w-5" />

@@ -107,3 +107,56 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const authResult = await requireAuth(request)
+    if (!authResult.success) {
+      return NextResponse.json({ error: authResult.error }, { status: 401 })
+    }
+
+    const roleCheck = await requireRole(authResult.user.id, ["admin"])
+    if (!roleCheck.success) {
+      return NextResponse.json({ error: "Only admins can delete users" }, { status: 403 })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const userId = searchParams.get("userId")
+
+    if (!userId) {
+      return NextResponse.json({ error: "User ID is required" }, { status: 400 })
+    }
+
+    // Prevent self-deletion
+    if (userId === authResult.user.id) {
+      return NextResponse.json({ error: "Cannot delete your own account" }, { status: 400 })
+    }
+
+    const supabase = createServerClient()
+
+    // Delete user's related data first
+    await Promise.all([
+      supabase.from("orders").delete().eq("user_id", userId),
+      supabase.from("support_tickets").delete().eq("user_id", userId),
+      supabase.from("price_calculations").delete().eq("user_id", userId),
+    ])
+
+    // Delete the user profile
+    const { error } = await supabase.from("profiles").delete().eq("id", userId)
+
+    if (error) throw error
+
+    await logAuditAction({
+      userId: authResult.user.id,
+      action: "delete_user",
+      entityType: "user",
+      entityId: userId,
+      changes: { deleted: true },
+    })
+
+    return NextResponse.json({ success: true })
+  } catch (error: any) {
+    console.error("[v0] Error deleting user:", error)
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+}

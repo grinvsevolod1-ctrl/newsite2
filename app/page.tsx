@@ -1,5 +1,52 @@
+import dynamic from "next/dynamic"
 import type { Metadata } from "next"
-import { HomePageClient } from "./home-page-client"
+import { HeroSection } from "@/components/home/hero-section"
+import { CTASection } from "@/components/home/cta-section"
+import { TrustBadges } from "@/components/ui/trust-badges"
+
+const ServicesSection = dynamic(
+  () => import("@/components/home/services-section").then((mod) => ({ default: mod.ServicesSection })),
+  {
+    loading: () => <div className="min-h-[600px] animate-pulse bg-gradient-to-b from-transparent via-primary/5 to-transparent" />,
+  },
+)
+
+const AnimatedStats = dynamic(
+  () => import("@/components/home/animated-stats").then((mod) => ({ default: mod.AnimatedStats })),
+  {
+    loading: () => <div className="min-h-[400px] animate-pulse bg-gradient-to-b from-transparent via-primary/5 to-transparent" />,
+  },
+)
+
+const TechnologiesSection = dynamic(
+  () => import("@/components/home/technologies-section").then((mod) => ({ default: mod.TechnologiesSection })),
+  {
+    loading: () => <div className="min-h-[500px] animate-pulse bg-gradient-to-b from-transparent via-primary/5 to-transparent" />,
+  },
+)
+
+const PromoSection = dynamic(
+  () => import("@/components/promo/promo-section").then((mod) => ({ default: mod.PromoSection })),
+  {
+    loading: () => <div className="min-h-[700px] animate-pulse bg-gradient-to-b from-transparent via-primary/5 to-transparent" />,
+    ssr: false,
+  },
+)
+
+const ReviewsCarousel = dynamic(
+  () => import("@/components/reviews/reviews-carousel").then((mod) => ({ default: mod.ReviewsCarousel })),
+  {
+    loading: () => <div className="min-h-[500px] animate-pulse bg-gradient-to-b from-transparent via-primary/5 to-transparent" />,
+    ssr: false,
+  },
+)
+
+const WelcomePopup = dynamic(
+  () => import("@/components/promo/welcome-popup").then((mod) => ({ default: mod.WelcomePopup })),
+  {
+    ssr: false,
+  },
+)
 
 export const metadata: Metadata = {
   title: "Разработка сайтов и приложений в Минске, Беларусь | NetNext - Студия веб-разработки",
@@ -44,12 +91,6 @@ export const metadata: Metadata = {
       },
     ],
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "NetNext - Разработка сайтов и приложений в Минске",
-    description: "Профессиональная разработка для бизнеса в Беларуси. 50+ опытных разработчиков.",
-    images: ["/og-image.png"],
-  },
   alternates: {
     canonical: "https://www.netnext.site",
     languages: {
@@ -61,5 +102,23 @@ export const metadata: Metadata = {
 }
 
 export default function HomePage() {
-  return <HomePageClient />
+  return (
+    <div className="flex flex-col relative">
+      <HeroSection />
+      
+      <section className="py-12 sm:py-16 md:py-20 relative">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <TrustBadges />
+        </div>
+      </section>
+
+      <ServicesSection />
+      <AnimatedStats />
+      <TechnologiesSection />
+      <PromoSection />
+      <ReviewsCarousel />
+      <CTASection />
+      <WelcomePopup />
+    </div>
+  )
 }

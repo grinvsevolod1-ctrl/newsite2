@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { ChevronLeft, ChevronRight, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -53,17 +53,22 @@ export function ReviewsCarousel() {
     return () => clearInterval(interval)
   }, [isAutoPlaying])
 
-  const goToPrevious = () => {
+  const goToPrevious = useCallback(() => {
     setIsAutoPlaying(false)
     setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length)
-  }
+  }, [])
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     setIsAutoPlaying(false)
     setCurrentIndex((prev) => (prev + 1) % reviews.length)
-  }
+  }, [])
 
-  const currentReview = reviews[currentIndex]
+  const handleDotClick = useCallback((index: number) => {
+    setIsAutoPlaying(false)
+    setCurrentIndex(index)
+  }, [])
+
+  const currentReview = useMemo(() => reviews[currentIndex], [currentIndex])
 
   return (
     <section className="relative overflow-hidden py-16 md:py-24">
@@ -71,13 +76,13 @@ export function ReviewsCarousel() {
         <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl lg:text-5xl">Отзывы наших клиентов</h2>
 
         <div className="relative mx-auto max-w-4xl">
-          {/* Review Card */}
           <div className="rounded-2xl border border-border/50 bg-card/50 p-8 backdrop-blur-sm transition-all duration-500 md:p-12">
             <div className="mb-6 flex items-center gap-4">
               <img
                 src={currentReview.avatar || "/placeholder.svg"}
                 alt={currentReview.name}
                 className="h-16 w-16 rounded-full object-cover md:h-20 md:w-20"
+                loading="lazy"
               />
               <div>
                 <h3 className="text-lg font-semibold md:text-xl">{currentReview.name}</h3>
@@ -94,7 +99,6 @@ export function ReviewsCarousel() {
             <p className="text-base leading-relaxed text-foreground/90 md:text-lg">"{currentReview.text}"</p>
           </div>
 
-          {/* Navigation */}
           <div className="mt-8 flex items-center justify-center gap-4">
             <Button variant="outline" size="icon" onClick={goToPrevious} className="h-12 w-12 bg-transparent">
               <ChevronLeft className="h-6 w-6" />
@@ -104,13 +108,11 @@ export function ReviewsCarousel() {
               {reviews.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => {
-                    setIsAutoPlaying(false)
-                    setCurrentIndex(index)
-                  }}
+                  onClick={() => handleDotClick(index)}
                   className={`h-2 rounded-full transition-all ${
                     index === currentIndex ? "w-8 bg-primary" : "w-2 bg-muted-foreground/30"
                   }`}
+                  aria-label={`Go to review ${index + 1}`}
                 />
               ))}
             </div>

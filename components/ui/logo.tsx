@@ -22,29 +22,29 @@ export function Logo({
 }: LogoProps) {
   const sizeClasses = {
     sm: {
-      container: "h-8 w-8",
-      svg: "w-5 h-4",
+      container: "h-9 w-9",
+      svg: "w-6 h-5",
       text: "text-base",
       subtitle: "text-[8px]",
       gap: "gap-2",
     },
     md: {
-      container: "h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12",
-      svg: "w-6 h-5 sm:w-7 sm:h-6 md:w-8 md:h-7",
+      container: "h-12 w-12 sm:h-14 sm:w-14 md:h-14 md:w-14",
+      svg: "w-7 h-6 sm:w-8 sm:h-7 md:w-9 md:h-8",
       text: "text-base sm:text-lg md:text-xl lg:text-2xl",
       subtitle: "text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs",
       gap: "gap-2 sm:gap-3",
     },
     lg: {
-      container: "h-14 w-14 md:h-16 md:w-16",
-      svg: "w-9 h-8 md:w-10 md:h-9",
+      container: "h-16 w-16 md:h-18 md:w-18",
+      svg: "w-10 h-9 md:w-11 md:h-10",
       text: "text-xl md:text-2xl lg:text-3xl",
       subtitle: "text-[10px] md:text-xs",
       gap: "gap-3 md:gap-4",
     },
     xl: {
-      container: "h-20 w-20 md:h-24 md:w-24",
-      svg: "w-12 h-10 md:w-14 md:h-12",
+      container: "h-22 w-22 md:h-26 md:w-26",
+      svg: "w-13 h-11 md:w-15 md:h-13",
       text: "text-2xl md:text-3xl lg:text-4xl",
       subtitle: "text-xs md:text-sm",
       gap: "gap-4 md:gap-5",
@@ -57,40 +57,24 @@ export function Logo({
     <>
       <div className={cn("relative flex-shrink-0", sizes.container)}>
         {animated && (
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary via-accent to-secondary opacity-20 blur-xl group-hover:opacity-40 transition-opacity duration-500" />
+          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary via-accent to-primary opacity-40 blur-md group-hover:opacity-60 transition-opacity duration-300" />
         )}
 
-        <div
-          className={cn(
-            "relative h-full w-full rounded-2xl bg-gradient-to-br from-primary via-accent to-secondary flex items-center justify-center shadow-lg shadow-primary/30",
-            animated && "group-hover:scale-110 group-hover:rotate-6 transition-all duration-500",
-          )}
-        >
-          <svg viewBox="0 0 50 40" className={sizes.svg} fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M4 32V8L12 16L20 8V32"
-              stroke="black"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-              className={cn(animated && "group-hover:stroke-white transition-colors duration-300")}
-            />
-            <path
-              d="M30 32V8L38 16L46 8V32"
-              stroke="black"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-              className={cn(animated && "group-hover:stroke-white transition-colors duration-300")}
-            />
-          </svg>
-
-          {animated && (
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-white/0 via-white/20 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-          )}
+        <div className="relative bg-gradient-to-br from-primary via-accent to-primary rounded-xl p-[1px] overflow-hidden">
+          <div className="bg-black rounded-[11px] h-full w-full flex items-center justify-center px-1.5 sm:px-2">
+            <span className={cn(
+              "font-black bg-gradient-to-br from-primary via-accent to-secondary bg-clip-text text-transparent tracking-tighter leading-none",
+              sizes.text,
+              animated && "group-hover:scale-110 transition-transform duration-300"
+            )}>
+              NN
+            </span>
+          </div>
         </div>
+        
+        {animated && (
+          <div className="absolute inset-0 rounded-xl border-2 border-primary/0 group-hover:border-primary/50 transition-all duration-300" />
+        )}
       </div>
 
       {showText && (

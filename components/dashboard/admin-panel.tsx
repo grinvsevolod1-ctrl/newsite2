@@ -8,6 +8,17 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Users,
   ShoppingCart,
@@ -21,6 +32,10 @@ import {
   MessageSquare,
   Shield,
   Eye,
+  Download,
+  Mail,
+  Ban,
+  CheckCircle,
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useLocale } from "@/contexts/locale-context"
@@ -31,6 +46,7 @@ interface User {
   full_name: string
   role: string
   created_at: string
+  is_active?: boolean
 }
 
 interface Order {
@@ -73,6 +89,16 @@ export const AdminPanel = () => {
   const { locale } = useLocale()
   const supabase = createClient()
 
+  // Added states for user selection and dialogs
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([])
+  const [userDetailsDialog, setUserDetailsDialog] = useState(false)
+  const [selectedUserDetails, setSelectedUserDetails] = useState<any>(null)
+  const [bulkActionDialog, setBulkActionDialog] = useState(false)
+  const [bulkAction, setBulkAction] = useState<string>("")
+  const [emailDialog, setEmailDialog] = useState(false)
+  const [emailSubject, setEmailSubject] = useState("")
+  const [emailBody, setEmailBody] = useState("")
+
   useEffect(() => {
     loadData()
   }, [])
@@ -90,7 +116,7 @@ export const AdminPanel = () => {
       supabase.from("promotions").select("*").order("created_at", { ascending: false }),
     ])
 
-    if (usersData.data) setUsers(usersData.data)
+    if (usersData.data) setUsers(usersData.data as User[])
     if (ordersData.data) setOrders(ordersData.data as any)
     if (projectsData.data) setProjects(projectsData.data)
     if (vacanciesData.data) setVacancies(vacanciesData.data)
@@ -199,6 +225,171 @@ export const AdminPanel = () => {
     } else {
       alert(locale === "ru" ? "Удалено" : "Deleted")
       loadData()
+    }
+  }
+
+  const toggleUserSelection = (userId: string) => {
+    setSelectedUsers((prev) => (prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]))
+  }
+
+  const toggleAllUsers = () => {
+    if (selectedUsers.length === filteredUsers.length) {
+      setSelectedUsers([])
+    } else {
+      setSelectedUsers(filteredUsers.map((u) => u.id))
+    }
+  }
+
+  const viewUserDetails = async (userId: string) => {
+    const { data: user } = await supabase.from("profiles").select("*").eq("id", userId).single()
+    const { data: userOrders } = await supabase
+      .from("orders")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+    const { data: userTickets } = await supabase
+      .from("support_tickets")
+      .select("*")
+      .eq("user_id", userId)
+      .order("created_at", { ascending: false })
+
+    setSelectedUserDetails({
+      ...user,
+      orders: userOrders || [],
+      tickets: userTickets || [],
+    })
+    setUserDetailsDialog(true)
+  }
+
+  const executeBulkAction = async () => {
+    if (selectedUsers.length === 0) return
+
+    try {
+      switch (bulkAction) {
+        case "delete":
+          if (
+            !confirm(
+              locale === "ru"
+                ? `Удалить ${selectedUsers.length} пользователей?`
+                : `Delete ${selectedUsers.length} users?`,
+            )
+          )
+            return
+
+          for (const userId of selectedUsers) {
+            await supabase.from("profiles").delete().eq("id", userId)
+          }
+          alert(locale === "ru" ? "Пользователи удалены" : "Users deleted")
+          break
+
+        case "activate":
+          for (const userId of selectedUsers) {
+            await supabase.from("profiles").update({ is_active: true }).eq("id", userId)
+          }
+          alert(locale === "ru" ? "Пользователи активированы" : "Users activated")
+          break
+
+        case "deactivate":
+          for (const userId of selectedUsers) {
+            await supabase.from("profiles").update({ is_active: false }).eq("id", userId)
+          }
+          alert(locale === "ru" ? "Пользователи деактивированы" : "Users deactivated")
+          break
+
+        case "email":
+          setEmailDialog(true)
+          return
+      }
+
+      setSelectedUsers([])
+      setBulkActionDialog(false)
+      loadData()
+    } catch (error) {
+      console.error("[v0] Bulk action error:", error)
+      alert(locale === "ru" ? "Ошибка выполнения действия" : "Error executing action")
+    }
+  }
+
+  const sendBulkEmail = async () => {
+    if (!emailSubject || !emailBody) {
+      alert(locale === "ru" ? "Заполните тему и текст письма" : "Fill in subject and body")
+      return
+    }
+
+    try {
+      const selectedUserEmails = users.filter((u) => selectedUsers.includes(u.id)).map((u) => u.email)
+
+      await fetch("/api/admin/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          recipients: selectedUserEmails,
+          subject: emailSubject,
+          body: emailBody,
+        }),
+      })
+
+      alert(locale === "ru" ? "Письма отправлены" : "Emails sent")
+      setEmailDialog(false)
+      setEmailSubject("")
+      setEmailBody("")
+      setSelectedUsers([])
+    } catch (error) {
+      console.error("[v0] Email error:", error)
+      alert(locale === "ru" ? "Ошибка отправки" : "Error sending emails")
+    }
+  }
+
+  const exportToCSV = (data: any[], filename: string) => {
+    if (data.length === 0) return
+
+    const headers = Object.keys(data[0]).join(",")
+    const rows = data.map((row) => Object.values(row).join(","))
+    const csv = [headers, ...rows].join("\n")
+
+    const blob = new Blob([csv], { type: "text/csv" })
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `${filename}-${new Date().toISOString().split("T")[0]}.csv`
+    a.click()
+  }
+
+  const exportUsers = () => {
+    const exportData = filteredUsers.map((u) => ({
+      name: u.full_name || "N/A",
+      email: u.email,
+      role: u.role || "client",
+      registered: new Date(u.created_at).toLocaleDateString(),
+    }))
+    exportToCSV(exportData, "users")
+  }
+
+  const exportOrders = () => {
+    const exportData = filteredOrders.map((o) => ({
+      order_number: o.order_number,
+      email: o.profiles?.email,
+      service: o.package_name,
+      price: (o.final_price / 100).toFixed(2),
+      status: o.status,
+      date: new Date(o.created_at).toLocaleDateString(),
+    }))
+    exportToCSV(exportData, "orders")
+  }
+
+  const deleteUser = async (userId: string) => {
+    if (!confirm(locale === "ru" ? "Удалить пользователя?" : "Delete user?")) return
+
+    try {
+      const { error } = await supabase.from("profiles").delete().eq("id", userId)
+
+      if (error) throw error
+
+      alert(locale === "ru" ? "Пользователь удален" : "User deleted")
+      loadData()
+    } catch (error) {
+      console.error("[v0] Delete user error:", error)
+      alert(locale === "ru" ? "Ошибка удаления" : "Error deleting user")
     }
   }
 
@@ -449,9 +640,13 @@ export const AdminPanel = () => {
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                 <div>
                   <CardTitle>{t.users}</CardTitle>
-                  <CardDescription>Manage user roles and permissions</CardDescription>
+                  <CardDescription>
+                    {locale === "ru"
+                      ? "Управление пользователями и правами доступа"
+                      : "Manage user roles and permissions"}
+                  </CardDescription>
                 </div>
-                <div className="flex gap-2 w-full sm:w-auto">
+                <div className="flex gap-2 w-full sm:w-auto flex-wrap">
                   <div className="relative flex-1 sm:w-64">
                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -475,14 +670,75 @@ export const AdminPanel = () => {
                       <SelectItem value="customer">{t.customer}</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Button variant="outline" size="sm" onClick={exportUsers}>
+                    <Download className="h-4 w-4 mr-2" />
+                    {locale === "ru" ? "Экспорт" : "Export"}
+                  </Button>
                 </div>
               </div>
+              {selectedUsers.length > 0 && (
+                <div className="flex items-center gap-2 mt-4 p-3 bg-muted rounded-lg">
+                  <span className="text-sm font-medium">
+                    {locale === "ru" ? `Выбрано: ${selectedUsers.length}` : `Selected: ${selectedUsers.length}`}
+                  </span>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setBulkAction("email")
+                      setBulkActionDialog(true)
+                    }}
+                  >
+                    <Mail className="h-4 w-4 mr-2" />
+                    {locale === "ru" ? "Отправить письмо" : "Send Email"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setBulkAction("activate")
+                      setBulkActionDialog(true)
+                    }}
+                  >
+                    <CheckCircle className="h-4 w-4 mr-2" />
+                    {locale === "ru" ? "Активировать" : "Activate"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setBulkAction("deactivate")
+                      setBulkActionDialog(true)
+                    }}
+                  >
+                    <Ban className="h-4 w-4 mr-2" />
+                    {locale === "ru" ? "Деактивировать" : "Deactivate"}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => {
+                      setBulkAction("delete")
+                      setBulkActionDialog(true)
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    {locale === "ru" ? "Удалить" : "Delete"}
+                  </Button>
+                </div>
+              )}
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead className="w-12">
+                        <Checkbox
+                          checked={selectedUsers.length === filteredUsers.length && filteredUsers.length > 0}
+                          onCheckedChange={toggleAllUsers}
+                        />
+                      </TableHead>
                       <TableHead>{t.name}</TableHead>
                       <TableHead>{t.email}</TableHead>
                       <TableHead>{t.role}</TableHead>
@@ -493,6 +749,12 @@ export const AdminPanel = () => {
                   <TableBody>
                     {filteredUsers.map((user) => (
                       <TableRow key={user.id}>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedUsers.includes(user.id)}
+                            onCheckedChange={() => toggleUserSelection(user.id)}
+                          />
+                        </TableCell>
                         <TableCell className="font-medium">{user.full_name || "N/A"}</TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>
@@ -506,22 +768,30 @@ export const AdminPanel = () => {
                         </TableCell>
                         <TableCell className="text-sm">{new Date(user.created_at).toLocaleDateString()}</TableCell>
                         <TableCell>
-                          <Select
-                            value={user.role || "client"}
-                            onValueChange={(value) => updateUserRole(user.id, value)}
-                          >
-                            <SelectTrigger className="w-32 h-8 text-xs">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="admin">{t.admin}</SelectItem>
-                              <SelectItem value="manager">{t.manager}</SelectItem>
-                              <SelectItem value="developer">{t.developer}</SelectItem>
-                              <SelectItem value="freelancer">{t.freelancer}</SelectItem>
-                              <SelectItem value="client">{t.client}</SelectItem>
-                              <SelectItem value="customer">{t.customer}</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <div className="flex items-center gap-2">
+                            <Button size="sm" variant="ghost" onClick={() => viewUserDetails(user.id)}>
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Select
+                              value={user.role || "client"}
+                              onValueChange={(value) => updateUserRole(user.id, value)}
+                            >
+                              <SelectTrigger className="w-32 h-8 text-xs">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="admin">{t.admin}</SelectItem>
+                                <SelectItem value="manager">{t.manager}</SelectItem>
+                                <SelectItem value="developer">{t.developer}</SelectItem>
+                                <SelectItem value="freelancer">{t.freelancer}</SelectItem>
+                                <SelectItem value="client">{t.client}</SelectItem>
+                                <SelectItem value="customer">{t.customer}</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <Button size="sm" variant="ghost" onClick={() => deleteUser(user.id)}>
+                              <Trash2 className="h-4 w-4 text-destructive" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -539,9 +809,11 @@ export const AdminPanel = () => {
               <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
                 <div>
                   <CardTitle>{t.orders}</CardTitle>
-                  <CardDescription>Manage all orders and payments</CardDescription>
+                  <CardDescription>
+                    {locale === "ru" ? "Управление заказами и платежами" : "Manage all orders and payments"}
+                  </CardDescription>
                 </div>
-                <div className="flex gap-2 w-full sm:w-auto">
+                <div className="flex gap-2 w-full sm:w-auto flex-wrap">
                   <div className="relative flex-1 sm:w-64">
                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -563,6 +835,10 @@ export const AdminPanel = () => {
                       <SelectItem value="cancelled">{t.cancelled}</SelectItem>
                     </SelectContent>
                   </Select>
+                  <Button variant="outline" size="sm" onClick={exportOrders}>
+                    <Download className="h-4 w-4 mr-2" />
+                    {locale === "ru" ? "Экспорт" : "Export"}
+                  </Button>
                 </div>
               </div>
             </CardHeader>
@@ -848,6 +1124,124 @@ export const AdminPanel = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <Dialog open={userDetailsDialog} onOpenChange={setUserDetailsDialog}>
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{locale === "ru" ? "Детали пользователя" : "User Details"}</DialogTitle>
+          </DialogHeader>
+          {selectedUserDetails && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label className="text-sm text-muted-foreground">{t.name}</Label>
+                  <p className="font-medium">{selectedUserDetails.full_name || "N/A"}</p>
+                </div>
+                <div>
+                  <Label className="text-sm text-muted-foreground">{t.email}</Label>
+                  <p className="font-medium">{selectedUserDetails.email}</p>
+                </div>
+                <div>
+                  <Label className="text-sm text-muted-foreground">{t.role}</Label>
+                  <Badge>{selectedUserDetails.role || "client"}</Badge>
+                </div>
+                <div>
+                  <Label className="text-sm text-muted-foreground">{t.registered}</Label>
+                  <p className="font-medium">{new Date(selectedUserDetails.created_at).toLocaleDateString()}</p>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-2">
+                  {locale === "ru" ? "Заказы" : "Orders"} ({selectedUserDetails.orders?.length || 0})
+                </h4>
+                <div className="space-y-2">
+                  {selectedUserDetails.orders?.slice(0, 5).map((order: any) => (
+                    <div key={order.id} className="flex justify-between items-center p-2 bg-muted rounded">
+                      <span className="text-sm font-mono">{order.order_number}</span>
+                      <Badge variant="outline">{order.status}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-2">
+                  {locale === "ru" ? "Тикеты" : "Tickets"} ({selectedUserDetails.tickets?.length || 0})
+                </h4>
+                <div className="space-y-2">
+                  {selectedUserDetails.tickets?.slice(0, 5).map((ticket: any) => (
+                    <div key={ticket.id} className="flex justify-between items-center p-2 bg-muted rounded">
+                      <span className="text-sm">{ticket.subject}</span>
+                      <Badge variant="outline">{ticket.status}</Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={bulkActionDialog} onOpenChange={setBulkActionDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{locale === "ru" ? "Подтвердите действие" : "Confirm Action"}</DialogTitle>
+            <DialogDescription>
+              {locale === "ru"
+                ? `Вы собираетесь выполнить действие для ${selectedUsers.length} пользователей`
+                : `You are about to perform an action on ${selectedUsers.length} users`}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setBulkActionDialog(false)}>
+              {locale === "ru" ? "Отмена" : "Cancel"}
+            </Button>
+            <Button onClick={executeBulkAction}>{locale === "ru" ? "Подтвердить" : "Confirm"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={emailDialog} onOpenChange={setEmailDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{locale === "ru" ? "Отправить письмо" : "Send Email"}</DialogTitle>
+            <DialogDescription>
+              {locale === "ru"
+                ? `Отправить письмо ${selectedUsers.length} пользователям`
+                : `Send email to ${selectedUsers.length} users`}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label>{locale === "ru" ? "Тема" : "Subject"}</Label>
+              <Input
+                value={emailSubject}
+                onChange={(e) => setEmailSubject(e.target.value)}
+                placeholder={locale === "ru" ? "Введите тему письма" : "Enter email subject"}
+              />
+            </div>
+            <div>
+              <Label>{locale === "ru" ? "Сообщение" : "Message"}</Label>
+              <Textarea
+                value={emailBody}
+                onChange={(e) => setEmailBody(e.target.value)}
+                placeholder={locale === "ru" ? "Введите текст письма" : "Enter email body"}
+                rows={6}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEmailDialog(false)}>
+              {locale === "ru" ? "Отмена" : "Cancel"}
+            </Button>
+            <Button onClick={sendBulkEmail}>
+              <Mail className="h-4 w-4 mr-2" />
+              {locale === "ru" ? "Отправить" : "Send"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

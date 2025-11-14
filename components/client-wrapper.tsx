@@ -3,6 +3,14 @@
 import dynamic from "next/dynamic"
 import { usePerformance } from "@/contexts/performance-context"
 
+const PerformanceMonitor = dynamic(
+  () => import("@/components/effects/performance-monitor").then((mod) => ({ default: mod.PerformanceMonitor })),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+)
+
 const AIChatWidget = dynamic(
   () => import("@/components/chat/ai-chat-widget").then((mod) => ({ default: mod.AIChatWidget })),
   {
@@ -52,13 +60,14 @@ const InstallPrompt = dynamic(
 )
 
 export function ClientWrapper() {
-  const { shouldUseHeavyEffects, mode } = usePerformance()
+  const { shouldUseHeavyEffects, performanceMode } = usePerformance()
 
   return (
     <>
+      <PerformanceMonitor />
       <AIChatWidget />
-      <CustomCursor />
-      <SimpleBackground />
+      {shouldUseHeavyEffects && performanceMode === "high" && <CustomCursor />}
+      {performanceMode !== "low" && <SimpleBackground />}
       <PageProgress />
       <ScrollToTop />
       <InstallPrompt />

@@ -39,7 +39,7 @@ export function FreelanceContent() {
     locale === "ru" ? "Портфолио выполненных проектов" : "Portfolio of completed projects",
     locale === "ru" ? "Знание современных технологий" : "Knowledge of modern technologies",
     locale === "ru" ? "Ответственность и пунктуальность" : "Responsibility and punctuality",
-    locale === "ru" ? "Хорошие коммуникативные ��авыки" : "Good communication skills",
+    locale === "ru" ? "Хорошие коммуникативные навыки" : "Good communication skills",
   ]
 
   return (

@@ -173,16 +173,22 @@
   }
 }
 
+/* Optimized glow animation with reduced complexity */
 @keyframes glow {
   0%,
   100% {
-    opacity: 0.4;
-    filter: blur(50px);
+    opacity: 0.3;
+    transform: scale(1);
   }
   50% {
-    opacity: 0.7;
-    filter: blur(70px);
+    opacity: 0.5;
+    transform: scale(1.05);
   }
+}
+
+.animate-glow {
+  animation: glow 6s ease-in-out infinite;
+  will-change: opacity, transform;
 }
 
 @keyframes shimmer {
@@ -278,10 +284,6 @@
   background-size: 200% 200%;
 }
 
-.animate-glow {
-  animation: glow 4s ease-in-out infinite;
-}
-
 .animate-shimmer {
   animation: shimmer 3s linear infinite;
   background: linear-gradient(90deg, transparent 0%, rgba(34, 211, 238, 0.1) 50%, transparent 100%);
@@ -329,14 +331,14 @@
   animation: page-enter 0.4s ease-out;
 }
 
-/* Added gradient-text utility class for text gradients */
+/* Hardware-accelerated gradient text with optimized performance */
 .gradient-text {
   background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 50%, var(--secondary) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   background-size: 200% 200%;
-  animation: gradient-shift 5s ease infinite;
+  will-change: background-position;
 }
 
 /* Added app-button utility for consistent button styling */
@@ -470,6 +472,39 @@ html {
   }
 }
 
+/* Aggressive performance mode optimizations */
+[data-performance="low"] * {
+  animation-duration: 0.1s !important;
+  transition-duration: 0.1s !important;
+}
+
+[data-performance="low"] .animate-glow,
+[data-performance="low"] .animate-float,
+[data-performance="low"] .animate-float-delayed,
+[data-performance="low"] .animate-pulse-slow,
+[data-performance="low"] .animate-gradient,
+[data-performance="low"] .animate-shimmer,
+[data-performance="low"] .animate-gradient-shift {
+  animation: none !important;
+}
+
+[data-performance="low"] .backdrop-blur-xl,
+[data-performance="low"] .backdrop-blur-lg,
+[data-performance="low"] .backdrop-blur-md,
+[data-performance="low"] .backdrop-blur-sm {
+  backdrop-filter: none !important;
+  background-color: rgba(0, 0, 0, 0.9) !important;
+}
+
+[data-performance="medium"] .animate-glow {
+  animation-duration: 10s !important;
+}
+
+[data-performance="medium"] * {
+  animation-duration: 0.3s !important;
+  transition-duration: 0.3s !important;
+}
+
 /* Оптимизация для слабых устройств через data-атрибут */
 [data-performance="low"] .animate-glow,
 [data-performance="low"] .animate-float,
@@ -522,4 +557,59 @@ html {
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
+}
+
+/* Critical performance optimizations */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img, video {
+  content-visibility: auto;
+}
+
+/* Font optimization hints */
+@font-face {
+  font-family: 'Geist';
+  font-display: swap;
+  src: local('Geist');
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  font-display: swap;
+  src: local('Geist Mono');
+}
+
+/* Aggressive mobile performance optimizations */
+@media (max-width: 768px) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  img, video {
+    content-visibility: auto;
+    contain-intrinsic-size: 300px;
+  }
+  
+  /* Disable heavy animations on mobile */
+  .animate-glow,
+  .animate-float,
+  .animate-float-delayed,
+  .animate-pulse-slow,
+  .animate-gradient {
+    animation-duration: 0.5s !important;
+  }
+  
+  /* Simplify blur effects */
+  .backdrop-blur-xl,
+  .backdrop-blur-lg {
+    backdrop-filter: blur(8px) !important;
+  }
+  
+  /* Simplify shadows */
+  .shadow-2xl, .shadow-xl {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+  }
 }

@@ -27,12 +27,12 @@ export function CalculatorContent() {
   const [saved, setSaved] = useState(false)
 
   const projectTypes = [
-    { value: "web", label: locale === "ru" ? "Сайт / Веб-приложение" : "Website / Web App", basePrice: 300 },
-    { value: "mobile", label: locale === "ru" ? "Мобильное приложение" : "Mobile App", basePrice: 800 },
-    { value: "bot", label: locale === "ru" ? "Telegram бот" : "Telegram Bot", basePrice: 400 },
-    { value: "ai", label: locale === "ru" ? "AI решение" : "AI Solution", basePrice: 1000 },
-    { value: "desktop", label: locale === "ru" ? "Десктопное приложение" : "Desktop App", basePrice: 600 },
-    { value: "design", label: locale === "ru" ? "Дизайн проект" : "Design Project", basePrice: 500 },
+    { value: "web", label: locale === "ru" ? "Сайт/Веб-приложение" : "Website/Web Application", basePrice: 2000 },
+    { value: "mobile", label: locale === "ru" ? "Мобильное приложение" : "Mobile App", basePrice: 3000 },
+    { value: "bot", label: locale === "ru" ? "Telegram бот" : "Telegram Bot", basePrice: 800 },
+    { value: "ai", label: locale === "ru" ? "AI решение" : "AI Solution", basePrice: 4000 },
+    { value: "desktop", label: locale === "ru" ? "Десктопное приложение" : "Desktop App", basePrice: 2500 },
+    { value: "design", label: locale === "ru" ? "Дизайн проект" : "Design Project", basePrice: 1500 },
   ]
 
   const features: ProjectFeature[] = [

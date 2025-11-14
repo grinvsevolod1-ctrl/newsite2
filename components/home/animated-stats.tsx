@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { usePerformance } from "@/contexts/performance-context"
 
 interface StatProps {
   end: number
@@ -13,6 +14,7 @@ function AnimatedStat({ end, label, suffix = "", prefix = "" }: StatProps) {
   const [count, setCount] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const { shouldAnimate, mode } = usePerformance()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -34,8 +36,13 @@ function AnimatedStat({ end, label, suffix = "", prefix = "" }: StatProps) {
   useEffect(() => {
     if (!isVisible) return
 
-    const duration = 2000
-    const steps = 60
+    if (!shouldAnimate || mode === "low") {
+      setCount(end)
+      return
+    }
+
+    const duration = mode === "medium" ? 1000 : 2000
+    const steps = mode === "medium" ? 30 : 60
     const increment = end / steps
     let current = 0
 
@@ -50,7 +57,7 @@ function AnimatedStat({ end, label, suffix = "", prefix = "" }: StatProps) {
     }, duration / steps)
 
     return () => clearInterval(timer)
-  }, [isVisible, end])
+  }, [isVisible, end, shouldAnimate, mode])
 
   return (
     <div ref={ref} className="text-center">
