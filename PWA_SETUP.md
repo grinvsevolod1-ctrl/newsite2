@@ -169,5 +169,5 @@ Service Worker автоматически проверяет обновлени�
 
 Для вопросов и проблем:
 - Email: info@netnext.site
-- Telegram: @netnext_support
+- Telegram: @skufig1
 - Phone: +375 29 141 45 55

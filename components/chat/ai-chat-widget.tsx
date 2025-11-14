@@ -93,7 +93,7 @@ export function AIChatWidget() {
             icon: <Phone className="h-4 w-4" />,
             question: "Как с вами связаться?",
             answer:
-              "Свяжитесь с нами удобным способом:\n\n📞 Телефон: +375 29 141 45 55\n📧 Email: info@netnext.site\n💬 Telegram: @netnext_support\n\nРаботаем: Пн-Пт 9:00-18:00\nОтвечаем в течение 1 часа!",
+              "Свяжитесь с нами удобным способом:\n\n📞 Телефон: +375 29 141 45 55\n📧 Email: info@netnext.site\n💬 Telegram: @skufig1\n\nРаботаем: Пн-Пт 9:00-18:00\nОтвечаем в течение 1 часа!",
             category: "Контакты",
           },
           {
@@ -144,7 +144,7 @@ export function AIChatWidget() {
             icon: <Phone className="h-4 w-4" />,
             question: "How to contact you?",
             answer:
-              "Contact us in a convenient way:\n\n📞 Phone: +375 29 141 45 55\n📧 Email: info@netnext.site\n💬 Telegram: @netnext_support\n\nWorking hours: Mon-Fri 9:00-18:00\nWe respond within 1 hour!",
+              "Contact us in a convenient way:\n\n📞 Phone: +375 29 141 45 55\n📧 Email: info@netnext.site\n💬 Telegram: @skufig1\n\nWorking hours: Mon-Fri 9:00-18:00\nWe respond within 1 hour!",
             category: "Contacts",
           },
           {
@@ -213,8 +213,8 @@ export function AIChatWidget() {
         const response = matchedQuestion
           ? matchedQuestion.answer
           : locale === "ru"
-            ? "Спасибо за ваш вопрос! Для получения детальной консультации, пожалуйста, свяжитесь с нами:\n\n📞 +375 29 141 45 55\n📧 info@netnext.site\n💬 Telegram: @netnext_support\n\nМы ответим в течение 1 часа!"
-            : "Thank you for your question! For detailed consultation, please contact us:\n\n📞 +375 29 141 45 55\n📧 info@netnext.site\n💬 Telegram: @netnext_support\n\nWe will respond within 1 hour!"
+            ? "Спасибо за ваш вопрос! Для получения детальной консультации, пожалуйста, свяжитесь с нами:\n\n📞 +375 29 141 45 55\n📧 info@netnext.site\n💬 Telegram: @skufig1\n\nМы ответим в течение 1 часа!"
+            : "Thank you for your question! For detailed consultation, please contact us:\n\n📞 +375 29 141 45 55\n📧 info@netnext.site\n💬 Telegram: @skufig1\n\nWe will respond within 1 hour!"
 
         const assistantMessage: Message = {
           id: (Date.now() + 1).toString(),
