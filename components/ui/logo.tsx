@@ -55,23 +55,25 @@ export function Logo({
 
   const logoContent = (
     <>
-      <div className={cn("relative flex-shrink-0", sizes.container)}>
+      <div className={cn("relative flex-shrink-0 translate-y-[11px]", sizes.container)}>
         {animated && (
           <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary via-accent to-primary opacity-40 blur-md group-hover:opacity-60 transition-opacity duration-300" />
         )}
 
         <div className="relative bg-gradient-to-br from-primary via-accent to-primary rounded-xl p-[1px] overflow-hidden">
           <div className="bg-black rounded-[11px] h-full w-full flex items-center justify-center px-1.5 sm:px-2">
-            <span className={cn(
-              "font-black bg-gradient-to-br from-primary via-accent to-secondary bg-clip-text text-transparent tracking-tighter leading-none",
-              sizes.text,
-              animated && "group-hover:scale-110 transition-transform duration-300"
-            )}>
+            <span
+              className={cn(
+                "font-black bg-gradient-to-br from-primary via-accent to-secondary bg-clip-text text-transparent tracking-tighter leading-none",
+                sizes.text,
+                animated && "group-hover:scale-110 transition-transform duration-300"
+              )}
+            >
               NN
             </span>
           </div>
         </div>
-        
+
         {animated && (
           <div className="absolute inset-0 rounded-xl border-2 border-primary/0 group-hover:border-primary/50 transition-all duration-300" />
         )}
@@ -106,11 +108,18 @@ export function Logo({
 
   if (href) {
     return (
-      <Link href={href} className={cn("flex items-center group flex-shrink-0 min-w-0", sizes.gap, className)}>
+      <Link
+        href={href}
+        className={cn("flex items-center group flex-shrink-0 min-w-0", sizes.gap, className)}
+      >
         {logoContent}
       </Link>
     )
   }
 
-  return <div className={cn("flex items-center flex-shrink-0 min-w-0", sizes.gap, className)}>{logoContent}</div>
+  return (
+    <div className={cn("flex items-center flex-shrink-0 min-w-0", sizes.gap, className)}>
+      {logoContent}
+    </div>
+  )
 }
