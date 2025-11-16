@@ -57,7 +57,7 @@ export function Logo({
     <>
       <div className={cn("relative flex-shrink-0 translate-y-[11px]", sizes.container)}>
         {animated && (
-          <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary via-accent to-primary opacity-40 blur-md group-hover:opacity-60 transition-opacity duration-300" />
+          <div className="absolute -top-[5px] bottom-0 left-0 right-0 rounded-xl bg-gradient-to-br from-primary via-accent to-primary opacity-40 blur-md group-hover:opacity-60 transition-opacity duration-300" />
         )}
 
         <div className="relative bg-gradient-to-br from-primary via-accent to-primary rounded-xl p-[1px] overflow-hidden">
