@@ -68,10 +68,10 @@ export function PromoSection() {
           },
           {
             id: 4,
-            code: "PREMIUM25",
+            code: "h0mnp5xdoz9g79bf",
             discount_type: "percentage",
-            discount_value: 25,
-            description_ru: "Скидка на премиум пакет",
+            discount_value: 10,
+            description_ru: "Скидка на рекламу в яндексе",
             description_en: "Discount on premium package",
           },
           {
