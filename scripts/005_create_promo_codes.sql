@@ -50,11 +50,11 @@ INSERT INTO promotions (
   true
 ),
 (
-  'PREMIUM25',
+  'h0mnp5xdoz9g79bf',
   'percentage',
   25,
-  'Скидка 25% на премиум пакет',
-  '25% discount on premium package',
+  'Скидка в Яндекс Директе',
+  '25% discount on Yandex Direct',
   NOW(),
   NOW() + INTERVAL '3 months',
   50,
