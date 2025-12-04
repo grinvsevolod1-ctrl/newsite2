@@ -1,101 +1,71 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Gift, Sparkles, TrendingUp, Shield, ArrowRight, Check, Zap, Award } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { createBrowserClient } from "@supabase/ssr"
 import { useLocale } from "@/contexts/locale-context"
 import { usePerformance } from "@/contexts/performance-context"
 
 export function PromoSection() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [activePromos, setActivePromos] = useState<any[]>([])
   const router = useRouter()
-  const { t, locale } = useLocale()
+  const { locale } = useLocale()
   const { performanceMode } = usePerformance()
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const supabase = createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      )
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser()
-      setIsAuthenticated(!!user)
-
-      // Load active promotions
-      const { data: promos } = await supabase
-        .from("promotions")
-        .select("*")
-        .eq("is_active", true)
-        .gte("valid_until", new Date().toISOString())
-        .lte("valid_from", new Date().toISOString())
-        .limit(6)
-
-      if (promos && promos.length > 0) {
-        setActivePromos(promos)
-      } else {
-        setActivePromos([
-          {
-            id: 1,
-            code: "WELCOME15",
-            discount_type: "percentage",
-            discount_value: 15,
-            description_ru: "Скидка на первый заказ",
-            description_en: "Discount on first order",
-          },
-          {
-            id: 2,
-            code: "TRANSFER2024",
-            discount_type: "fixed",
-            discount_value: 0,
-            description_ru: "Бесплатный перенос сайта",
-            description_en: "Free website migration",
-          },
-          {
-            id: 3,
-            code: "SUPPORT3M",
-            discount_type: "fixed",
-            discount_value: 0,
-            description_ru: "3 месяца бесплатной поддержки",
-            description_en: "3 months free support",
-          },
-          {
-            id: 4,
-            code: "h0mnp5xdoz9g79bf",
-            discount_type: "percentage",
-            discount_value: 10,
-            description_ru: "Скидка на рекламу в яндексе",
-            description_en: "Discount on Yandex Direct",
-          },
-          {
-            id: 5,
-            code: "NEWYEAR2025",
-            discount_type: "percentage",
-            discount_value: 20,
-            description_ru: "Новогодняя акция 2025",
-            description_en: "New Year 2025 promotion",
-          },
-          {
-            id: 6,
-            code: "AUDIT2025",
-            discount_type: "fixed",
-            discount_value: 0,
-            description_ru: "Бесплатный аудит сайта и консультация",
-            description_en: "Free website audit and consultation",
-          },
-        ])
-      }
-    }
-
-    checkAuth()
-  }, [])
+  // 🔥 Промо теперь всегда берутся из кода
+  const activePromos = [
+    {
+      id: 1,
+      code: "WELCOME15",
+      discount_type: "percentage",
+      discount_value: 15,
+      description_ru: "Скидка на первый заказ",
+      description_en: "Discount on first order",
+    },
+    {
+      id: 2,
+      code: "TRANSFER2024",
+      discount_type: "fixed",
+      discount_value: 0,
+      description_ru: "Бесплатный перенос сайта",
+      description_en: "Free website migration",
+    },
+    {
+      id: 3,
+      code: "SUPPORT3M",
+      discount_type: "fixed",
+      discount_value: 0,
+      description_ru: "3 месяца бесплатной поддержки",
+      description_en: "3 months free support",
+    },
+    {
+      id: 4,
+      code: "h0mnp5xdoz9g79bf",
+      discount_type: "percentage",
+      discount_value: 10,
+      description_ru: "Скидка на рекламу в яндексе",
+      description_en: "Discount on Yandex Direct",
+    },
+    {
+      id: 5,
+      code: "NEWYEAR2025",
+      discount_type: "percentage",
+      discount_value: 20,
+      description_ru: "Новогодняя акция 2025",
+      description_en: "New Year 2025 promotion",
+    },
+    {
+      id: 6,
+      code: "AUDIT2025",
+      discount_type: "fixed",
+      discount_value: 0,
+      description_ru: "Бесплатный аудит сайта и консультация",
+      description_en: "Free website audit and consultation",
+    },
+  ]
 
   const getPromoIcon = (index: number) => {
     const icons = [Gift, Sparkles, TrendingUp, Shield, Zap, Award]
