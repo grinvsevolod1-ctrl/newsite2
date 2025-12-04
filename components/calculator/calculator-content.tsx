@@ -27,7 +27,7 @@ export function CalculatorContent() {
   const [saved, setSaved] = useState(false)
 
   const projectTypes = [
-    { value: "web", label: locale === "ru" ? "Сайт/Веб-приложение" : "Website/Web Application", basePrice: 2000 },
+    { value: "web", label: locale === "ru" ? "Сайт/Веб-приложение" : "Website/Web Application", basePrice: 300 },
     { value: "mobile", label: locale === "ru" ? "Мобильное приложение" : "Mobile App", basePrice: 3000 },
     { value: "bot", label: locale === "ru" ? "Telegram бот" : "Telegram Bot", basePrice: 800 },
     { value: "ai", label: locale === "ru" ? "AI решение" : "AI Solution", basePrice: 4000 },
