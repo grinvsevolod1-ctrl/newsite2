@@ -72,7 +72,7 @@ export function PromoSection() {
             discount_type: "percentage",
             discount_value: 10,
             description_ru: "Скидка на рекламу в яндексе",
-            description_en: "Discount on premium package",
+            description_en: "Discount on Yandex Direct",
           },
           {
             id: 5,
