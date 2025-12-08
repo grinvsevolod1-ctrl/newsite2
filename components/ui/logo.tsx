@@ -24,21 +24,25 @@ export function Logo({
     sm: {
       container: "h-9 w-9",
       text: "text-base",
+      textNN: "text-sm",
       subtitle: "text-[8px]",
     },
     md: {
       container: "h-12 w-12 sm:h-14 sm:w-14 md:h-14 md:w-14",
       text: "text-base sm:text-lg md:text-xl lg:text-2xl",
+      textNN: "text-lg sm:text-xl",
       subtitle: "text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs",
     },
     lg: {
       container: "h-16 w-16 md:h-18 md:w-18",
       text: "text-xl md:text-2xl lg:text-3xl",
+      textNN: "text-xl",
       subtitle: "text-[10px] md:text-xs",
     },
     xl: {
       container: "h-22 w-22 md:h-26 md:w-26",
       text: "text-2xl md:text-3xl lg:text-4xl",
+      textNN: "text-2xl md:text-3xl",
       subtitle: "text-xs md:text-sm",
     },
   }
@@ -56,8 +60,8 @@ export function Logo({
           <div className="bg-black rounded-[11px] h-full w-full flex items-center justify-center px-1.5 sm:px-2">
             <span
               className={cn(
-                "font-black bg-gradient-to-br from-primary via-accent to-secondary bg-clip-text text-transparent tracking-tighter leading-none",
-                sizes.text,
+                "font-black bg-gradient-to-br from-primary via-accent to-secondary bg-clip-text text-transparent tracking-tighter leading-none translate-y-[2px]",
+                sizes.textNN,
                 animated && "group-hover:scale-110 transition-transform duration-300"
               )}
             >
